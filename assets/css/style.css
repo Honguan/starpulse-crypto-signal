@@ -155,6 +155,41 @@ h3 {
   cursor: pointer;
 }
 
+.mode-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mode-button,
+.favorite-toggle {
+  min-height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff9fb;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.mode-button {
+  padding: 0 14px;
+}
+
+.mode-button.active,
+.favorite-toggle.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.favorite-toggle {
+  width: 38px;
+  flex: 0 0 38px;
+  font-size: 1rem;
+}
+
 .section-heading {
   display: flex;
   align-items: end;

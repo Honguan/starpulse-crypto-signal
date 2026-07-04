@@ -23,7 +23,12 @@
       <label for="coin-symbol">指定幣種</label>
       <div class="filter-row">
         <input id="coin-symbol" type="search" placeholder="例如 BTCUSDT" autocomplete="off">
+        <button id="add-favorite" type="button">加入最愛</button>
         <button id="clear-symbol" type="button">清除</button>
+      </div>
+      <div class="mode-row" role="group" aria-label="顯示模式">
+        <button class="mode-button active" type="button" data-mode="all">全部</button>
+        <button class="mode-button" type="button" data-mode="favorites">最愛</button>
       </div>
     </section>
 

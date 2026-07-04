@@ -16,34 +16,39 @@ const statusLabels = {
   ethDirection: "ETH 方向"
 };
 
-export function renderDashboard(data, symbolFilter = "") {
+export function renderDashboard(data, options = "") {
   renderStatus(data);
   renderMarket(data.market);
 
+  const settings = typeof options === "string" ? { symbolFilter: options } : options;
+  const favoriteSymbols = settings.favoriteSymbols || new Set();
+  const symbolFilter = settings.symbolFilter || "";
   const normalizedFilter = symbolFilter.trim().toUpperCase();
-  const signals = data.signals.filter((signal) =>
-    !normalizedFilter || signal.symbol.includes(normalizedFilter)
-  );
+  const signals = data.signals.filter((signal) => {
+    const matchesSymbol = !normalizedFilter || signal.symbol.includes(normalizedFilter);
+    const matchesFavorite = !settings.favoriteOnly || favoriteSymbols.has(signal.symbol);
+    return matchesSymbol && matchesFavorite;
+  });
   const byRank = (a, b) =>
     b.confidence - a.confidence || b.ev - a.ev || b.rr - a.rr || b.winRate - a.winRate;
 
   renderCards("#long-list", signals
     .filter((signal) => ["強烈做多", "做多"].includes(signal.direction))
     .sort(byRank)
-    .slice(0, 5));
+    .slice(0, 5), favoriteSymbols);
 
   renderCards("#short-list", signals
     .filter((signal) => ["強烈做空", "做空"].includes(signal.direction))
     .sort(byRank)
-    .slice(0, 5));
+    .slice(0, 5), favoriteSymbols);
 
   renderCards("#watch-list", signals
     .filter((signal) => signal.direction === "觀望")
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)));
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)), favoriteSymbols);
 
   const highRiskSymbols = new Set((data.highRisk || []).map((item) => item.symbol));
   renderCards("#risk-list", signals
-    .filter((signal) => signal.riskLevel === "高" || highRiskSymbols.has(signal.symbol)));
+    .filter((signal) => signal.riskLevel === "高" || highRiskSymbols.has(signal.symbol)), favoriteSymbols);
 }
 
 function renderStatus(data) {
@@ -91,14 +96,15 @@ function marketItem(label, value) {
   `;
 }
 
-function renderCards(selector, signals) {
+function renderCards(selector, signals, favoriteSymbols = new Set()) {
   const root = document.querySelector(selector);
   root.innerHTML = signals.length
-    ? signals.map(renderCard).join("")
+    ? signals.map((signal) => renderCard(signal, favoriteSymbols)).join("")
     : '<p class="empty">目前沒有符合條件的訊號。</p>';
 }
 
-function renderCard(signal) {
+function renderCard(signal, favoriteSymbols) {
+  const isFavorite = favoriteSymbols.has(signal.symbol);
   return `
     <article class="card">
       <div class="card-head">
@@ -106,6 +112,7 @@ function renderCard(signal) {
           <h3 class="symbol">${signal.symbol}</h3>
           <span class="asset">${signal.baseAsset} · ${signal.price} · ${signal.change24h}%</span>
         </div>
+        <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-symbol="${signal.symbol}" aria-label="切換 ${signal.symbol} 最愛">★</button>
         <span class="badge ${directionClass[signal.direction] || "watch"}">${signal.direction}</span>
       </div>
       <div class="card-body">
