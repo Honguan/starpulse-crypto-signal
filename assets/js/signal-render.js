@@ -16,11 +16,14 @@ const statusLabels = {
   ethDirection: "ETH 方向"
 };
 
-export function renderDashboard(data) {
+export function renderDashboard(data, symbolFilter = "") {
   renderStatus(data);
   renderMarket(data.market);
 
-  const signals = [...data.signals];
+  const normalizedFilter = symbolFilter.trim().toUpperCase();
+  const signals = data.signals.filter((signal) =>
+    !normalizedFilter || signal.symbol.includes(normalizedFilter)
+  );
   const byRank = (a, b) =>
     b.confidence - a.confidence || b.ev - a.ev || b.rr - a.rr || b.winRate - a.winRate;
 

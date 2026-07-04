@@ -2,6 +2,9 @@ import { renderDashboard } from "./signal-render.js";
 import { getStrongNotifications } from "./notification.js";
 
 const errorEl = document.querySelector("#error");
+const coinInput = document.querySelector("#coin-symbol");
+const clearSymbolButton = document.querySelector("#clear-symbol");
+let signalData;
 
 async function loadSignals() {
   const response = await fetch("data/signals.json", { cache: "no-store" });
@@ -13,13 +16,26 @@ async function loadSignals() {
 
 async function init() {
   try {
-    const data = await loadSignals();
-    renderDashboard(data);
-    getStrongNotifications(data);
+    signalData = await loadSignals();
+    renderDashboard(signalData);
+    getStrongNotifications(signalData);
   } catch (error) {
     errorEl.hidden = false;
     errorEl.textContent = error.message || "資料讀取失敗，請稍後再試。";
   }
 }
+
+coinInput.addEventListener("input", () => {
+  if (signalData) {
+    renderDashboard(signalData, coinInput.value);
+  }
+});
+
+clearSymbolButton.addEventListener("click", () => {
+  coinInput.value = "";
+  if (signalData) {
+    renderDashboard(signalData);
+  }
+});
 
 init();
