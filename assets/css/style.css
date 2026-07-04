@@ -249,6 +249,18 @@ h3 {
   overflow-wrap: anywhere;
 }
 
+.asset span + span::before {
+  content: " · ";
+}
+
+.price-up {
+  color: var(--long);
+}
+
+.price-down {
+  color: var(--short);
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

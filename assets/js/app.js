@@ -1,5 +1,6 @@
 import { renderDashboard } from "./signal-render.js";
 import { getStrongNotifications } from "./notification.js";
+import { startLivePrices, syncLiveStatus } from "./live-prices.js";
 
 const errorEl = document.querySelector("#error");
 const coinInput = document.querySelector("#coin-symbol");
@@ -40,6 +41,7 @@ function render() {
     favoriteOnly,
     favoriteSymbols
   });
+  syncLiveStatus();
 }
 
 function setMode(mode) {
@@ -62,6 +64,7 @@ async function init() {
   try {
     signalData = await loadSignals();
     render();
+    startLivePrices();
     getStrongNotifications(signalData);
   } catch (error) {
     errorEl.hidden = false;

@@ -66,7 +66,7 @@ function renderStatus(data) {
     .map(([key, value]) => `
       <div class="status-item">
         <span class="label">${statusLabels[key]}</span>
-        <span class="value">${value}</span>
+        <span class="value" data-status-value="${key}">${value}</span>
       </div>
     `)
     .join("");
@@ -106,11 +106,15 @@ function renderCards(selector, signals, favoriteSymbols = new Set()) {
 function renderCard(signal, favoriteSymbols) {
   const isFavorite = favoriteSymbols.has(signal.symbol);
   return `
-    <article class="card">
+    <article class="card" data-symbol="${signal.symbol}">
       <div class="card-head">
         <div>
           <h3 class="symbol">${signal.symbol}</h3>
-          <span class="asset">${signal.baseAsset} · ${signal.price} · ${signal.change24h}%</span>
+          <span class="asset">
+            <span>${signal.baseAsset}</span>
+            <span data-live-price>${signal.price}</span>
+            <span data-live-change>${signal.change24h}%</span>
+          </span>
         </div>
         <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-symbol="${signal.symbol}" aria-label="切換 ${signal.symbol} 最愛">★</button>
         <span class="badge ${directionClass[signal.direction] || "watch"}">${signal.direction}</span>
