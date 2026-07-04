@@ -6,6 +6,7 @@ const read = (file) => fs.readFileSync(file, "utf8");
 const index = read("index.html");
 const app = read("assets/js/app.js");
 const render = read("assets/js/signal-render.js");
+const css = read("assets/css/style.css");
 const generator = fs.existsSync("scripts/generate_signals.mjs")
   ? read("scripts/generate_signals.mjs")
   : "";
@@ -27,5 +28,9 @@ assert(generator.includes("TOP_500_PAGES = [1, 2]"), "generator requests two pag
 assert(workflow.includes("schedule:"), "update workflow has schedule");
 assert(workflow.includes("scripts/generate_signals.mjs"), "workflow runs generator");
 assert(data.signals.length >= 10 && data.signals.length <= 500, "signals count is within expected range");
+assert(css.includes("@media (max-width: 430px)"), "small phone breakpoint exists");
+assert(css.includes("overflow-wrap: anywhere"), "long mobile text can wrap");
+assert(css.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "mobile metrics use two compact columns");
+assert(css.includes("min-width: 0"), "mobile flex/grid children can shrink");
 
 console.log("check ok");

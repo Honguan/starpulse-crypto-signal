@@ -25,6 +25,7 @@ body {
   color: var(--text);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 .wrap {
@@ -107,6 +108,7 @@ h3 {
 .value {
   display: block;
   font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .panel {
@@ -195,6 +197,7 @@ h3 {
   align-items: end;
   justify-content: space-between;
   margin-bottom: 12px;
+  min-width: 0;
 }
 
 .market-grid {
@@ -230,14 +233,20 @@ h3 {
   border-bottom: 1px solid var(--line);
 }
 
+.card-head > div {
+  min-width: 0;
+}
+
 .symbol {
   margin: 0;
   font-size: 1.3rem;
+  overflow-wrap: anywhere;
 }
 
 .asset {
   color: var(--muted);
   font-size: 0.88rem;
+  overflow-wrap: anywhere;
 }
 
 .badge {
@@ -306,6 +315,7 @@ h3 {
   padding: 12px;
   border-radius: 14px;
   background: #fff9fb;
+  overflow-wrap: anywhere;
 }
 
 .reason-list,
@@ -340,6 +350,7 @@ summary {
   border-radius: 12px;
   background: #fff9fb;
   border: 1px solid var(--line);
+  overflow-wrap: anywhere;
 }
 
 .analysis p {
@@ -389,5 +400,76 @@ summary {
 
   .badge {
     justify-content: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .wrap {
+    width: min(100% - 16px, 1120px);
+  }
+
+  .site-header {
+    padding: 22px 0 16px;
+  }
+
+  h1 {
+    font-size: 1.85rem;
+  }
+
+  h2 {
+    font-size: 1.12rem;
+  }
+
+  .status-grid,
+  .market-grid,
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-panel,
+  .status-item,
+  .market-card,
+  .card-head,
+  .card-body {
+    padding: 12px;
+  }
+
+  .mode-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mode-button,
+  .filter-row button {
+    width: 100%;
+  }
+
+  .card-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+  }
+
+  .card-head .badge {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric {
+    min-width: 0;
+  }
+
+  .metric strong {
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+  }
+
+  .reason-list,
+  .warnings {
+    padding-left: 18px;
   }
 }
