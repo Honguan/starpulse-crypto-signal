@@ -13,7 +13,8 @@ const statusLabels = {
   condition: "目前市場",
   riskLevel: "市場風險",
   btcDirection: "BTC 方向",
-  ethDirection: "ETH 方向"
+  ethDirection: "ETH 方向",
+  source: "資料來源"
 };
 
 export function renderDashboard(data, options = "") {
@@ -59,7 +60,8 @@ function renderStatus(data) {
     condition: data.market.condition,
     riskLevel: data.market.riskLevel,
     btcDirection: data.market.btcDirection,
-    ethDirection: data.market.ethDirection
+    ethDirection: data.market.ethDirection,
+    source: data.strategySource || (data.live ? "即時策略資料" : "備援快照")
   };
 
   document.querySelector("#status").innerHTML = Object.entries(status)
@@ -105,8 +107,12 @@ function renderCards(selector, signals, favoriteSymbols = new Set()) {
 
 function renderCard(signal, favoriteSymbols) {
   const isFavorite = favoriteSymbols.has(signal.symbol);
+  const strategy = signal.strategy || {};
+  const entry = signal.entryZone ? `${signal.entryZone.low} - ${signal.entryZone.high}` : "-";
+  const stopLoss = signal.stopLoss ?? "-";
+  const takeProfit = signal.takeProfit?.length ? signal.takeProfit.join(" / ") : "-";
   return `
-    <article class="card" data-symbol="${signal.symbol}">
+    <article class="card" data-symbol="${signal.symbol}" data-direction="${signal.direction}" data-entry-low="${signal.entryZone?.low ?? ""}" data-entry-high="${signal.entryZone?.high ?? ""}" data-stop-loss="${signal.stopLoss ?? ""}" data-take-profit="${signal.takeProfit?.[0] ?? ""}">
       <div class="card-head">
         <div>
           <h3 class="symbol">${signal.symbol}</h3>
@@ -121,18 +127,18 @@ function renderCard(signal, favoriteSymbols) {
       </div>
       <div class="card-body">
         <div class="metrics">
-          ${metric("信心", `${signal.confidence}%`)}
-          ${metric("勝率", `${signal.winRate}%`)}
-          ${metric("EV", `${signal.ev > 0 ? "+" : ""}${signal.ev}%`)}
+          ${metric("條件", `${signal.confidence}%`)}
+          ${metric("RSI", `${strategy.indicators?.rsi14 ?? signal.winRate}%`)}
+          ${metric("狀態", `<span data-plan-state>${strategy.planState || "資料延遲"}</span>`)}
           ${metric("RR", `${signal.rr}:1`)}
         </div>
 
         <div class="trade-box">
           <span>週期：${signal.timeframe}</span>
           <span>風險：${signal.riskLevel}</span>
-          <span>進場：${signal.entryZone.low} - ${signal.entryZone.high}</span>
-          <span>停損：${signal.stopLoss}</span>
-          <span>止盈：${signal.takeProfit.join(" / ")}</span>
+          <span>進場：${entry}</span>
+          <span>停損：${stopLoss}</span>
+          <span>止盈：${takeProfit}</span>
           <span>Vegas：${signal.vegas.text}</span>
           <span>九轉：${signal.tdSequential.riskText}</span>
           <span>更新：${signal.updatedAt}</span>

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
-const TOP_500_PAGES = [1, 2];
+const TOP_100_PAGES = [1];
 const UPDATED_AT = new Date().toISOString().slice(0, 19).replace("T", " ");
 
 function number(value, fallback = 0) {
@@ -62,7 +62,7 @@ function tradeLevels(price, direction) {
   return { entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit };
 }
 
-function signalFor(coin, index) {
+export function signalFor(coin, index) {
   const change24h = round(coin.price_change_percentage_24h);
   const change7d = round(coin.price_change_percentage_7d_in_currency);
   const riskLevel = riskLevelFor(coin, change24h);
@@ -147,7 +147,7 @@ function signalFor(coin, index) {
 }
 
 async function fetchPage(page) {
-  const url = `${API}?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false&price_change_percentage=7d`;
+  const url = `${API}?vs_currency=usd&order=market_cap_desc&per_page=100&page=${page}&sparkline=false&price_change_percentage=7d`;
   const headers = process.env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": process.env.COINGECKO_API_KEY } : {};
   const response = await fetch(url, { headers });
   if (!response.ok) {
@@ -157,7 +157,7 @@ async function fetchPage(page) {
 }
 
 export async function buildSignals() {
-  const coins = (await Promise.all(TOP_500_PAGES.map(fetchPage))).flat().slice(0, 500);
+  const coins = (await Promise.all(TOP_100_PAGES.map(fetchPage))).flat().slice(0, 100);
   const signals = coins.map(signalFor);
   const market = {
     condition: marketCondition(signals),
@@ -166,7 +166,7 @@ export async function buildSignals() {
     ethDirection: signals.find((signal) => signal.symbol === "ETHUSDT")?.direction || "震盪",
     btcVegas: signals.find((signal) => signal.symbol === "BTCUSDT")?.vegas.state || "neutral",
     ethVegas: signals.find((signal) => signal.symbol === "ETHUSDT")?.vegas.state || "neutral",
-    summary: "CoinGecko 市值前 500 輕量分析已更新。"
+    summary: "CoinGecko 市值前 100 備援快照已更新。"
   };
 
   return {

@@ -10,8 +10,14 @@ const css = read("assets/css/style.css");
 const livePrices = fs.existsSync("assets/js/live-prices.js")
   ? read("assets/js/live-prices.js")
   : "";
+const strategy = fs.existsSync("assets/js/strategy.mjs")
+  ? read("assets/js/strategy.mjs")
+  : "";
 const generator = fs.existsSync("scripts/generate_signals.mjs")
   ? read("scripts/generate_signals.mjs")
+  : "";
+const liveUpdater = fs.existsSync("scripts/update-live-signals.mjs")
+  ? read("scripts/update-live-signals.mjs")
   : "";
 const workflow = fs.existsSync(".github/workflows/update-signals.yml")
   ? read(".github/workflows/update-signals.yml")
@@ -30,16 +36,21 @@ assert(render.includes("data-live-price"), "cards expose live price selector");
 assert(render.includes("data-live-change"), "cards expose live change selector");
 assert(app.includes("live-prices.js"), "app imports live price module");
 assert(app.includes("startLivePrices"), "app starts live price updates");
+assert(app.includes("LIVE_DATA_URL"), "app reads live-data branch");
 assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
 assert(livePrices.includes("OFFLINE"), "live prices expose offline state");
 assert(livePrices.includes("setTimeout"), "live prices schedule reconnects");
+assert(livePrices.includes("data-plan-state"), "live prices update plan status");
+assert(strategy.includes("strategyFor"), "strategy calculates 1h/4h plans");
 assert(generator.includes("api.coingecko.com/api/v3/coins/markets"), "CoinGecko markets endpoint is used");
-assert(generator.includes("per_page=250"), "generator requests 250 coins per page");
-assert(generator.includes("TOP_500_PAGES = [1, 2]"), "generator requests two pages for top 500");
+assert(generator.includes("per_page=100"), "generator requests 100 coins per page");
+assert(generator.includes("TOP_100_PAGES = [1]"), "generator requests one page for top 100");
+assert(liveUpdater.includes("price-history.json"), "live updater persists price history");
 assert(workflow.includes("schedule:"), "update workflow has schedule");
-assert(workflow.includes("scripts/generate_signals.mjs"), "workflow runs generator");
-assert(data.signals.length >= 10 && data.signals.length <= 500, "signals count is within expected range");
+assert(workflow.includes("7,17,27,37,47,57"), "workflow runs every ten minutes off the hour");
+assert(workflow.includes("live-data"), "workflow publishes live-data branch");
+assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count is within expected range");
 assert(css.includes("@media (max-width: 430px)"), "small phone breakpoint exists");
 assert(css.includes("overflow-wrap: anywhere"), "long mobile text can wrap");
 assert(css.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "mobile metrics use two compact columns");

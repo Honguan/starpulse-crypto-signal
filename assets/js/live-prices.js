@@ -1,3 +1,5 @@
+import { planStateFor } from "./strategy.mjs";
+
 const BINANCE_STREAM = "wss://stream.binance.com:9443/ws/!miniTicker@arr";
 const MAX_RECONNECT_DELAY = 30000;
 const FLASH_MS = 650;
@@ -86,6 +88,18 @@ export function applyTicker(ticker, root = globalThis.document) {
 
   if (changeEl && Number.isFinite(nextChange)) {
     changeEl.textContent = formatChange(nextChange);
+  }
+
+  const planValues = [card.dataset.entryLow, card.dataset.entryHigh, card.dataset.stopLoss, card.dataset.takeProfit];
+  const [entryLow, entryHigh, stopLoss, takeProfit] = planValues.map(Number);
+  const planStateEl = card.querySelector("[data-plan-state]");
+  if (planStateEl && planValues.every((value) => value !== "") && [entryLow, entryHigh, stopLoss, takeProfit].every(Number.isFinite)) {
+    planStateEl.textContent = planStateFor({
+      direction: card.dataset.direction,
+      entryZone: { low: entryLow, high: entryHigh },
+      stopLoss,
+      takeProfit: [takeProfit]
+    }, nextPrice);
   }
 
   return true;

@@ -8,6 +8,8 @@ const addFavoriteButton = document.querySelector("#add-favorite");
 const clearSymbolButton = document.querySelector("#clear-symbol");
 const modeButtons = document.querySelectorAll("[data-mode]");
 const FAVORITES_KEY = "starpulse.favoriteSymbols";
+const LIVE_DATA_URL = "https://raw.githubusercontent.com/Honguan/starpulse-crypto-signal/live-data/data/signals.json";
+const LIVE_REFRESH_MS = 10 * 60 * 1000;
 let signalData;
 let favoriteOnly = false;
 let favoriteSymbols = readFavorites();
@@ -52,20 +54,34 @@ function setMode(mode) {
   render();
 }
 
-async function loadSignals() {
-  const response = await fetch("data/signals.json", { cache: "no-store" });
+async function loadSignals(url = "data/signals.json") {
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`signals.json 讀取失敗：HTTP ${response.status}`);
   }
   return response.json();
 }
 
+async function refreshLiveSignals() {
+  try {
+    signalData = await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`);
+    errorEl.hidden = true;
+  } catch {
+    if (!signalData) {
+      signalData = await loadSignals();
+    }
+    errorEl.textContent = "即時策略資料暫時無法讀取，顯示備援快照。";
+    errorEl.hidden = false;
+  }
+  render();
+}
+
 async function init() {
   try {
-    signalData = await loadSignals();
-    render();
+    await refreshLiveSignals();
     startLivePrices();
     getStrongNotifications(signalData);
+    globalThis.setInterval(refreshLiveSignals, LIVE_REFRESH_MS);
   } catch (error) {
     errorEl.hidden = false;
     errorEl.textContent = error.message || "資料讀取失敗，請稍後再試。";

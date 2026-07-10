@@ -1,8 +1,8 @@
-name: Update Signals
+name: Update Live Signals
 
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "7,17,27,37,47,57 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,18 +16,42 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Generate signals
+      - id: api
+        run: |
+          if [ -n "$COINGECKO_API_KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "COINGECKO_API_KEY is not configured; skipped live update."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
         env:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
-        run: node scripts/generate_signals.mjs
-      - name: Commit updated signals
+      - name: Prepare live data branch
+        if: steps.api.outputs.ready == 'true'
         run: |
-          if git diff --quiet -- data/signals.json; then
+          LIVE_DIR="$GITHUB_WORKSPACE/live-data"
+          if git ls-remote --exit-code --heads origin live-data; then
+            git fetch origin live-data
+            git worktree add --detach "$LIVE_DIR" origin/live-data
+          else
+            git worktree add -b live-data "$LIVE_DIR"
+          fi
+      - name: Generate live signals
+        if: steps.api.outputs.ready == 'true'
+        env:
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
+        run: node scripts/update-live-signals.mjs
+      - name: Commit live signals
+        if: steps.api.outputs.ready == 'true'
+        run: |
+          cd "$GITHUB_WORKSPACE/live-data"
+          git add data/signals.json data/price-history.json
+          if git diff --cached --quiet; then
             echo "signals unchanged"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/signals.json
-          git commit -m "chore: update signals"
-          git push
+          git commit -m "chore: update live signals"
+          git push origin HEAD:live-data
