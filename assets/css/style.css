@@ -315,6 +315,95 @@ h3 {
   font-size: 1.08rem;
 }
 
+.plan-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.plan-box {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff9fb;
+}
+
+.long-plan {
+  border-top: 3px solid var(--long);
+}
+
+.short-plan {
+  border-top: 3px solid var(--short);
+}
+
+.plan-head,
+.plan-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plan-head h4 {
+  margin: 0;
+}
+
+.plan-state {
+  font-size: 0.82rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.plan-meta {
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.conditions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.condition {
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+}
+
+.condition.passed {
+  background: #d3f9d8;
+  color: #087f5b;
+}
+
+.condition.failed {
+  background: #ffe3e3;
+  color: #a61e1e;
+}
+
+.candle-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.chart-empty {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
 .trade-box,
 .reason-list,
 .warnings {
@@ -398,6 +487,10 @@ summary {
 
   .card-grid,
   .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .plan-grid {
     grid-template-columns: 1fr;
   }
 

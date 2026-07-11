@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { buildLivePayload } from "./update-live-signals.mjs";
-import { fetchMarkets, updateHistory } from "./live-signal-update.mjs";
+import { fetchMarkets, updateCandles, updateHistory } from "./live-signal-update.mjs";
 
 const coins = [
   { id: "bitcoin", symbol: "btc", current_price: 100, market_cap_rank: 1 },
@@ -27,5 +27,13 @@ const payload = buildLivePayload(coins, state, Date.UTC(2026, 0, 1, 11, 10));
 assert.equal(payload.signals.length, 2);
 assert.equal(payload.signals[0].coinId, "bitcoin");
 assert.equal(payload.signals[0].strategy.planState, "資料不足");
+assert(payload.signals[0].plans.long);
+assert(payload.signals[0].plans.short);
+
+const candleState = { candles: {} };
+updateCandles(candleState, coins, Date.UTC(2026, 0, 1, 12, 10));
+assert.deepEqual(candleState.candles.bitcoin.at(-1), [Date.UTC(2026, 0, 1, 12), 100, 100, 100, 100]);
+updateCandles(candleState, [{ ...coins[0], current_price: 103 }], Date.UTC(2026, 0, 1, 12, 20));
+assert.deepEqual(candleState.candles.bitcoin.at(-1), [Date.UTC(2026, 0, 1, 12), 100, 103, 100, 103]);
 
 console.log("live update check ok");

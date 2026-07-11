@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
 import { signalFor } from "./generate_signals.mjs";
-import { fetchMarkets, fillMissingHistory, updateHistory } from "./live-signal-update.mjs";
+import { fetchMarkets, fillMissingCandles, fillMissingHistory, updateCandles, updateHistory } from "./live-signal-update.mjs";
 
 const outputDir = process.env.LIVE_DATA_DIR || "data";
 const stateFile = path.join(outputDir, "price-history.json");
@@ -24,7 +24,8 @@ function updatedAt(now) {
 function signalFrom(coin, index, history, now) {
   const base = signalFor(coin, index);
   const strategy = strategyFor(history, coin.current_price);
-  const active = ["做多", "做空"].includes(strategy.direction);
+  const primaryPlan = strategy.primaryDirection === "做多" ? strategy.plans.long : strategy.primaryDirection === "做空" ? strategy.plans.short : null;
+  const active = Boolean(primaryPlan && primaryPlan.status === "可執行");
   const volatility = strategy.indicators.volatility || 0;
   const riskLevel = volatility >= 4 ? "高" : volatility >= 2 ? "中" : "低";
 
@@ -33,22 +34,26 @@ function signalFrom(coin, index, history, now) {
     coinId: coin.id,
     price: Number(coin.current_price),
     change24h: Number(coin.price_change_percentage_24h) || 0,
-    direction: strategy.direction,
-    confidence: active ? 75 : strategy.planState === "資料不足" ? 0 : 40,
+    direction: strategy.primaryDirection,
+    confidence: Math.max(strategy.plans.long.score, strategy.plans.short.score),
     winRate: strategy.indicators.rsi14 || 0,
     ev: active ? 1 : 0,
     rr: active ? 2.5 : 0,
     riskLevel,
     timeframe: "1h / 4h",
-    entryZone: strategy.entryZone,
-    stopLoss: strategy.stopLoss,
-    takeProfit: strategy.takeProfit,
+    entryZone: primaryPlan?.entryZone || null,
+    stopLoss: primaryPlan?.stopLoss || null,
+    takeProfit: primaryPlan?.takeProfit || [],
+    plans: strategy.plans,
+    primaryDirection: strategy.primaryDirection,
+    candles: [],
     strategy: { ...strategy, dataSource: "CoinGecko Demo", updatedAt: updatedAt(now) },
-    vegas: { ...base.vegas, text: `4h EMA20 ${strategy.indicators.ema20 || "-"} / EMA50 ${strategy.indicators.ema50 || "-"}` },
+    vegas: { ...base.vegas, text: `4h EMA20 ${strategy.indicators.ema4h20 || "-"} / EMA50 ${strategy.indicators.ema4h50 || "-"}` },
     tdSequential: { ...base.tdSequential, riskText: `1h RSI ${strategy.indicators.rsi14 || "-"} / MACD ${strategy.indicators.macd || "-"}` },
     reasons: [
-      `策略狀態：${strategy.planState}`,
-      `4h EMA20／EMA50：${strategy.indicators.ema20 || "-"}／${strategy.indicators.ema50 || "-"}`,
+      `做多方案：${strategy.plans.long.status}（${strategy.plans.long.score}%）`,
+      `做空方案：${strategy.plans.short.status}（${strategy.plans.short.score}%）`,
+      `4h EMA20／EMA50：${strategy.indicators.ema4h20 || "-"}／${strategy.indicators.ema4h50 || "-"}`,
       `1h RSI14：${strategy.indicators.rsi14 || "-"}`
     ],
     warnings: strategy.planState === "資料不足"
@@ -59,13 +64,17 @@ function signalFrom(coin, index, history, now) {
 }
 
 export function buildLivePayload(coins, state, now = Date.now()) {
-  const signals = coins.map((coin, index) => signalFrom(coin, index, state.history[coin.id] || [], now));
+  const signals = coins.map((coin, index) => ({
+    ...signalFrom(coin, index, state.history[coin.id] || [], now),
+    candles: state.candles?.[coin.id] || []
+  }));
   const count = (direction) => signals.filter((signal) => signal.direction === direction).length;
 
   return {
     project: "StarPulse Crypto Signal",
     status: "normal",
     live: true,
+    strategySource: "CoinGecko Demo／1h／4h",
     updatedAt: updatedAt(now),
     market: {
       condition: count("做多") > count("做空") ? "偏多" : count("做空") > count("做多") ? "偏空" : "震盪",
@@ -86,7 +95,9 @@ export async function updateLiveSignals(now = Date.now()) {
   const coins = await fetchMarkets();
   const state = readState();
   await fillMissingHistory(state, coins);
+  await fillMissingCandles(state, coins);
   updateHistory(state, coins, now);
+  updateCandles(state, coins, now);
   const payload = buildLivePayload(coins, state, now);
 
   fs.mkdirSync(outputDir, { recursive: true });

@@ -90,16 +90,32 @@ export function applyTicker(ticker, root = globalThis.document) {
     changeEl.textContent = formatChange(nextChange);
   }
 
-  const planValues = [card.dataset.entryLow, card.dataset.entryHigh, card.dataset.stopLoss, card.dataset.takeProfit];
-  const [entryLow, entryHigh, stopLoss, takeProfit] = planValues.map(Number);
-  const planStateEl = card.querySelector("[data-plan-state]");
-  if (planStateEl && planValues.every((value) => value !== "") && [entryLow, entryHigh, stopLoss, takeProfit].every(Number.isFinite)) {
-    planStateEl.textContent = planStateFor({
-      direction: card.dataset.direction,
+  ["long", "short"].forEach((direction) => {
+    const box = card.querySelector(`[data-plan="${direction}"]`);
+    const stateEl = card.querySelector(`[data-${direction}-plan-state]`);
+    if (!box || !stateEl) return;
+    const values = [box.dataset.entryLow, box.dataset.entryHigh, box.dataset.stopLoss, box.dataset.takeProfit];
+    if (box.dataset.planStatus !== "可執行" || values.some((value) => value === "")) return;
+    const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
+    if (![entryLow, entryHigh, stopLoss, takeProfit].every(Number.isFinite)) return;
+    stateEl.textContent = planStateFor({
+      direction: box.dataset.planDirection,
+      status: box.dataset.planStatus,
       entryZone: { low: entryLow, high: entryHigh },
       stopLoss,
       takeProfit: [takeProfit]
     }, nextPrice);
+  });
+
+  const primaryStateEl = card.querySelector("[data-plan-state]");
+  const primaryDirection = card.querySelector('[data-plan-status="可執行"]')?.dataset.planDirection;
+  const primaryPlan = primaryDirection === "做空" ? card.querySelector('[data-plan="short"]') : card.querySelector('[data-plan="long"]');
+  if (primaryStateEl && primaryPlan) {
+    const values = [primaryPlan.dataset.entryLow, primaryPlan.dataset.entryHigh, primaryPlan.dataset.stopLoss, primaryPlan.dataset.takeProfit];
+    if (primaryPlan.dataset.planStatus === "可執行" && values.every((value) => value !== "")) {
+      const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
+      primaryStateEl.textContent = planStateFor({ direction: primaryPlan.dataset.planDirection, status: primaryPlan.dataset.planStatus, entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit: [takeProfit] }, nextPrice);
+    }
   }
 
   return true;

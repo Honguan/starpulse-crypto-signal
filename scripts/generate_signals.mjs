@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
+import { strategyFor } from "../assets/js/strategy.mjs";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
 const TOP_100_PAGES = [1];
@@ -76,6 +77,7 @@ export function signalFor(coin, index) {
   const tdCount = clamp(Math.round(Math.abs(change24h) / 2), 0, 9);
   const tdState = tdCount >= 7 && tdDirection !== "none" ? `${tdDirection}${tdCount}` : "none";
   const levels = tradeLevels(coin.current_price, direction);
+  const fallbackStrategy = strategyFor([], coin.current_price);
   const rank = coin.market_cap_rank || index + 1;
 
   return {
@@ -90,8 +92,13 @@ export function signalFor(coin, index) {
     ev,
     rr,
     riskLevel,
-    timeframe: "24h / 7d",
+    timeframe: "1h / 4h",
     ...levels,
+    plans: fallbackStrategy.plans,
+    primaryDirection: "觀望",
+    candles: [],
+    strategy: fallbackStrategy,
+    strategySource: "CoinGecko 市場快照（備援）",
     vegas: {
       state: vegasState,
       pricePosition: vegasState === "bullish" ? "aboveTunnel" : vegasState === "bearish" ? "belowTunnel" : "insideTunnel",
@@ -134,13 +141,13 @@ export function signalFor(coin, index) {
     },
     analysis: {
       trendText: `CoinGecko 市值排名 ${rank}，7d 漲跌 ${change7d}%。`,
-      vegasText: "目前為前 500 輕量模式，尚未計算 EMA144 / EMA169。",
+      vegasText: "目前為前 100 備援快照，尚未載入 K 線歷史。",
       momentumText: `24h 漲跌 ${change24h}%，以短期動能估算方向。`,
       volumeText: `24h 成交量約 ${Math.round(number(coin.total_volume)).toLocaleString("en-US")} USD。`,
       positionText: "進場、停損、止盈以目前價格百分比估算。",
       tdSequentialText: "輕量模式以漲跌幅估算追價風險，非完整九轉。",
       riskText: `風險等級：${riskLevel}。`,
-      marketText: "前 500 模式以整體市值排序擴大分析範圍。"
+      marketText: "前 100 模式以整體市值排序提供備援資料。"
     },
     updatedAt: UPDATED_AT
   };
@@ -172,7 +179,8 @@ export async function buildSignals() {
   return {
     project: "StarPulse Crypto Signal",
     status: "normal",
-    live: true,
+    live: false,
+    strategySource: "CoinGecko 市場快照（備援）",
     updatedAt: UPDATED_AT,
     market,
     signals,

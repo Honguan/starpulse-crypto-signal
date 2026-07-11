@@ -1,3 +1,5 @@
+import { renderCandleChart } from "./candle-chart.mjs";
+
 const directionClass = {
   "強烈做多": "strong-long",
   "做多": "long",
@@ -30,26 +32,16 @@ export function renderDashboard(data, options = "") {
     const matchesFavorite = !settings.favoriteOnly || favoriteSymbols.has(signal.symbol);
     return matchesSymbol && matchesFavorite;
   });
-  const byRank = (a, b) =>
-    b.confidence - a.confidence || b.ev - a.ev || b.rr - a.rr || b.winRate - a.winRate;
+  const byPlanScore = (a, b) => {
+    const aScore = Math.max(a.plans?.long?.score || 0, a.plans?.short?.score || 0);
+    const bScore = Math.max(b.plans?.long?.score || 0, b.plans?.short?.score || 0);
+    return bScore - aScore || a.marketCapRank - b.marketCapRank;
+  };
 
-  renderCards("#long-list", signals
-    .filter((signal) => ["強烈做多", "做多"].includes(signal.direction))
-    .sort(byRank)
-    .slice(0, 5), favoriteSymbols);
-
-  renderCards("#short-list", signals
-    .filter((signal) => ["強烈做空", "做空"].includes(signal.direction))
-    .sort(byRank)
-    .slice(0, 5), favoriteSymbols);
-
-  renderCards("#watch-list", signals
-    .filter((signal) => signal.direction === "觀望")
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)), favoriteSymbols);
-
-  const highRiskSymbols = new Set((data.highRisk || []).map((item) => item.symbol));
-  renderCards("#risk-list", signals
-    .filter((signal) => signal.riskLevel === "高" || highRiskSymbols.has(signal.symbol)), favoriteSymbols);
+  const rankedSignals = signals.sort(byPlanScore);
+  const visibleSignals = settings.symbolFilter || settings.favoriteOnly ? rankedSignals : rankedSignals.slice(0, 5);
+  renderCards("#plan-list", visibleSignals, favoriteSymbols);
+  bindCandleCharts(visibleSignals);
 }
 
 function renderStatus(data) {
@@ -108,11 +100,10 @@ function renderCards(selector, signals, favoriteSymbols = new Set()) {
 function renderCard(signal, favoriteSymbols) {
   const isFavorite = favoriteSymbols.has(signal.symbol);
   const strategy = signal.strategy || {};
-  const entry = signal.entryZone ? `${signal.entryZone.low} - ${signal.entryZone.high}` : "-";
-  const stopLoss = signal.stopLoss ?? "-";
-  const takeProfit = signal.takeProfit?.length ? signal.takeProfit.join(" / ") : "-";
+  const plans = signal.plans || {};
+  const primary = signal.primaryDirection === "做空" ? plans.short : plans.long;
   return `
-    <article class="card" data-symbol="${signal.symbol}" data-direction="${signal.direction}" data-entry-low="${signal.entryZone?.low ?? ""}" data-entry-high="${signal.entryZone?.high ?? ""}" data-stop-loss="${signal.stopLoss ?? ""}" data-take-profit="${signal.takeProfit?.[0] ?? ""}">
+    <article class="card" data-symbol="${signal.symbol}">
       <div class="card-head">
         <div>
           <h3 class="symbol">${signal.symbol}</h3>
@@ -123,25 +114,19 @@ function renderCard(signal, favoriteSymbols) {
           </span>
         </div>
         <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-symbol="${signal.symbol}" aria-label="切換 ${signal.symbol} 最愛">★</button>
-        <span class="badge ${directionClass[signal.direction] || "watch"}">${signal.direction}</span>
+        <span class="badge ${directionClass[signal.primaryDirection] || "watch"}">${signal.primaryDirection || signal.direction || "觀望"}</span>
       </div>
       <div class="card-body">
         <div class="metrics">
           ${metric("條件", `${signal.confidence}%`)}
-          ${metric("RSI", `${strategy.indicators?.rsi14 ?? signal.winRate}%`)}
-          ${metric("狀態", `<span data-plan-state>${strategy.planState || "資料延遲"}</span>`)}
-          ${metric("RR", `${signal.rr}:1`)}
+          ${metric("RSI", `${strategy.indicators?.rsi14 ?? signal.winRate ?? "-"}%`)}
+          ${metric("主要狀態", `<span data-plan-state>${strategy.planState || "資料延遲"}</span>`)}
+          ${metric("主要 RR", primary?.takeProfit?.length ? "2.5:1" : "-")}
         </div>
 
-        <div class="trade-box">
-          <span>週期：${signal.timeframe}</span>
-          <span>風險：${signal.riskLevel}</span>
-          <span>進場：${entry}</span>
-          <span>停損：${stopLoss}</span>
-          <span>止盈：${takeProfit}</span>
-          <span>Vegas：${signal.vegas.text}</span>
-          <span>九轉：${signal.tdSequential.riskText}</span>
-          <span>更新：${signal.updatedAt}</span>
+        <div class="plan-grid">
+          ${renderPlan("long", plans.long)}
+          ${renderPlan("short", plans.short)}
         </div>
 
         <ol class="reason-list">
@@ -155,12 +140,58 @@ function renderCard(signal, favoriteSymbols) {
           <li>資料延遲或 API 異常時請勿依賴訊號。</li>
         </ul>
 
+        <details class="chart-details" data-chart-details data-symbol="${signal.symbol}">
+          <summary>K 線圖</summary>
+          <canvas class="candle-chart" width="640" height="240" aria-label="${signal.symbol} K 線圖"></canvas>
+          <p class="chart-empty">展開後載入 K 線；歷史不足時不繪製。</p>
+        </details>
+
         <details>
-          <summary>詳細分析</summary>
+          <summary>為什麼</summary>
           ${renderDetails(signal)}
         </details>
       </div>
     </article>
+  `;
+}
+
+function bindCandleCharts(signals) {
+  document.querySelectorAll("[data-chart-details]").forEach((details) => {
+    details.addEventListener("toggle", () => {
+      if (!details.open || details.dataset.chartReady) return;
+      const signal = signals.find((item) => item.symbol === details.dataset.symbol);
+      const rendered = renderCandleChart(details.querySelector("canvas"), signal?.candles || [], signal?.plans || {});
+      const empty = details.querySelector(".chart-empty");
+      if (rendered && empty) empty.hidden = true;
+      details.dataset.chartReady = "true";
+    });
+  });
+}
+
+function renderPlan(key, plan = {}) {
+  const isLong = key === "long";
+  const entry = plan.entryZone ? `${plan.entryZone.low} - ${plan.entryZone.high}` : "-";
+  const takeProfit = plan.takeProfit?.length ? plan.takeProfit.join(" / ") : "-";
+  const prefix = isLong ? "long" : "short";
+  const conditionLabels = { trend: "4h 趨勢", position: "1h 位置", rsi: "RSI14", momentum: "MACD" };
+  const conditions = Object.entries(plan.conditions || {})
+    .map(([name, passed]) => `<span class="condition ${passed ? "passed" : "failed"}">${conditionLabels[name] || name}：${passed ? "符合" : "不足"}</span>`)
+    .join("");
+
+  return `
+    <section class="plan-box ${prefix}-plan" data-plan="${prefix}" data-plan-direction="${plan.direction || (isLong ? "做多" : "做空")}" data-plan-status="${plan.status || "資料不足"}" data-entry-low="${plan.entryZone?.low ?? ""}" data-entry-high="${plan.entryZone?.high ?? ""}" data-stop-loss="${plan.stopLoss ?? ""}" data-take-profit="${plan.takeProfit?.[0] ?? ""}">
+      <div class="plan-head">
+        <h4>${isLong ? "做多方案" : "做空方案"}</h4>
+        <span class="plan-state" data-${prefix}-plan-state>${plan.planState || plan.status || "資料不足"}</span>
+      </div>
+      <div class="plan-meta">
+        <span>條件分數 ${plan.score ?? 0}%</span>
+        <span>進場 ${entry}</span>
+        <span>停損 ${plan.stopLoss ?? "-"}</span>
+        <span>止盈 ${takeProfit}</span>
+      </div>
+      <div class="conditions">${conditions || "資料不足"}</div>
+    </section>
   `;
 }
 

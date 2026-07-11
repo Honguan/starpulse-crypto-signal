@@ -1,98 +1,44 @@
 # StarPulse Crypto Signal
 
-星脈加密貨幣訊號看板是一個可部署在 GitHub Pages 的靜態加密貨幣訊號展示專案。第一版使用 mock data，不連接交易所 API，也不做自動下單。
+StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不下單、不保存持倉，只根據公開市場資料產生做多與做空計畫。
 
-## 功能特色
+## 使用方式
 
-- 市場總覽、資料狀態、LIVE 狀態與最後更新時間
-- 做多推薦 Top 5、做空推薦 Top 5、觀望清單與高風險區
-- 每張卡片顯示方向、信心、勝率、EV、RR、進場、停損、止盈與原因
-- 每張卡片顯示 Vegas 隧道與神奇九轉狀態
-- 詳細分數與分析可展開查看
-- 手機版優先排版
-- JSON 讀取失敗時顯示錯誤提示
+- 預設顯示策略分數最高的 5 個幣種。
+- 在「指定幣種」輸入 `BTC` 或 `BTCUSDT`，即可查看該幣種的雙向計畫。
+- 按「加入最愛」保存幣種，再切換「最愛」查看收藏清單。
+- 每張卡同時列出做多、做空的條件、進場區、停損與兩段止盈。
+- 展開「K 線圖」查看最近 4h 蠟燭、EMA20／EMA50 與計畫價位。
+- 「可執行」表示四項條件全部通過；「等待條件」不代表可以進場。
 
-## 專案架構
+## 策略規則
 
-```text
-starpulse-crypto-signal/
-├── index.html
-├── README.md
-├── assets/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       ├── app.js
-│       ├── signal-render.js
-│       └── notification.js
-└── data/
-    └── signals.json
+做多與做空各自檢查四項條件：
+
+1. 4h EMA20 與 EMA50 的趨勢方向。
+2. 價格相對 1h EMA20 的位置。
+3. 1h RSI14 區間：做多 45–60、做空 40–55。
+4. 1h MACD 方向與柱狀體變化。
+
+進場中心使用 1h EMA20，進場寬度使用最近 14 期平均絕對小時報酬的 0.25 倍。停損取最近 12 小時結構高低點與 1.5 倍波動距離中較嚴格者，止盈一與止盈二為 1.5R、2.5R。
+
+## 資料更新
+
+GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100，累積 1h 價格與 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
+
+啟用自動更新前，在 GitHub Repository Secrets 設定 `COINGECKO_API_KEY`。金鑰只會在 Actions 使用，不會送到瀏覽器。
+
+Binance USDT 現貨幣種在頁面開啟時會透過公開 WebSocket 更新價格，並即時重新判定兩套計畫的狀態；其他幣種等待下一次快照。
+
+## 本機檢查
+
+```powershell
+node scripts/strategy-check.mjs
+node scripts/live-update-check.mjs
+node scripts/candle-chart-check.mjs
+node --no-warnings scripts/live-price-check.mjs
+node scripts/check.mjs
 ```
-
-## 部署到 GitHub Pages
-
-1. 將本專案推送到 GitHub repository。
-2. 到 repository 的 Settings > Pages。
-3. Source 選擇 `Deploy from a branch`。
-4. Branch 選擇 `main`，資料夾選擇 `/root`。
-5. 儲存後等待 GitHub Pages 建置完成。
-
-## 修改 signals.json
-
-前台資料來自 `data/signals.json`。可以直接修改：
-
-- `market`：市場狀態與摘要
-- `signals`：各幣種訊號
-- `watchlist`：觀望清單
-- `highRisk`：高風險清單
-
-修改後重新整理網頁即可看到新資料。
-
-## 啟用 GitHub Actions
-
-MVP 尚未包含自動更新 workflow。第二版可新增 `.github/workflows/update-signals.yml`，設定每 15 分鐘執行一次 Python 腳本，產生 `data/signals.json` 後 commit 回 repository。
-
-## 訊號計算邏輯
-
-MVP 使用 mock data。訊號欄位保留後續真實計算需要的結構：
-
-- 趨勢分
-- Vegas 分
-- 動能分
-- 量能分
-- 位置分
-- 神奇九轉分
-- 風險分
-- 大盤分
-- 多方分數與空方分數
-
-判斷原則：
-
-- `longScore >= 80` 且多空分差足夠：強烈做多
-- `longScore >= 65` 且多空分差足夠：做多
-- `shortScore >= 80` 且多空分差足夠：強烈做空
-- `shortScore >= 65` 且多空分差足夠：做空
-- 其他情況：觀望
-
-RR 小於 1.5、EV 小於等於 0、BTC 方向不明、Vegas 隧道內震盪、九轉與趨勢衝突等情況會傾向觀望。
-
-## Vegas 隧道與神奇九轉
-
-本專案加入 Vegas 隧道交易與神奇九轉作為輔助判斷。
-
-Vegas 隧道使用 EMA144 與 EMA169 作為趨勢隧道，EMA12 作為短線動能線。當價格與 EMA12 位於隧道上方時，市場偏多；當價格與 EMA12 位於隧道下方時，市場偏空；當價格在隧道內震盪時，系統傾向觀望。
-
-神奇九轉用於判斷短線趨勢疲乏。上漲九轉 9 代表短線上漲可能過熱，不建議追多。下跌九轉 9 代表短線下跌可能過度，不建議追空。神奇九轉不單獨產生交易訊號，只作為反轉警告、追價風險與信心分數調整依據。
-
-## 後續開發計畫
-
-- GitHub Actions 定時更新
-- Python 抓取公開市場資料
-- 真實計算 EMA、RSI、MACD、ATR
-- 真實計算 Vegas 隧道與神奇九轉
-- 產生真實 `signals.json`
-- 瀏覽器通知、Telegram 通知、Discord Webhook
-- 訊號歷史紀錄與簡單回測
 
 ## 風險提示
 
