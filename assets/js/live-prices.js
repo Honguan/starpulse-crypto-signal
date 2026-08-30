@@ -108,13 +108,16 @@ export function applyTicker(ticker, root = globalThis.document) {
   });
 
   const primaryStateEl = card.querySelector("[data-plan-state]");
+  const primaryRrEl = card.querySelector("[data-plan-rr]");
   const primaryDirection = card.querySelector('[data-plan-status="可執行"]')?.dataset.planDirection;
   const primaryPlan = primaryDirection === "做空" ? card.querySelector('[data-plan="short"]') : card.querySelector('[data-plan="long"]');
   if (primaryStateEl && primaryPlan) {
     const values = [primaryPlan.dataset.entryLow, primaryPlan.dataset.entryHigh, primaryPlan.dataset.stopLoss, primaryPlan.dataset.takeProfit];
     if (primaryPlan.dataset.planStatus === "可執行" && values.every((value) => value !== "")) {
       const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
-      primaryStateEl.textContent = planStateFor({ direction: primaryPlan.dataset.planDirection, status: primaryPlan.dataset.planStatus, entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit: [takeProfit] }, nextPrice);
+      const state = planStateFor({ direction: primaryPlan.dataset.planDirection, status: primaryPlan.dataset.planStatus, entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit: [takeProfit] }, nextPrice);
+      primaryStateEl.textContent = state;
+      if (state === "停損失效" && primaryRrEl) primaryRrEl.textContent = "-";
     }
   }
 

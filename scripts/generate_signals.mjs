@@ -68,10 +68,7 @@ export function signalFor(coin, index) {
   const change7d = round(coin.price_change_percentage_7d_in_currency);
   const riskLevel = riskLevelFor(coin, change24h);
   const direction = directionFor(change24h, change7d, riskLevel);
-  const confidence = clamp(Math.round(48 + Math.abs(change24h) * 1.4 + Math.abs(change7d) * 0.45), 35, 88);
-  const winRate = clamp(Math.round(50 + confidence / 8 - (riskLevel === "高" ? 8 : 0)), 35, 75);
-  const ev = direction === "觀望" ? -0.2 : round((winRate - 50) / 10 - (riskLevel === "高" ? 0.8 : 0), 1);
-  const rr = direction === "觀望" ? 1.2 : round(1.5 + confidence / 100, 1);
+  const momentumScore = clamp(Math.round(48 + Math.abs(change24h) * 1.4 + Math.abs(change7d) * 0.45), 35, 88);
   const vegasState = direction.includes("多") ? "bullish" : direction.includes("空") ? "bearish" : "neutral";
   const tdDirection = change24h > 0 ? "up" : change24h < 0 ? "down" : "none";
   const tdCount = clamp(Math.round(Math.abs(change24h) / 2), 0, 9);
@@ -87,10 +84,6 @@ export function signalFor(coin, index) {
     change24h,
     marketCapRank: rank,
     direction,
-    confidence,
-    winRate,
-    ev,
-    rr,
     riskLevel,
     timeframe: "1h / 4h",
     ...levels,
@@ -136,8 +129,8 @@ export function signalFor(coin, index) {
       tdSequential: tdCount,
       risk: riskLevel === "高" ? 3 : riskLevel === "中" ? 6 : 8,
       market: 6,
-      longScore: direction.includes("多") ? confidence : Math.max(20, 60 - confidence / 2),
-      shortScore: direction.includes("空") ? confidence : Math.max(20, 60 - confidence / 2)
+      longScore: direction.includes("多") ? momentumScore : Math.max(20, 60 - momentumScore / 2),
+      shortScore: direction.includes("空") ? momentumScore : Math.max(20, 60 - momentumScore / 2)
     },
     analysis: {
       trendText: `CoinGecko 市值排名 ${rank}，7d 漲跌 ${change7d}%。`,

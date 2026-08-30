@@ -24,6 +24,8 @@ StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不�
 
 1h 指標只使用帶 UTC 時間戳的 CoinGecko hourly 資料，4h 趨勢與結構價位使用官方 OHLC。最近 220 個 1h 點或 50 根 4h K 線若有缺口，該幣種不產生交易計畫。
 
+畫面的「條件」是四項策略條件的加權分數（40／20／20／20），不是勝率。「主要 RR」以進場區中心、停損及第二段止盈計算；條件未完成或計畫停損失效時不顯示。詳細分數只描述目前市場快照的啟發式強弱，不代表歷史績效、機率或期望值。
+
 ## 資料更新
 
 GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
@@ -40,6 +42,7 @@ node scripts/freshness-check.mjs
 node scripts/live-update-check.mjs
 node scripts/candle-chart-check.mjs
 node --no-warnings scripts/live-price-check.mjs
+node --no-warnings scripts/notification-check.mjs
 node scripts/check.mjs
 ```
 

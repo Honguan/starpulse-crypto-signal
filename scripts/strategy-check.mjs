@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { planStateFor, strategyFor } from "../assets/js/strategy.mjs";
+import { planStateFor, riskRewardFor, strategyFor } from "../assets/js/strategy.mjs";
 
 function series(values) {
   return values.map((price, index) => [Date.UTC(2026, 0, 1, index), price]);
@@ -26,6 +26,7 @@ assert.equal(longResult.primaryDirection, "做多");
 assert(longResult.plans.long.stopLoss < longResult.plans.long.entryZone.low);
 assert(longResult.plans.long.takeProfit[0] > longResult.plans.long.entryZone.high);
 assert(longResult.plans.long.takeProfit[1] > longResult.plans.long.takeProfit[0]);
+assert.equal(longResult.plans.long.riskReward, 2.5);
 assert(longResult.plans.short.stopLoss > longResult.plans.short.entryZone.high);
 assert(longResult.plans.short.takeProfit[0] < longResult.plans.short.entryZone.low);
 assert(longResult.plans.short.takeProfit[1] < longResult.plans.short.takeProfit[0]);
@@ -52,5 +53,7 @@ assert.equal(longResult.indicators.asOf4h, candles(uptrend).at(-1)[0]);
 assert.equal(planStateFor({ direction: "做多", status: "可執行", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 106] }, 105), "已到止盈區");
 assert.equal(planStateFor({ direction: "做空", status: "可執行", entryZone: { low: 99, high: 101 }, stopLoss: 104, takeProfit: [96, 94] }, 105), "停損失效");
 assert.equal(planStateFor({ direction: "做多", status: "等待條件", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 106] }, 100), "等待條件");
+assert.equal(riskRewardFor({ direction: "做多", status: "可執行", planState: "可進場", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 110] }), 2.5);
+assert.equal(riskRewardFor({ direction: "做多", status: "可執行", planState: "停損失效", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 110] }), null);
 
 console.log("strategy check ok");

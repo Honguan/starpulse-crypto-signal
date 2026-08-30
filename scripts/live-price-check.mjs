@@ -13,6 +13,8 @@ const price = element("100");
 const change = element("0%");
 const longState = element("等待回踩");
 const shortState = element("條件不足");
+const primaryState = element("等待回踩");
+const primaryRr = element("2.5:1");
 const longBox = { dataset: { planDirection: "做多", planStatus: "可執行", entryLow: "99", entryHigh: "101", stopLoss: "96", takeProfit: "104" } };
 const shortBox = { dataset: { planDirection: "做空", planStatus: "可執行", entryLow: "104", entryHigh: "106", stopLoss: "110", takeProfit: "100" } };
 const card = {
@@ -23,7 +25,10 @@ const card = {
         : selector === '[data-plan="long"]' ? longBox
           : selector === '[data-plan="short"]' ? shortBox
             : selector === "[data-long-plan-state]" ? longState
-              : selector === "[data-short-plan-state]" ? shortState : null;
+              : selector === "[data-short-plan-state]" ? shortState
+                : selector === '[data-plan-status="可執行"]' ? longBox
+                  : selector === "[data-plan-state]" ? primaryState
+                    : selector === "[data-plan-rr]" ? primaryRr : null;
   }
 };
 const root = { querySelector: () => card };
@@ -33,6 +38,11 @@ assert.equal(price.textContent, "105");
 assert.equal(change.textContent, "+1.23%");
 assert.equal(longState.textContent, "已到止盈區");
 assert.equal(shortState.textContent, "可進場");
+assert.equal(primaryRr.textContent, "2.5:1");
+
+applyTicker({ s: "BTCUSDT", c: "95", P: "-1" }, root);
+assert.equal(primaryState.textContent, "停損失效");
+assert.equal(primaryRr.textContent, "-");
 
 const insufficientState = element("資料不足");
 const insufficientCard = {

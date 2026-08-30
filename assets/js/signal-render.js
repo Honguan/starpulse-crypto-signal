@@ -104,6 +104,7 @@ function renderCard(signal, favoriteSymbols) {
   const strategy = signal.strategy || {};
   const plans = signal.plans || {};
   const primary = signal.primaryDirection === "做空" ? plans.short : plans.long;
+  const conditionScore = Math.max(plans.long?.score || 0, plans.short?.score || 0);
   return `
     <article class="card" data-symbol="${signal.symbol}">
       <div class="card-head">
@@ -120,10 +121,10 @@ function renderCard(signal, favoriteSymbols) {
       </div>
       <div class="card-body">
         <div class="metrics">
-          ${metric("條件", `${signal.confidence}%`)}
-          ${metric("RSI", `${strategy.indicators?.rsi14 ?? signal.winRate ?? "-"}%`)}
+          ${metric("條件", `${conditionScore}%`)}
+          ${metric("RSI", strategy.indicators?.rsi14 ?? "-")}
           ${metric("主要狀態", `<span data-plan-state>${strategy.planState || "資料延遲"}</span>`)}
-          ${metric("主要 RR", primary?.takeProfit?.length ? "2.5:1" : "-")}
+          ${metric("主要 RR", `<span data-plan-rr>${primary?.riskReward ? `${primary.riskReward}:1` : "-"}</span>`)}
         </div>
 
         <div class="plan-grid">

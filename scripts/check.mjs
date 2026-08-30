@@ -60,6 +60,7 @@ assert(workflow.includes("live-data"), "workflow publishes live-data branch");
 assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count is within expected range");
 assert(data.signals.every((signal) => signal.plans?.long && signal.plans?.short), "signals expose long and short plans");
 assert(data.signals.every((signal) => Array.isArray(signal.candles)), "signals expose candles");
+assert(data.signals.every((signal) => !("winRate" in signal) && !("ev" in signal) && !("rr" in signal)), "fallback data excludes unsupported performance metrics");
 assert(css.includes("@media (max-width: 430px)"), "small phone breakpoint exists");
 assert(css.includes("overflow-wrap: anywhere"), "long mobile text can wrap");
 assert(css.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "mobile metrics use two compact columns");
