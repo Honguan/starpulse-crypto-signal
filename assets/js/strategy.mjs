@@ -3,6 +3,9 @@ const LONG = "做多";
 const SHORT = "做空";
 const READY = "可執行";
 const WAITING = "等待條件";
+const HOUR = 60 * 60 * 1000;
+const FOUR_HOURS = 4 * HOUR;
+const MIN_4H_HISTORY = 50;
 
 function number(value) {
   return Number.isFinite(Number(value)) ? Number(value) : 0;
@@ -44,24 +47,20 @@ function macd(values) {
   return { line, signal, histogram };
 }
 
-function fourHourly(values) {
-  return values.filter((_, index) => (index + 1) % 4 === 0);
-}
-
 function volatility(values) {
   const recent = values.slice(-13);
   const changes = recent.slice(1).map((value, index) => Math.abs(value / recent[index] - 1));
   return Math.max(0.002, changes.reduce((sum, value) => sum + value, 0) / changes.length);
 }
 
-function levelsFor(direction, indicators, values) {
+function levelsFor(direction, indicators, values, candles4h) {
   const center = indicators.ema1h20 || indicators.price;
   const recentVolatility = volatility(values);
   const entryWidth = center * recentVolatility * 0.25;
   const risk = center * recentVolatility * 1.5;
   const entryZone = { low: round(center - entryWidth), high: round(center + entryWidth) };
-  const structureLow = Math.min(...values.slice(-12));
-  const structureHigh = Math.max(...values.slice(-12));
+  const structureLow = Math.min(...candles4h.slice(-3).map((candle) => candle[3]));
+  const structureHigh = Math.max(...candles4h.slice(-3).map((candle) => candle[2]));
 
   return direction === LONG
     ? {
@@ -89,7 +88,7 @@ function emptyPlan(direction, status = "資料不足") {
   };
 }
 
-function planFor(direction, indicators, values) {
+function planFor(direction, indicators, values, candles4h, evaluationPrice) {
   const longSide = direction === LONG;
   const conditions = longSide
     ? {
@@ -106,9 +105,23 @@ function planFor(direction, indicators, values) {
     };
   const weights = [40, 20, 20, 20];
   const score = Object.values(conditions).reduce((sum, passed, index) => sum + (passed ? weights[index] : 0), 0);
-  const levels = levelsFor(direction, indicators, values);
+  const levels = levelsFor(direction, indicators, values, candles4h);
   const plan = { direction, score, status: score === 100 ? READY : WAITING, ...levels, conditions };
-  return { ...plan, planState: planStateFor(plan, indicators.price) };
+  return { ...plan, planState: planStateFor(plan, evaluationPrice) };
+}
+
+function hasContinuousTail(rows, interval, minimum, width) {
+  if (!Array.isArray(rows) || rows.length < minimum) return false;
+  return rows.slice(-minimum).every((row, index, tail) => {
+    if (!Array.isArray(row) || row.length < width || row[0] % interval !== 0) return false;
+    if (!row.slice(1, width).every((value) => Number.isFinite(Number(value)) && Number(value) > 0)) return false;
+    return !index || row[0] - tail[index - 1][0] === interval;
+  });
+}
+
+function emptyStrategy(status) {
+  const plans = { long: emptyPlan(LONG, status), short: emptyPlan(SHORT, status) };
+  return { plans, primaryDirection: "觀望", indicators: {}, direction: "觀望", planState: status, entryZone: null, stopLoss: null, takeProfit: [] };
 }
 
 export function planStateFor(plan, price) {
@@ -126,16 +139,21 @@ export function planStateFor(plan, price) {
   return price >= plan.entryZone.low && price <= plan.entryZone.high ? "可進場" : "等待回踩";
 }
 
-export function strategyFor(history, currentPrice) {
-  const closes = history.map((item) => number(Array.isArray(item) ? item[1] : item)).filter((value) => value > 0);
-  const price = number(currentPrice) || closes.at(-1);
+export function strategyFor(hourly, candles4h, currentPrice, now = Date.now()) {
+  if (hourly.length < MIN_HISTORY || candles4h.length < MIN_4H_HISTORY) return emptyStrategy("資料不足");
+  const expected1h = Math.floor(now / HOUR) * HOUR;
+  const expected4h = Math.floor(now / FOUR_HOURS) * FOUR_HOURS;
+  if (!hasContinuousTail(hourly, HOUR, MIN_HISTORY, 2)
+      || !hasContinuousTail(candles4h, FOUR_HOURS, MIN_4H_HISTORY, 5)
+      || hourly.at(-1)[0] !== expected1h
+      || candles4h.at(-1)[0] !== expected4h) return emptyStrategy("資料不連續");
 
-  if (closes.length < MIN_HISTORY || !price) {
-    const plans = { long: emptyPlan(LONG, "資料不足"), short: emptyPlan(SHORT, "資料不足") };
-    return { plans, primaryDirection: "觀望", indicators: {}, direction: "觀望", planState: "資料不足", entryZone: null, stopLoss: null, takeProfit: [] };
-  }
-
-  const closes4h = fourHourly(closes);
+  const hourlyInput = hourly.slice(-MIN_HISTORY);
+  const candles4hInput = candles4h.slice(-MIN_4H_HISTORY);
+  const closes = hourlyInput.map((item) => number(item[1]));
+  const closes4h = candles4hInput.map((item) => number(item[4]));
+  const price = closes.at(-1);
+  const evaluationPrice = number(currentPrice) || price;
   const ema4h20 = ema(closes4h, 20).at(-1);
   const ema4h50 = ema(closes4h, 50).at(-1);
   const ema1h20 = ema(closes, 20).at(-1);
@@ -144,6 +162,9 @@ export function strategyFor(history, currentPrice) {
   const last = currentMacd.histogram.length - 1;
   const indicators = {
     price,
+    asOf1h: hourlyInput.at(-1)[0],
+    asOf4h: candles4hInput.at(-1)[0],
+    intervals: { indicators: HOUR, trend: FOUR_HOURS },
     ema4h20,
     ema4h50,
     ema1h20,
@@ -154,8 +175,8 @@ export function strategyFor(history, currentPrice) {
     volatility: volatility(closes) * 100
   };
   const plans = {
-    long: planFor(LONG, indicators, closes),
-    short: planFor(SHORT, indicators, closes)
+    long: planFor(LONG, indicators, closes, candles4hInput, evaluationPrice),
+    short: planFor(SHORT, indicators, closes, candles4hInput, evaluationPrice)
   };
   const primary = plans.long.score >= plans.short.score ? plans.long : plans.short;
   const primaryDirection = primary.direction;
@@ -163,7 +184,7 @@ export function strategyFor(history, currentPrice) {
   return {
     plans,
     primaryDirection,
-    indicators: Object.fromEntries(Object.entries(indicators).map(([key, value]) => [key, typeof value === "boolean" ? value : round(value, key === "rsi14" ? 2 : 6)])),
+    indicators: Object.fromEntries(Object.entries(indicators).map(([key, value]) => [key, typeof value === "number" ? round(value, key === "rsi14" ? 2 : 6) : value])),
     direction: primaryDirection,
     planState: primary.planState,
     entryZone: primary.entryZone || null,

@@ -22,9 +22,11 @@ StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不�
 
 進場中心使用 1h EMA20，進場寬度使用最近 14 期平均絕對小時報酬的 0.25 倍。停損取最近 12 小時結構高低點與 1.5 倍波動距離中較嚴格者，止盈一與止盈二為 1.5R、2.5R。
 
+1h 指標只使用帶 UTC 時間戳的 CoinGecko hourly 資料，4h 趨勢與結構價位使用官方 OHLC。最近 220 個 1h 點或 50 根 4h K 線若有缺口，該幣種不產生交易計畫。
+
 ## 資料更新
 
-GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100，累積 1h 價格與 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
+GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
 
 啟用自動更新前，在 GitHub Repository Secrets 設定 `COINGECKO_API_KEY`。金鑰只會在 Actions 使用，不會送到瀏覽器。
 
