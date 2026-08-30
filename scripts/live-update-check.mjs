@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { buildLivePayload } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
+import { verifiedInstruments } from "./binance-instruments.mjs";
 
 const HOUR = 60 * 60 * 1000;
 const FOUR_HOURS = 4 * HOUR;
@@ -14,6 +15,19 @@ const coins = [
   { id: "bitcoin", symbol: "btc", current_price: 122, market_cap_rank: 1 },
   { id: "ethereum", symbol: "eth", current_price: 50, market_cap_rank: 2 }
 ];
+
+const duplicateAndMissing = [...coins, { id: "wrapped-bitcoin", symbol: "btc" }, { id: "dogecoin", symbol: "doge" }];
+const liveInstruments = verifiedInstruments(duplicateAndMissing, [
+  { symbol: "BTCUSDT", status: "TRADING", isSpotTradingAllowed: true, baseAsset: "BTC", quoteAsset: "USDT" },
+  { symbol: "ETHUSDT", status: "BREAK", isSpotTradingAllowed: true, baseAsset: "ETH", quoteAsset: "USDT" }
+]);
+assert.equal(liveInstruments.get("bitcoin").symbol, "BTCUSDT");
+assert.equal(liveInstruments.has("wrapped-bitcoin"), false);
+assert.equal(liveInstruments.has("ethereum"), false);
+assert.equal(liveInstruments.has("dogecoin"), false);
+const duplicatePayload = buildLivePayload(duplicateAndMissing, {}, now, liveInstruments);
+assert.deepEqual(duplicatePayload.signals.filter((signal) => signal.symbol === "BTC").map((signal) => signal.coinId), ["bitcoin", "wrapped-bitcoin"]);
+assert.equal(duplicatePayload.signals.find((signal) => signal.coinId === "wrapped-bitcoin").liveMode, "snapshot-only");
 
 let requests = 0;
 const markets = await fetchMarkets(async () => {
@@ -39,10 +53,17 @@ await refreshTimeSeries(state, [coins[0]], now + 20 * 60_000, async () => {
 }, 0);
 assert.deepEqual(state, before);
 
-const payload = buildLivePayload(coins, state, now);
+const payload = buildLivePayload(coins, state, now, liveInstruments);
 assert.equal(payload.signals.length, 2);
 assert.equal(payload.updatedAt, "2026-01-10T12:10:00.000Z");
 assert.equal(payload.signals[0].coinId, "bitcoin");
+assert.equal(payload.signals[0].symbol, "BTC");
+assert.equal(payload.signals[0].liveMode, "websocket");
+assert.equal(payload.signals[0].liveInstrument.symbol, "BTCUSDT");
+assert.equal(payload.signals[1].liveMode, "snapshot-only");
+assert.equal(payload.signals[1].liveInstrument, null);
+assert.deepEqual(payload.signals[0].priceSource, { source: "CoinGecko", instrument: "bitcoin", quoteAsset: "USD" });
+assert.equal(payload.signals[0].indicatorSource.instrument, "bitcoin");
 assert(!("winRate" in payload.signals[0]));
 assert(!("ev" in payload.signals[0]));
 assert(!("rr" in payload.signals[0]));

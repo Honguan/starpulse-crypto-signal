@@ -15,10 +15,6 @@ function round(value, digits = 2) {
   return Math.round(number(value) * factor) / factor;
 }
 
-function symbolFor(coin) {
-  return `${String(coin.symbol || "").toUpperCase()}USDT`;
-}
-
 function riskLevelFor(coin, change24h) {
   const volume = number(coin.total_volume);
   if (volume < 1_000_000 || Math.abs(change24h) >= 18) return "高";
@@ -34,9 +30,15 @@ export function signalFor(coin, index) {
   const rank = coin.market_cap_rank || index + 1;
 
   return {
-    symbol: symbolFor(coin),
+    coinId: coin.id,
+    name: coin.name || coin.id,
+    symbol: String(coin.symbol || "").toUpperCase(),
     baseAsset: String(coin.symbol || "").toUpperCase(),
     price: number(coin.current_price),
+    priceSource: { source: "CoinGecko", instrument: coin.id, quoteAsset: "USD" },
+    indicatorSource: { source: "CoinGecko", instrument: coin.id, timeframe: "1h / 4h" },
+    liveMode: "snapshot-only",
+    liveInstrument: null,
     change24h,
     marketCapRank: rank,
     direction: "觀望",
@@ -99,11 +101,11 @@ export async function buildSignals() {
     watchlist: signals
       .filter((signal) => signal.direction === "觀望")
       .slice(0, 20)
-      .map((signal) => ({ symbol: signal.symbol, reason: signal.reasons.join("、") })),
+      .map((signal) => ({ coinId: signal.coinId, symbol: signal.symbol, reason: signal.reasons.join("、") })),
     highRisk: signals
       .filter((signal) => signal.riskLevel === "高")
       .slice(0, 20)
-      .map((signal) => ({ symbol: signal.symbol, reason: signal.warnings[0] }))
+      .map((signal) => ({ coinId: signal.coinId, symbol: signal.symbol, reason: signal.warnings[0] }))
   };
 }
 

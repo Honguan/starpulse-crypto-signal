@@ -25,12 +25,12 @@ export function renderDashboard(data, options = "") {
   renderMarket(data.market);
 
   const settings = typeof options === "string" ? { symbolFilter: options } : options;
-  const favoriteSymbols = settings.favoriteSymbols || new Set();
+  const favoriteCoinIds = settings.favoriteCoinIds || new Set();
   const symbolFilter = settings.symbolFilter || "";
   const normalizedFilter = symbolFilter.trim().toUpperCase();
   const signals = data.signals.filter((signal) => {
-    const matchesSymbol = !normalizedFilter || signal.symbol.includes(normalizedFilter);
-    const matchesFavorite = !settings.favoriteOnly || favoriteSymbols.has(signal.symbol);
+    const matchesSymbol = !normalizedFilter || [signal.symbol, signal.coinId, signal.name, signal.liveInstrument?.symbol].some((value) => String(value || "").toUpperCase().includes(normalizedFilter));
+    const matchesFavorite = !settings.favoriteOnly || favoriteCoinIds.has(signal.coinId);
     return matchesSymbol && matchesFavorite;
   });
   const byPlanScore = (a, b) => {
@@ -41,7 +41,7 @@ export function renderDashboard(data, options = "") {
 
   const rankedSignals = signals.sort(byPlanScore);
   const visibleSignals = settings.symbolFilter || settings.favoriteOnly ? rankedSignals : rankedSignals.slice(0, 5);
-  renderCards("#plan-list", visibleSignals, favoriteSymbols);
+  renderCards("#plan-list", visibleSignals, favoriteCoinIds);
   bindCandleCharts(visibleSignals);
 }
 
@@ -90,31 +90,32 @@ function marketItem(label, value) {
   `;
 }
 
-function renderCards(selector, signals, favoriteSymbols = new Set()) {
+function renderCards(selector, signals, favoriteCoinIds = new Set()) {
   const root = document.querySelector(selector);
   root.innerHTML = signals.length
-    ? signals.map((signal) => renderCard(signal, favoriteSymbols)).join("")
+    ? signals.map((signal) => renderCard(signal, favoriteCoinIds)).join("")
     : '<p class="empty">目前沒有符合條件的訊號。</p>';
 }
 
-function renderCard(signal, favoriteSymbols) {
-  const isFavorite = favoriteSymbols.has(signal.symbol);
+function renderCard(signal, favoriteCoinIds) {
+  const isFavorite = favoriteCoinIds.has(signal.coinId);
   const strategy = signal.strategy || {};
   const plans = signal.plans || {};
   const primary = signal.primaryDirection === "做空" ? plans.short : plans.long;
   const conditionScore = Math.max(plans.long?.score || 0, plans.short?.score || 0);
   return `
-    <article class="card" data-symbol="${signal.symbol}">
+    <article class="card" data-coin-id="${signal.coinId}" data-live-pair="${signal.liveInstrument?.symbol || ""}" data-snapshot-price="${signal.price}">
       <div class="card-head">
         <div>
           <h3 class="symbol">${signal.symbol}</h3>
           <span class="asset">
-            <span>${signal.baseAsset}</span>
+            <span>${signal.name}／${signal.coinId}</span>
             <span data-live-price>${signal.price}</span>
             <span data-live-change>${signal.change24h}%</span>
           </span>
         </div>
-        <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-symbol="${signal.symbol}" aria-label="切換 ${signal.symbol} 最愛">★</button>
+        <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-coin-id="${signal.coinId}" aria-label="切換 ${signal.name} 最愛">★</button>
+        <span class="label">${signal.liveMode === "websocket" ? `${signal.liveInstrument.symbol} 即時` : "快照模式"}</span>
         <span class="badge ${directionClass[signal.primaryDirection] || "watch"}">${signal.primaryDirection || signal.direction || "觀望"}</span>
       </div>
       <div class="card-body">
@@ -141,7 +142,7 @@ function renderCard(signal, favoriteSymbols) {
           <li>資料延遲或 API 異常時請勿依賴訊號。</li>
         </ul>
 
-        <details class="chart-details" data-chart-details data-symbol="${signal.symbol}">
+        <details class="chart-details" data-chart-details data-coin-id="${signal.coinId}">
           <summary>K 線圖</summary>
           <canvas class="candle-chart" width="640" height="240" aria-label="${signal.symbol} K 線圖"></canvas>
           <p class="chart-empty">展開後載入 K 線；歷史不足時不繪製。</p>
@@ -160,7 +161,7 @@ function bindCandleCharts(signals) {
   document.querySelectorAll("[data-chart-details]").forEach((details) => {
     details.addEventListener("toggle", () => {
       if (!details.open || details.dataset.chartReady) return;
-      const signal = signals.find((item) => item.symbol === details.dataset.symbol);
+      const signal = signals.find((item) => item.coinId === details.dataset.coinId);
       const rendered = renderCandleChart(details.querySelector("canvas"), signal?.candles || [], signal?.plans || {});
       const empty = details.querySelector(".chart-empty");
       if (rendered && empty) empty.hidden = true;
