@@ -8,9 +8,14 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: live-data-publisher
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -42,16 +47,33 @@ jobs:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
           LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
         run: node scripts/update-live-signals.mjs
-      - name: Commit live signals
+      - name: Commit and publish live signals
         if: steps.api.outputs.ready == 'true'
+        env:
+          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
+          LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
         run: |
           cd "$GITHUB_WORKSPACE/live-data"
-          git add data/signals.json data/price-history.json
-          if git diff --cached --quiet; then
-            echo "signals unchanged"
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: update live signals"
-          git push origin HEAD:live-data
+          for attempt in 1 2; do
+            git add data/signals.json data/price-history.json
+            if git diff --cached --quiet; then
+              echo "signals unchanged"
+              exit 0
+            fi
+            git commit -m "chore: update live signals"
+            if git push origin HEAD:live-data; then
+              exit 0
+            fi
+            if [ "$attempt" = 2 ]; then
+              echo "::error::live-data changed again; publication aborted without force-pushing"
+              exit 1
+            fi
+            echo "::warning::live-data push conflict; regenerating once from the latest remote state"
+            git fetch origin live-data
+            git reset --hard origin/live-data
+            cd "$GITHUB_WORKSPACE"
+            node scripts/update-live-signals.mjs
+            cd "$GITHUB_WORKSPACE/live-data"
+          done
