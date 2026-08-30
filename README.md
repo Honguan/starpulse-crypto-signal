@@ -36,6 +36,8 @@ GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 
 
 訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
 
+Fallback 用來保護回訪者免受短暫的 live publication 或上游讀取故障：每個瀏覽器只在 schema 與 render 驗證成功後，於 localStorage 覆寫 1 份 last-known-good snapshot，不建立 Git 版本。資料超過 24 小時便刪除且不顯示為可用交易快照；首次造訪、清除瀏覽器資料或所有來源同時失效時不保證有 fallback。
+
 啟用自動更新前，在 GitHub Repository Secrets 設定 `COINGECKO_API_KEY`。金鑰只會在 Actions 使用，不會送到瀏覽器。
 
 只有明確對應 CoinGecko ID、且由 Binance `exchangeInfo` 確認仍可交易的 USDT 現貨，才會透過公開 WebSocket 更新價格。若兩來源價格相差超過 5%，或資產沒有已驗證配對，畫面明示快照模式並等待下一次 CoinGecko 快照。

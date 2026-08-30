@@ -3,6 +3,7 @@ import { getStrongNotifications } from "./notification.js";
 import { startLivePrices, syncLiveStatus } from "./live-prices.js";
 import { prepareSnapshot } from "./data-freshness.mjs";
 import { parseSignalPayload } from "./signal-schema.mjs";
+import { loadLastKnownGood, saveLastKnownGood } from "./snapshot-store.mjs";
 
 const errorEl = document.querySelector("#error");
 const coinInput = document.querySelector("#coin-symbol");
@@ -105,6 +106,16 @@ function clearDashboard() {
   document.querySelector("#plan-list").replaceChildren();
 }
 
+async function fallbackSnapshot() {
+  try {
+    const stored = loadLastKnownGood();
+    if (stored) return stored;
+  } catch {
+    // Invalid or expired browser snapshots are removed by loadLastKnownGood.
+  }
+  return prepareSnapshot(await loadSignals(), { fallback: true });
+}
+
 async function refreshLiveSignals() {
   try {
     const candidate = prepareSnapshot(await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`));
@@ -114,6 +125,11 @@ async function refreshLiveSignals() {
       throw loadError("render", "render failed");
     }
     signalData = candidate;
+    try {
+      saveLastKnownGood(candidate);
+    } catch {
+      // Storage availability must not invalidate a usable in-memory snapshot.
+    }
     errorEl.hidden = candidate.freshness.state === "fresh";
     errorEl.textContent = candidate.freshness.state === "delayed"
       ? "策略資料更新延遲，暫不顯示為即時資料。"
@@ -122,7 +138,7 @@ async function refreshLiveSignals() {
     try {
       const candidate = signalData
         ? prepareSnapshot(signalData, { fallback: signalData.freshness?.fallback })
-        : prepareSnapshot(await loadSignals(), { fallback: true });
+        : await fallbackSnapshot();
       renderData(candidate);
       signalData = candidate;
     } catch (fallbackError) {
