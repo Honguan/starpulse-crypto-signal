@@ -30,7 +30,7 @@ export function verifiedInstruments(coins, exchangeSymbols) {
 
 export async function fetchVerifiedInstruments(coins, fetchImpl = fetch) {
   try {
-    const response = await fetchImpl("https://api.binance.com/api/v3/exchangeInfo?symbolStatus=TRADING&showPermissionSets=false");
+    const response = await fetchImpl("https://data-api.binance.vision/api/v3/exchangeInfo?symbolStatus=TRADING&showPermissionSets=false");
     if (!response.ok) return new Map();
     return verifiedInstruments(coins, (await response.json()).symbols || []);
   } catch {
