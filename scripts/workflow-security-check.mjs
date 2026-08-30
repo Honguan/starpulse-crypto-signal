@@ -20,11 +20,14 @@ for (const [, action, sha, version] of pins) assert.deepEqual([sha, version], ex
 assert(Object.values(workflows).every((workflow) => !/^permissions:/m.test(workflow)), "permissions must be job-scoped");
 assert.equal((source.match(/^\s+contents:\s+write\s*$/gm) || []).length, 1, "only one job may write contents");
 assert(/update:\s+permissions:\s+contents: write/.test(workflows["update-signals.yml"]), "only the publisher gets contents write");
-assert(/deploy:\s+permissions:\s+contents: read\s+pages: write\s+id-token: write/.test(workflows["pages.yml"]), "Pages gets only required permissions");
-assert.equal((source.match(/persist-credentials:\s+false/g) || []).length, 3, "all checkouts disable persisted credentials");
+assert(/deploy:[\s\S]*?permissions:\s+contents: read\s+pages: write\s+id-token: write/.test(workflows["pages.yml"]), "Pages gets only required permissions");
+const checkoutCount = pins.filter(([, action]) => action === "actions/checkout").length;
+assert.equal((source.match(/persist-credentials:\s+false/g) || []).length, checkoutCount, "all checkouts disable persisted credentials");
 assert(workflows["update-signals.yml"].includes("GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}") && workflows["update-signals.yml"].includes("http.https://github.com/.extraheader"), "push authenticates only in the publication step");
 assert(workflows["live-data-health.yml"].includes("timeout-minutes: 5"));
 assert(workflows["pages.yml"].includes("timeout-minutes: 10"));
+assert(workflows["pages.yml"].includes("pull_request:") && workflows["pages.yml"].includes("needs: validate") && workflows["pages.yml"].includes("github.event_name != 'pull_request'"), "pull requests validate and deployment requires a successful validation job");
+assert(workflows["pages.yml"].includes("signal-schema-check.mjs") && workflows["pages.yml"].includes("git ls-files -z '*.js' '*.mjs'"), "CI validates fallback schema and JavaScript syntax");
 assert(workflows["update-signals.yml"].includes("timeout-minutes: 15"));
 
 console.log("workflow security check ok");

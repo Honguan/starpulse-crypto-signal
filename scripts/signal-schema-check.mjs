@@ -3,7 +3,6 @@ import fs from "node:fs";
 import { parseSignalPayload, validateSignalPayload } from "../assets/js/signal-schema.mjs";
 
 const valid = JSON.parse(fs.readFileSync("data/signals.json", "utf8"));
-valid.schemaVersion = 1;
 
 assert.equal(validateSignalPayload(valid), valid);
 assert.equal(parseSignalPayload(JSON.stringify(valid)).signals.length, valid.signals.length);

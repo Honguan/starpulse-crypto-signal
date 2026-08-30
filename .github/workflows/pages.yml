@@ -4,14 +4,45 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
+  validate:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+      - name: Run regression checks
+        run: |
+          node scripts/strategy-check.mjs
+          node scripts/indicator-check.mjs
+          node scripts/freshness-check.mjs
+          node scripts/signal-schema-check.mjs
+          node scripts/live-update-check.mjs
+          node scripts/candle-chart-check.mjs
+          node --no-warnings scripts/render-security-check.mjs
+          node scripts/workflow-security-check.mjs
+          node --no-warnings scripts/live-price-check.mjs
+          node --no-warnings scripts/notification-check.mjs
+          node scripts/check.mjs
+          git ls-files -z '*.js' '*.mjs' | xargs -0 -n1 node --check
+
   deploy:
+    needs: validate
+    if: ${{ github.event_name != 'pull_request' }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     permissions:
       contents: read
       pages: write

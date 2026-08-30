@@ -40,6 +40,8 @@ CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多
 
 所有第三方 Actions 固定至完整 commit SHA，並在旁註記已審查版本。token 權限僅設於個別 job：健康檢查只有 `contents: read`，Pages 只有 `contents: read`／`pages: write`／`id-token: write`，只有 `live-data` 發布 job 可寫 repository contents。所有 checkout 均不持久化 Git credential，發布 step 才以 `GITHUB_TOKEN` 驗證單次 push；每個 job 也有明確 timeout。`workflow-security-check.mjs` 由 freshness workflow 持續驗證這些限制。
 
+Pages workflow 在 pull request 與 main push 執行相同的 deterministic regression、fallback schema 與全 JavaScript syntax 檢查，不需要 production API secrets。部署 job 以 `needs: validate` 為硬閘門，驗證失敗即不會啟動；PR 只執行驗證，合併後才部署。Repository branch protection 可將 `validate` 設為 required check。
+
 更新 SLO 是每 10 分鐘發布一次，GitHub Actions cron 僅視為 best-effort。資料年齡達 20 分鐘（連續缺 2 個預期窗口）即顯示延遲／degraded，超過 60 分鐘顯示 stale 並停用計畫。獨立的 `Live Data Freshness` workflow 每 15 分鐘直接驗證已發布 payload 的 schema 與 `updatedAt`；超出 SLO 會產生失敗 Action 與 job summary，藉此區分「更新 workflow 曾成功」和「目前資料仍新鮮」。若 10 分鐘硬 SLA 是產品必要條件，需改用具排程 SLA 的外部 runtime，不能把 GitHub cron 當保證。
 
 訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
