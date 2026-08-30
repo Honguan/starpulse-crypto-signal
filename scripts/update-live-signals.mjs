@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
+import { SIGNAL_SCHEMA_VERSION } from "../assets/js/signal-schema.mjs";
 import { signalFor } from "./generate_signals.mjs";
 import { fetchMarkets, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments } from "./binance-instruments.mjs";
@@ -76,6 +77,7 @@ export function buildLivePayload(coins, state, now = Date.now(), liveInstruments
   const count = (direction) => signals.filter((signal) => signal.direction === direction).length;
 
   return {
+    schemaVersion: SIGNAL_SCHEMA_VERSION,
     project: "StarPulse Crypto Signal",
     status: "normal",
     live: true,

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { buildLivePayload } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments, verifiedInstruments } from "./binance-instruments.mjs";
+import { validateSignalPayload } from "../assets/js/signal-schema.mjs";
 
 const HOUR = 60 * 60 * 1000;
 const FOUR_HOURS = 4 * HOUR;
@@ -58,6 +59,7 @@ await refreshTimeSeries(state, [coins[0]], now + 20 * 60_000, async () => {
 assert.deepEqual(state, before);
 
 const payload = buildLivePayload(coins, state, now, liveInstruments);
+assert.equal(validateSignalPayload(payload), payload);
 assert.equal(payload.signals.length, 2);
 assert.equal(payload.updatedAt, "2026-01-10T12:10:00.000Z");
 assert.equal(payload.signals[0].coinId, "bitcoin");

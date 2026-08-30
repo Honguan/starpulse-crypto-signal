@@ -13876,5 +13876,6 @@
       "symbol": "USD0",
       "reason": "波動或流動性風險偏高"
     }
-  ]
+  ],
+  "schemaVersion": 1
 }

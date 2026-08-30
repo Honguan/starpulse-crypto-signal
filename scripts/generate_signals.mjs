@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
+import { SIGNAL_SCHEMA_VERSION } from "../assets/js/signal-schema.mjs";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
 const TOP_100_PAGES = [1];
@@ -91,6 +92,7 @@ export async function buildSignals() {
   };
 
   return {
+    schemaVersion: SIGNAL_SCHEMA_VERSION,
     project: "StarPulse Crypto Signal",
     status: "normal",
     live: false,
