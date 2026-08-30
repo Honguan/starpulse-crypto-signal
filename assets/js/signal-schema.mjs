@@ -90,6 +90,16 @@ export function validateSignalPayload(payload) {
   if (typeof payload.live !== "boolean") reject("live");
   const market = record(payload.market, "market");
   ["condition", "riskLevel", "btcDirection", "ethDirection", "summary"].forEach((key) => string(market[key], `market.${key}`));
+  const quality = record(payload.dataQuality, "dataQuality");
+  ["source", "status"].forEach((key) => string(quality[key], `dataQuality.${key}`));
+  ["successCount", "failedCount", "requestFailureCount", "missingHistoryCount", "concurrency"].forEach((key) => {
+    if (!Number.isInteger(quality[key]) || quality[key] < 0) reject(`dataQuality.${key}`);
+  });
+  array(quality.failures, "dataQuality.failures");
+  quality.failures.forEach((failure, index) => {
+    record(failure, `dataQuality.failures[${index}]`);
+    ["coinId", "resource", "classification"].forEach((key) => string(failure[key], `dataQuality.failures[${index}].${key}`));
+  });
   array(payload.signals, "signals");
   if (!payload.signals.length) reject("signals");
   payload.signals.forEach(validateSignal);

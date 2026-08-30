@@ -1,9 +1,20 @@
 {
+  "schemaVersion": 1,
   "project": "StarPulse Crypto Signal",
-  "status": "normal",
+  "status": "degraded",
   "live": false,
   "strategySource": "CoinGecko 市場快照（備援）",
-  "updatedAt": "2026-08-30T09:50:38.958Z",
+  "updatedAt": "2026-08-30T12:06:02.861Z",
+  "dataQuality": {
+    "source": "CoinGecko",
+    "status": "degraded",
+    "successCount": 100,
+    "failedCount": 0,
+    "requestFailureCount": 0,
+    "missingHistoryCount": 100,
+    "concurrency": 1,
+    "failures": []
+  },
   "market": {
     "condition": "震盪",
     "riskLevel": "中",
@@ -17,7 +28,7 @@
       "name": "Bitcoin",
       "symbol": "BTC",
       "baseAsset": "BTC",
-      "price": 78036,
+      "price": 78182,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "bitcoin",
@@ -30,7 +41,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.5,
+      "change24h": 0.76,
       "marketCapRank": 1,
       "direction": "觀望",
       "riskLevel": "低",
@@ -121,40 +132,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.5%",
+          "value": "0.76%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.8%",
+          "value": "1.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "13,089,308,778 USD",
+          "value": "12,920,567,875 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 1",
-        "24h 漲跌 0.5%",
-        "7d 漲跌 2.8%"
+        "24h 漲跌 0.76%",
+        "7d 漲跌 1.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ethereum",
       "name": "Ethereum",
       "symbol": "ETH",
       "baseAsset": "ETH",
-      "price": 2453.63,
+      "price": 2460.37,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "ethereum",
@@ -167,7 +178,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.76,
+      "change24h": 0.99,
       "marketCapRank": 2,
       "direction": "觀望",
       "riskLevel": "低",
@@ -258,40 +269,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.76%",
+          "value": "0.99%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.9%",
+          "value": "1.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "5,319,302,756 USD",
+          "value": "5,438,352,604 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 2",
-        "24h 漲跌 0.76%",
-        "7d 漲跌 2.9%"
+        "24h 漲跌 0.99%",
+        "7d 漲跌 1.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "tether",
       "name": "Tether",
       "symbol": "USDT",
       "baseAsset": "USDT",
-      "price": 0.999929,
+      "price": 0.999881,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "tether",
@@ -407,7 +418,7 @@
         },
         {
           "label": "24h 成交量",
-          "value": "25,564,401,858 USD",
+          "value": "25,434,678,999 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
@@ -421,14 +432,14 @@
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "binancecoin",
       "name": "BNB",
       "symbol": "BNB",
       "baseAsset": "BNB",
-      "price": 691.94,
+      "price": 693.05,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "binancecoin",
@@ -441,7 +452,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.5,
+      "change24h": 0.54,
       "marketCapRank": 4,
       "direction": "觀望",
       "riskLevel": "低",
@@ -532,33 +543,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.5%",
+          "value": "0.54%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "1.5%",
+          "value": "0.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "503,067,665 USD",
+          "value": "509,910,909 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 4",
-        "24h 漲跌 0.5%",
-        "7d 漲跌 1.5%"
+        "24h 漲跌 0.54%",
+        "7d 漲跌 0.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ripple",
@@ -578,7 +589,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.22,
+      "change24h": 0.67,
       "marketCapRank": 5,
       "direction": "觀望",
       "riskLevel": "低",
@@ -669,40 +680,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.22%",
+          "value": "0.67%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-4.7%",
+          "value": "-5.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,058,562,798 USD",
+          "value": "1,083,275,057 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 5",
-        "24h 漲跌 0.22%",
-        "7d 漲跌 -4.7%"
+        "24h 漲跌 0.67%",
+        "7d 漲跌 -5.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "usd-coin",
       "name": "USDC",
       "symbol": "USDC",
       "baseAsset": "USDC",
-      "price": 0.999914,
+      "price": 0.999883,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "usd-coin",
@@ -715,7 +726,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": -0.01,
       "marketCapRank": 6,
       "direction": "觀望",
       "riskLevel": "低",
@@ -806,7 +817,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -818,28 +829,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "6,444,105,364 USD",
+          "value": "6,222,636,555 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 6",
-        "24h 漲跌 0%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "solana",
       "name": "Solana",
       "symbol": "SOL",
       "baseAsset": "SOL",
-      "price": 104.69,
+      "price": 105.1,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "solana",
@@ -852,7 +863,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.22,
+      "change24h": 1.54,
       "marketCapRank": 7,
       "direction": "觀望",
       "riskLevel": "低",
@@ -943,40 +954,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.22%",
+          "value": "1.54%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "13.3%",
+          "value": "12.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "2,056,073,494 USD",
+          "value": "2,085,779,789 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 7",
-        "24h 漲跌 1.22%",
-        "7d 漲跌 13.3%"
+        "24h 漲跌 1.54%",
+        "7d 漲跌 12.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "tron",
       "name": "TRON",
       "symbol": "TRX",
       "baseAsset": "TRX",
-      "price": 0.340324,
+      "price": 0.340583,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "tron",
@@ -989,7 +1000,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.59,
+      "change24h": 0.6,
       "marketCapRank": 8,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1080,33 +1091,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.59%",
+          "value": "0.6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.6%",
+          "value": "-0.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "252,670,179 USD",
+          "value": "247,948,577 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 8",
-        "24h 漲跌 0.59%",
-        "7d 漲跌 -0.6%"
+        "24h 漲跌 0.6%",
+        "7d 漲跌 -0.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "figure-heloc",
@@ -1126,7 +1137,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": -3.82,
       "marketCapRank": 9,
       "direction": "觀望",
       "riskLevel": "中",
@@ -1217,7 +1228,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "-3.82%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -1236,21 +1247,21 @@
       ],
       "reasons": [
         "市值排名 9",
-        "24h 漲跌 0%",
+        "24h 漲跌 -3.82%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "hyperliquid",
       "name": "Hyperliquid",
       "symbol": "HYPE",
       "baseAsset": "HYPE",
-      "price": 83.22,
+      "price": 83.55,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "hyperliquid",
@@ -1263,7 +1274,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.14,
+      "change24h": 2.97,
       "marketCapRank": 9,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1354,40 +1365,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.14%",
+          "value": "2.97%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "6.1%",
+          "value": "5.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "860,669,362 USD",
+          "value": "856,815,469 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 9",
-        "24h 漲跌 2.14%",
-        "7d 漲跌 6.1%"
+        "24h 漲跌 2.97%",
+        "7d 漲跌 5.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "zcash",
       "name": "Zcash",
       "symbol": "ZEC",
       "baseAsset": "ZEC",
-      "price": 838.32,
+      "price": 840.89,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "zcash",
@@ -1400,7 +1411,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 5.1,
+      "change24h": 4.1,
       "marketCapRank": 10,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1491,40 +1502,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "5.1%",
+          "value": "4.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "4.4%",
+          "value": "3.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,116,859,565 USD",
+          "value": "1,100,245,819 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 10",
-        "24h 漲跌 5.1%",
-        "7d 漲跌 4.4%"
+        "24h 漲跌 4.1%",
+        "7d 漲跌 3.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "dogecoin",
       "name": "Dogecoin",
       "symbol": "DOGE",
       "baseAsset": "DOGE",
-      "price": 0.08454,
+      "price": 0.084923,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "dogecoin",
@@ -1537,7 +1548,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.26,
+      "change24h": 0.47,
       "marketCapRank": 11,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1628,40 +1639,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.26%",
+          "value": "0.47%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-6.3%",
+          "value": "-7.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "307,522,826 USD",
+          "value": "315,789,379 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 11",
-        "24h 漲跌 0.26%",
-        "7d 漲跌 -6.3%"
+        "24h 漲跌 0.47%",
+        "7d 漲跌 -7.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "rain",
       "name": "Rain",
       "symbol": "RAIN",
       "baseAsset": "RAIN",
-      "price": 0.01749482,
+      "price": 0.01750017,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "rain",
@@ -1674,7 +1685,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.9,
+      "change24h": -0.73,
       "marketCapRank": 12,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1765,40 +1776,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.9%",
+          "value": "-0.73%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "26.5%",
+          "value": "25.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "45,300,581 USD",
+          "value": "48,136,481 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 12",
-        "24h 漲跌 -0.9%",
-        "7d 漲跌 26.5%"
+        "24h 漲跌 -0.73%",
+        "7d 漲跌 25.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "usds",
       "name": "USDS",
       "symbol": "USDS",
       "baseAsset": "USDS",
-      "price": 0.999898,
+      "price": 0.999954,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "usds",
@@ -1811,7 +1822,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.01,
+      "change24h": 0,
       "marketCapRank": 13,
       "direction": "觀望",
       "riskLevel": "低",
@@ -1902,7 +1913,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.01%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -1914,28 +1925,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "168,218,261 USD",
+          "value": "141,141,628 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 13",
-        "24h 漲跌 -0.01%",
+        "24h 漲跌 0%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "monero",
       "name": "Monero",
       "symbol": "XMR",
       "baseAsset": "XMR",
-      "price": 480.36,
+      "price": 478.13,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "monero",
@@ -1948,7 +1959,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.17,
+      "change24h": 2.92,
       "marketCapRank": 14,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2039,40 +2050,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.17%",
+          "value": "2.92%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "10.9%",
+          "value": "10.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "69,513,451 USD",
+          "value": "75,220,206 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 14",
-        "24h 漲跌 2.17%",
-        "7d 漲跌 10.9%"
+        "24h 漲跌 2.92%",
+        "7d 漲跌 10.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "leo-token",
       "name": "LEO Token",
       "symbol": "LEO",
       "baseAsset": "LEO",
-      "price": 9.71,
+      "price": 9.52,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "leo-token",
@@ -2085,7 +2096,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.43,
+      "change24h": -1.42,
       "marketCapRank": 15,
       "direction": "觀望",
       "riskLevel": "高",
@@ -2176,40 +2187,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.43%",
+          "value": "-1.42%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.3%",
+          "value": "0.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "228,013 USD",
+          "value": "364,683 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 15",
-        "24h 漲跌 0.43%",
-        "7d 漲跌 2.3%"
+        "24h 漲跌 -1.42%",
+        "7d 漲跌 0.2%"
       ],
       "warnings": [
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "chainlink",
       "name": "Chainlink",
       "symbol": "LINK",
       "baseAsset": "LINK",
-      "price": 11.35,
+      "price": 11.41,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "chainlink",
@@ -2222,144 +2233,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.32,
-      "marketCapRank": 17,
-      "direction": "觀望",
-      "riskLevel": "低",
-      "timeframe": "1h / 4h",
-      "plans": {
-        "long": {
-          "direction": "做多",
-          "score": 0,
-          "status": "資料不足",
-          "planState": "資料不足",
-          "entryZone": null,
-          "stopLoss": null,
-          "takeProfit": [],
-          "conditions": {
-            "trend": false,
-            "position": false,
-            "rsi": false,
-            "momentum": false
-          }
-        },
-        "short": {
-          "direction": "做空",
-          "score": 0,
-          "status": "資料不足",
-          "planState": "資料不足",
-          "entryZone": null,
-          "stopLoss": null,
-          "takeProfit": [],
-          "conditions": {
-            "trend": false,
-            "position": false,
-            "rsi": false,
-            "momentum": false
-          }
-        }
-      },
-      "primaryDirection": "觀望",
-      "candles": [],
-      "strategy": {
-        "plans": {
-          "long": {
-            "direction": "做多",
-            "score": 0,
-            "status": "資料不足",
-            "planState": "資料不足",
-            "entryZone": null,
-            "stopLoss": null,
-            "takeProfit": [],
-            "conditions": {
-              "trend": false,
-              "position": false,
-              "rsi": false,
-              "momentum": false
-            }
-          },
-          "short": {
-            "direction": "做空",
-            "score": 0,
-            "status": "資料不足",
-            "planState": "資料不足",
-            "entryZone": null,
-            "stopLoss": null,
-            "takeProfit": [],
-            "conditions": {
-              "trend": false,
-              "position": false,
-              "rsi": false,
-              "momentum": false
-            }
-          }
-        },
-        "primaryDirection": "觀望",
-        "indicators": {},
-        "direction": "觀望",
-        "planState": "資料不足",
-        "entryZone": null,
-        "stopLoss": null,
-        "takeProfit": []
-      },
-      "strategySource": "CoinGecko 市場快照（備援）",
-      "sourceMode": "fallback",
-      "details": [
-        {
-          "label": "市值排名",
-          "value": 17,
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko market_cap_rank"
-        },
-        {
-          "label": "24h 漲跌",
-          "value": "0.32%",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko price_change_percentage_24h"
-        },
-        {
-          "label": "7d 漲跌",
-          "value": "0.8%",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko price_change_percentage_7d"
-        },
-        {
-          "label": "24h 成交量",
-          "value": "217,568,313 USD",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko total_volume"
-        }
-      ],
-      "reasons": [
-        "市值排名 17",
-        "24h 漲跌 0.32%",
-        "7d 漲跌 0.8%"
-      ],
-      "warnings": [
-        "輕量分析需等待後續技術指標確認",
-        "此版本未逐一計算 K 線技術指標"
-      ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
-    },
-    {
-      "coinId": "whitebit",
-      "name": "WhiteBIT Coin",
-      "symbol": "WBT",
-      "baseAsset": "WBT",
-      "price": 72,
-      "priceSource": {
-        "source": "CoinGecko",
-        "instrument": "whitebit",
-        "quoteAsset": "USD"
-      },
-      "indicatorSource": {
-        "source": "CoinGecko",
-        "instrument": "whitebit",
-        "timeframe": "1h / 4h"
-      },
-      "liveMode": "snapshot-only",
-      "liveInstrument": null,
-      "change24h": 0.63,
+      "change24h": 0.92,
       "marketCapRank": 16,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2450,40 +2324,177 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.63%",
+          "value": "0.92%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "1.7%",
+          "value": "-0.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "29,982,064 USD",
+          "value": "218,904,809 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 16",
-        "24h 漲跌 0.63%",
-        "7d 漲跌 1.7%"
+        "24h 漲跌 0.92%",
+        "7d 漲跌 -0.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
+    },
+    {
+      "coinId": "whitebit",
+      "name": "WhiteBIT Coin",
+      "symbol": "WBT",
+      "baseAsset": "WBT",
+      "price": 72.06,
+      "priceSource": {
+        "source": "CoinGecko",
+        "instrument": "whitebit",
+        "quoteAsset": "USD"
+      },
+      "indicatorSource": {
+        "source": "CoinGecko",
+        "instrument": "whitebit",
+        "timeframe": "1h / 4h"
+      },
+      "liveMode": "snapshot-only",
+      "liveInstrument": null,
+      "change24h": 0.76,
+      "marketCapRank": 17,
+      "direction": "觀望",
+      "riskLevel": "低",
+      "timeframe": "1h / 4h",
+      "plans": {
+        "long": {
+          "direction": "做多",
+          "score": 0,
+          "status": "資料不足",
+          "planState": "資料不足",
+          "entryZone": null,
+          "stopLoss": null,
+          "takeProfit": [],
+          "conditions": {
+            "trend": false,
+            "position": false,
+            "rsi": false,
+            "momentum": false
+          }
+        },
+        "short": {
+          "direction": "做空",
+          "score": 0,
+          "status": "資料不足",
+          "planState": "資料不足",
+          "entryZone": null,
+          "stopLoss": null,
+          "takeProfit": [],
+          "conditions": {
+            "trend": false,
+            "position": false,
+            "rsi": false,
+            "momentum": false
+          }
+        }
+      },
+      "primaryDirection": "觀望",
+      "candles": [],
+      "strategy": {
+        "plans": {
+          "long": {
+            "direction": "做多",
+            "score": 0,
+            "status": "資料不足",
+            "planState": "資料不足",
+            "entryZone": null,
+            "stopLoss": null,
+            "takeProfit": [],
+            "conditions": {
+              "trend": false,
+              "position": false,
+              "rsi": false,
+              "momentum": false
+            }
+          },
+          "short": {
+            "direction": "做空",
+            "score": 0,
+            "status": "資料不足",
+            "planState": "資料不足",
+            "entryZone": null,
+            "stopLoss": null,
+            "takeProfit": [],
+            "conditions": {
+              "trend": false,
+              "position": false,
+              "rsi": false,
+              "momentum": false
+            }
+          }
+        },
+        "primaryDirection": "觀望",
+        "indicators": {},
+        "direction": "觀望",
+        "planState": "資料不足",
+        "entryZone": null,
+        "stopLoss": null,
+        "takeProfit": []
+      },
+      "strategySource": "CoinGecko 市場快照（備援）",
+      "sourceMode": "fallback",
+      "details": [
+        {
+          "label": "市值排名",
+          "value": 17,
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko market_cap_rank"
+        },
+        {
+          "label": "24h 漲跌",
+          "value": "0.76%",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko price_change_percentage_24h"
+        },
+        {
+          "label": "7d 漲跌",
+          "value": "0.8%",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko price_change_percentage_7d"
+        },
+        {
+          "label": "24h 成交量",
+          "value": "30,464,966 USD",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko total_volume"
+        }
+      ],
+      "reasons": [
+        "市值排名 17",
+        "24h 漲跌 0.76%",
+        "7d 漲跌 0.8%"
+      ],
+      "warnings": [
+        "輕量分析需等待後續技術指標確認",
+        "此版本未逐一計算 K 線技術指標"
+      ],
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "cardano",
       "name": "Cardano",
       "symbol": "ADA",
       "baseAsset": "ADA",
-      "price": 0.200577,
+      "price": 0.201214,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "cardano",
@@ -2496,7 +2507,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.3,
+      "change24h": 0.56,
       "marketCapRank": 18,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2587,40 +2598,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.3%",
+          "value": "0.56%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-7.8%",
+          "value": "-9.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "183,728,903 USD",
+          "value": "178,265,154 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 18",
-        "24h 漲跌 0.3%",
-        "7d 漲跌 -7.8%"
+        "24h 漲跌 0.56%",
+        "7d 漲跌 -9.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "stellar",
       "name": "Stellar",
       "symbol": "XLM",
       "baseAsset": "XLM",
-      "price": 0.178753,
+      "price": 0.179601,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "stellar",
@@ -2633,7 +2644,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.73,
+      "change24h": 1.38,
       "marketCapRank": 19,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2724,40 +2735,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.73%",
+          "value": "1.38%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-5.7%",
+          "value": "-7.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "69,182,172 USD",
+          "value": "69,445,163 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 19",
-        "24h 漲跌 0.73%",
-        "7d 漲跌 -5.7%"
+        "24h 漲跌 1.38%",
+        "7d 漲跌 -7.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "bitcoin-cash",
       "name": "Bitcoin Cash",
       "symbol": "BCH",
       "baseAsset": "BCH",
-      "price": 245.07,
+      "price": 246.65,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "bitcoin-cash",
@@ -2770,7 +2781,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.43,
+      "change24h": 1.53,
       "marketCapRank": 20,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2861,40 +2872,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.43%",
+          "value": "1.53%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-8.2%",
+          "value": "-9.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "83,597,668 USD",
+          "value": "78,635,733 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 20",
-        "24h 漲跌 0.43%",
-        "7d 漲跌 -8.2%"
+        "24h 漲跌 1.53%",
+        "7d 漲跌 -9.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "canton-network",
       "name": "Canton",
       "symbol": "CC",
       "baseAsset": "CC",
-      "price": 0.118943,
+      "price": 0.118232,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "canton-network",
@@ -2907,7 +2918,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 5.5,
+      "change24h": 4.25,
       "marketCapRank": 21,
       "direction": "觀望",
       "riskLevel": "低",
@@ -2998,40 +3009,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "5.5%",
+          "value": "4.25%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "4.9%",
+          "value": "1.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "12,458,509 USD",
+          "value": "12,591,105 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 21",
-        "24h 漲跌 5.5%",
-        "7d 漲跌 4.9%"
+        "24h 漲跌 4.25%",
+        "7d 漲跌 1.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "dai",
       "name": "Dai",
       "symbol": "DAI",
       "baseAsset": "DAI",
-      "price": 0.999786,
+      "price": 0.999752,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "dai",
@@ -3044,7 +3055,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": -0.03,
       "marketCapRank": 22,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3135,7 +3146,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "-0.03%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -3147,28 +3158,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "100,189,537 USD",
+          "value": "86,053,518 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 22",
-        "24h 漲跌 0%",
+        "24h 漲跌 -0.03%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "usd1-wlfi",
       "name": "USD1",
       "symbol": "USD1",
       "baseAsset": "USD1",
-      "price": 0.999505,
+      "price": 0.999445,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "usd1-wlfi",
@@ -3181,7 +3192,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.01,
+      "change24h": -0.02,
       "marketCapRank": 23,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3272,7 +3283,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.01%",
+          "value": "-0.02%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -3284,28 +3295,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "560,419,485 USD",
+          "value": "552,782,130 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 23",
-        "24h 漲跌 -0.01%",
+        "24h 漲跌 -0.02%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ethena-usde",
       "name": "Ethena USDe",
       "symbol": "USDE",
       "baseAsset": "USDE",
-      "price": 0.999936,
+      "price": 0.999914,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "ethena-usde",
@@ -3318,7 +3329,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": -0.01,
       "marketCapRank": 24,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3409,7 +3420,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -3421,28 +3432,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "27,201,634 USD",
+          "value": "22,222,341 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 24",
-        "24h 漲跌 0%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "litecoin",
       "name": "Litecoin",
       "symbol": "LTC",
       "baseAsset": "LTC",
-      "price": 49.1,
+      "price": 49.31,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "litecoin",
@@ -3455,7 +3466,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.39,
+      "change24h": 1.13,
       "marketCapRank": 25,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3546,40 +3557,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.39%",
+          "value": "1.13%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-4.3%",
+          "value": "-5.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "164,462,554 USD",
+          "value": "161,418,801 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 25",
-        "24h 漲跌 0.39%",
-        "7d 漲跌 -4.3%"
+        "24h 漲跌 1.13%",
+        "7d 漲跌 -5.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "the-open-network",
       "name": "Gram (prev. Toncoin)",
       "symbol": "GRAM",
       "baseAsset": "GRAM",
-      "price": 1.36,
+      "price": 1.37,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "the-open-network",
@@ -3592,7 +3603,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.44,
+      "change24h": 0.7,
       "marketCapRank": 26,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3683,33 +3694,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.44%",
+          "value": "0.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-7.7%",
+          "value": "-8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "24,198,602 USD",
+          "value": "23,935,389 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 26",
-        "24h 漲跌 0.44%",
-        "7d 漲跌 -7.7%"
+        "24h 漲跌 0.7%",
+        "7d 漲跌 -8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "global-dollar",
@@ -3729,7 +3740,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.02,
+      "change24h": -0.01,
       "marketCapRank": 27,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3820,7 +3831,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.02%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -3832,28 +3843,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "526,960,234 USD",
+          "value": "544,335,322 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 27",
-        "24h 漲跌 0.02%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "hedera-hashgraph",
       "name": "Hedera",
       "symbol": "HBAR",
       "baseAsset": "HBAR",
-      "price": 0.074916,
+      "price": 0.075068,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "hedera-hashgraph",
@@ -3866,7 +3877,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.28,
+      "change24h": 0.45,
       "marketCapRank": 28,
       "direction": "觀望",
       "riskLevel": "低",
@@ -3957,56 +3968,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.28%",
+          "value": "0.45%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-2.3%",
+          "value": "-4.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "40,983,689 USD",
+          "value": "42,489,073 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 28",
-        "24h 漲跌 0.28%",
-        "7d 漲跌 -2.3%"
+        "24h 漲跌 0.45%",
+        "7d 漲跌 -4.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "avalanche-2",
-      "name": "Avalanche",
-      "symbol": "AVAX",
-      "baseAsset": "AVAX",
-      "price": 7.33,
+      "coinId": "uniswap",
+      "name": "Uniswap",
+      "symbol": "UNI",
+      "baseAsset": "UNI",
+      "price": 5.14,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "avalanche-2",
+        "instrument": "uniswap",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "avalanche-2",
+        "instrument": "uniswap",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.97,
+      "change24h": 17.15,
       "marketCapRank": 29,
       "direction": "觀望",
-      "riskLevel": "低",
+      "riskLevel": "中",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -4094,56 +4105,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.97%",
+          "value": "17.15%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.6%",
+          "value": "20.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "100,520,595 USD",
+          "value": "539,055,160 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 29",
-        "24h 漲跌 0.97%",
-        "7d 漲跌 -0.6%"
+        "24h 漲跌 17.15%",
+        "7d 漲跌 20.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "uniswap",
-      "name": "Uniswap",
-      "symbol": "UNI",
-      "baseAsset": "UNI",
-      "price": 4.83,
+      "coinId": "avalanche-2",
+      "name": "Avalanche",
+      "symbol": "AVAX",
+      "baseAsset": "AVAX",
+      "price": 7.38,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "uniswap",
+        "instrument": "avalanche-2",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "uniswap",
+        "instrument": "avalanche-2",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 10.26,
+      "change24h": 1.61,
       "marketCapRank": 30,
       "direction": "觀望",
-      "riskLevel": "中",
+      "riskLevel": "低",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -4231,40 +4242,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "10.26%",
+          "value": "1.61%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "18.5%",
+          "value": "-0.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "429,681,737 USD",
+          "value": "107,222,509 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 30",
-        "24h 漲跌 10.26%",
-        "7d 漲跌 18.5%"
+        "24h 漲跌 1.61%",
+        "7d 漲跌 -0.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "sui",
       "name": "Sui",
       "symbol": "SUI",
       "baseAsset": "SUI",
-      "price": 0.737861,
+      "price": 0.741754,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "sui",
@@ -4277,7 +4288,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.32,
+      "change24h": 0.9,
       "marketCapRank": 31,
       "direction": "觀望",
       "riskLevel": "低",
@@ -4368,40 +4379,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.32%",
+          "value": "0.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-6.7%",
+          "value": "-7.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "214,909,300 USD",
+          "value": "222,639,560 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 31",
-        "24h 漲跌 0.32%",
-        "7d 漲跌 -6.7%"
+        "24h 漲跌 0.9%",
+        "7d 漲跌 -7.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "shiba-inu",
       "name": "Shiba Inu",
       "symbol": "SHIB",
       "baseAsset": "SHIB",
-      "price": 0.00000509,
+      "price": 0.00000512,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "shiba-inu",
@@ -4414,7 +4425,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.1,
+      "change24h": 0.52,
       "marketCapRank": 32,
       "direction": "觀望",
       "riskLevel": "低",
@@ -4505,33 +4516,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.1%",
+          "value": "0.52%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-3.8%",
+          "value": "-4.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "50,618,884 USD",
+          "value": "44,964,204 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 32",
-        "24h 漲跌 -0.1%",
-        "7d 漲跌 -3.8%"
+        "24h 漲跌 0.52%",
+        "7d 漲跌 -4.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "blackrock-usd-institutional-digital-liquidity-fund",
@@ -4668,14 +4679,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "paypal-usd",
       "name": "PayPal USD",
       "symbol": "PYUSD",
       "baseAsset": "PYUSD",
-      "price": 0.999924,
+      "price": 1,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "paypal-usd",
@@ -4688,7 +4699,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.01,
+      "change24h": 0,
       "marketCapRank": 34,
       "direction": "觀望",
       "riskLevel": "低",
@@ -4779,7 +4790,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.01%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -4791,21 +4802,21 @@
         },
         {
           "label": "24h 成交量",
-          "value": "33,605,250 USD",
+          "value": "24,569,862 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 34",
-        "24h 漲跌 -0.01%",
+        "24h 漲跌 0%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "hashnote-usyc",
@@ -4942,14 +4953,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "crypto-com-chain",
       "name": "Cronos",
       "symbol": "CRO",
       "baseAsset": "CRO",
-      "price": 0.05724,
+      "price": 0.057206,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "crypto-com-chain",
@@ -4962,7 +4973,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.62,
+      "change24h": -0.71,
       "marketCapRank": 36,
       "direction": "觀望",
       "riskLevel": "中",
@@ -5053,40 +5064,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.62%",
+          "value": "-0.71%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.4%",
+          "value": "-0.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "4,133,293 USD",
+          "value": "3,904,277 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 36",
-        "24h 漲跌 0.62%",
-        "7d 漲跌 2.4%"
+        "24h 漲跌 -0.71%",
+        "7d 漲跌 -0.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "tether-gold",
       "name": "Tether Gold",
       "symbol": "XAUT",
       "baseAsset": "XAUT",
-      "price": 4456.93,
+      "price": 4456.5,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "tether-gold",
@@ -5099,7 +5110,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.05,
+      "change24h": 0.06,
       "marketCapRank": 37,
       "direction": "觀望",
       "riskLevel": "低",
@@ -5190,40 +5201,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.05%",
+          "value": "0.06%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-2.7%",
+          "value": "-2.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "116,114,762 USD",
+          "value": "117,455,491 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 37",
-        "24h 漲跌 0.05%",
-        "7d 漲跌 -2.7%"
+        "24h 漲跌 0.06%",
+        "7d 漲跌 -2.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "memecore",
       "name": "MemeCore",
       "symbol": "M",
       "baseAsset": "M",
-      "price": 1.1,
+      "price": 1.086,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "memecore",
@@ -5236,7 +5247,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 6.73,
+      "change24h": 5.95,
       "marketCapRank": 38,
       "direction": "觀望",
       "riskLevel": "中",
@@ -5327,33 +5338,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "6.73%",
+          "value": "5.95%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.7%",
+          "value": "-1.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,392,780 USD",
+          "value": "1,345,680 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 38",
-        "24h 漲跌 6.73%",
-        "7d 漲跌 -0.7%"
+        "24h 漲跌 5.95%",
+        "7d 漲跌 -1.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "near",
@@ -5373,7 +5384,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 4.67,
+      "change24h": 4.68,
       "marketCapRank": 39,
       "direction": "觀望",
       "riskLevel": "低",
@@ -5464,40 +5475,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "4.67%",
+          "value": "4.68%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2%",
+          "value": "-3.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "158,967,278 USD",
+          "value": "162,565,496 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 39",
-        "24h 漲跌 4.67%",
-        "7d 漲跌 2%"
+        "24h 漲跌 4.68%",
+        "7d 漲跌 -3.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "okb",
       "name": "OKB",
       "symbol": "OKB",
       "baseAsset": "OKB",
-      "price": 114.45,
+      "price": 114.02,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "okb",
@@ -5510,7 +5521,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 3.24,
+      "change24h": 3.13,
       "marketCapRank": 40,
       "direction": "觀望",
       "riskLevel": "低",
@@ -5601,33 +5612,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "3.24%",
+          "value": "3.13%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "6.2%",
+          "value": "4.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "20,470,297 USD",
+          "value": "20,163,550 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 40",
-        "24h 漲跌 3.24%",
-        "7d 漲跌 6.2%"
+        "24h 漲跌 3.13%",
+        "7d 漲跌 4.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ripple-usd",
@@ -5647,7 +5658,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.01,
+      "change24h": -0.03,
       "marketCapRank": 41,
       "direction": "觀望",
       "riskLevel": "低",
@@ -5738,7 +5749,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.01%",
+          "value": "-0.03%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -5750,28 +5761,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "194,882,776 USD",
+          "value": "174,017,243 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 41",
-        "24h 漲跌 -0.01%",
+        "24h 漲跌 -0.03%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "bittensor",
       "name": "Bittensor",
       "symbol": "TAO",
       "baseAsset": "TAO",
-      "price": 236.74,
+      "price": 238.06,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "bittensor",
@@ -5784,7 +5795,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.9,
+      "change24h": 1.48,
       "marketCapRank": 42,
       "direction": "觀望",
       "riskLevel": "低",
@@ -5875,33 +5886,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.9%",
+          "value": "1.48%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "8.3%",
+          "value": "5.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "79,880,737 USD",
+          "value": "79,023,796 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 42",
-        "24h 漲跌 1.9%",
-        "7d 漲跌 8.3%"
+        "24h 漲跌 1.48%",
+        "7d 漲跌 5.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ondo-us-dollar-yield",
@@ -5921,7 +5932,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.06,
+      "change24h": -0.31,
       "marketCapRank": 43,
       "direction": "觀望",
       "riskLevel": "高",
@@ -6012,53 +6023,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.06%",
+          "value": "-0.31%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "0.2%",
+          "value": "0.3%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "512,049 USD",
+          "value": "477,522 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 43",
-        "24h 漲跌 -0.06%",
-        "7d 漲跌 0.2%"
+        "24h 漲跌 -0.31%",
+        "7d 漲跌 0.3%"
       ],
       "warnings": [
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "pax-gold",
-      "name": "PAX Gold",
-      "symbol": "PAXG",
-      "baseAsset": "PAXG",
-      "price": 4462.44,
+      "coinId": "aave",
+      "name": "Aave",
+      "symbol": "AAVE",
+      "baseAsset": "AAVE",
+      "price": 126.73,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "pax-gold",
+        "instrument": "aave",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "pax-gold",
+        "instrument": "aave",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.11,
+      "change24h": 4.06,
       "marketCapRank": 44,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6149,53 +6160,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.11%",
+          "value": "4.06%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-2.8%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "31,920,241 USD",
+          "value": "214,925,700 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 44",
-        "24h 漲跌 0.11%",
-        "7d 漲跌 -2.8%"
+        "24h 漲跌 4.06%",
+        "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "pump-fun",
-      "name": "Pump.fun",
-      "symbol": "PUMP",
-      "baseAsset": "PUMP",
-      "price": 0.00483971,
+      "coinId": "pax-gold",
+      "name": "PAX Gold",
+      "symbol": "PAXG",
+      "baseAsset": "PAXG",
+      "price": 4461.71,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "pump-fun",
+        "instrument": "pax-gold",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "pump-fun",
+        "instrument": "pax-gold",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 4.33,
+      "change24h": 0.12,
       "marketCapRank": 45,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6286,53 +6297,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "4.33%",
+          "value": "0.12%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-4.6%",
+          "value": "-2.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "190,553,036 USD",
+          "value": "31,127,291 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 45",
-        "24h 漲跌 4.33%",
-        "7d 漲跌 -4.6%"
+        "24h 漲跌 0.12%",
+        "7d 漲跌 -2.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "aave",
-      "name": "Aave",
-      "symbol": "AAVE",
-      "baseAsset": "AAVE",
-      "price": 123.84,
+      "coinId": "pump-fun",
+      "name": "Pump.fun",
+      "symbol": "PUMP",
+      "baseAsset": "PUMP",
+      "price": 0.00480871,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "aave",
+        "instrument": "pump-fun",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "aave",
+        "instrument": "pump-fun",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.83,
+      "change24h": 4.29,
       "marketCapRank": 46,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6423,40 +6434,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.83%",
+          "value": "4.29%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.4%",
+          "value": "-6.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "191,742,717 USD",
+          "value": "184,053,010 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 46",
-        "24h 漲跌 1.83%",
-        "7d 漲跌 2.4%"
+        "24h 漲跌 4.29%",
+        "7d 漲跌 -6.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "aster-2",
       "name": "Aster",
       "symbol": "ASTER",
       "baseAsset": "ASTER",
-      "price": 0.696757,
+      "price": 0.70603,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "aster-2",
@@ -6469,7 +6480,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.3,
+      "change24h": 1.14,
       "marketCapRank": 47,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6560,40 +6571,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.3%",
+          "value": "1.14%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "8%",
+          "value": "6.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "69,775,401 USD",
+          "value": "65,285,237 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 47",
-        "24h 漲跌 -0.3%",
-        "7d 漲跌 8%"
+        "24h 漲跌 1.14%",
+        "7d 漲跌 6.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "world-liberty-financial",
       "name": "World Liberty Financial",
       "symbol": "WLFI",
       "baseAsset": "WLFI",
-      "price": 0.057434,
+      "price": 0.057861,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "world-liberty-financial",
@@ -6606,7 +6617,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.19,
+      "change24h": 0.23,
       "marketCapRank": 48,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6697,40 +6708,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.19%",
+          "value": "0.23%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.7%",
+          "value": "-1.3%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "15,554,363 USD",
+          "value": "17,644,104 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 48",
-        "24h 漲跌 -0.19%",
-        "7d 漲跌 -0.7%"
+        "24h 漲跌 0.23%",
+        "7d 漲跌 -1.3%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "mantle",
       "name": "Mantle",
       "symbol": "MNT",
       "baseAsset": "MNT",
-      "price": 0.52796,
+      "price": 0.529778,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "mantle",
@@ -6743,7 +6754,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.62,
+      "change24h": 3.17,
       "marketCapRank": 49,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6834,40 +6845,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.62%",
+          "value": "3.17%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "11.6%",
+          "value": "11.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "16,765,139 USD",
+          "value": "16,259,103 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 49",
-        "24h 漲跌 2.62%",
-        "7d 漲跌 11.6%"
+        "24h 漲跌 3.17%",
+        "7d 漲跌 11.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ondo-finance",
       "name": "Ondo",
       "symbol": "ONDO",
       "baseAsset": "ONDO",
-      "price": 0.353056,
+      "price": 0.355635,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "ondo-finance",
@@ -6880,7 +6891,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.11,
+      "change24h": 1.64,
       "marketCapRank": 50,
       "direction": "觀望",
       "riskLevel": "低",
@@ -6971,40 +6982,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.11%",
+          "value": "1.64%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.9%",
+          "value": "-3.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "45,809,088 USD",
+          "value": "46,298,090 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 50",
-        "24h 漲跌 1.11%",
-        "7d 漲跌 -0.9%"
+        "24h 漲跌 1.64%",
+        "7d 漲跌 -3.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "sky",
       "name": "Sky",
       "symbol": "SKY",
       "baseAsset": "SKY",
-      "price": 0.069192,
+      "price": 0.069805,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "sky",
@@ -7017,7 +7028,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.17,
+      "change24h": 2.84,
       "marketCapRank": 51,
       "direction": "觀望",
       "riskLevel": "中",
@@ -7108,40 +7119,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.17%",
+          "value": "2.84%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "7.6%",
+          "value": "5.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "3,786,262 USD",
+          "value": "4,456,974 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 51",
-        "24h 漲跌 2.17%",
-        "7d 漲跌 7.6%"
+        "24h 漲跌 2.84%",
+        "7d 漲跌 5.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "morpho",
       "name": "Morpho",
       "symbol": "MORPHO",
       "baseAsset": "MORPHO",
-      "price": 2.43,
+      "price": 2.47,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "morpho",
@@ -7154,7 +7165,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.56,
+      "change24h": 1.84,
       "marketCapRank": 52,
       "direction": "觀望",
       "riskLevel": "低",
@@ -7245,40 +7256,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.56%",
+          "value": "1.84%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "3.6%",
+          "value": "3%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "24,993,627 USD",
+          "value": "24,779,034 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 52",
-        "24h 漲跌 0.56%",
-        "7d 漲跌 3.6%"
+        "24h 漲跌 1.84%",
+        "7d 漲跌 3%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ethena",
       "name": "Ethena",
       "symbol": "ENA",
       "baseAsset": "ENA",
-      "price": 0.157175,
+      "price": 0.157131,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "ethena",
@@ -7291,7 +7302,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.39,
+      "change24h": 1.34,
       "marketCapRank": 53,
       "direction": "觀望",
       "riskLevel": "低",
@@ -7382,56 +7393,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.39%",
+          "value": "1.34%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "3.7%",
+          "value": "-10.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "354,376,463 USD",
+          "value": "347,024,569 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 53",
-        "24h 漲跌 0.39%",
-        "7d 漲跌 3.7%"
+        "24h 漲跌 1.34%",
+        "7d 漲跌 -10.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "usdd",
-      "name": "USDD",
-      "symbol": "USDD",
-      "baseAsset": "USDD",
-      "price": 0.999594,
+      "coinId": "pepe",
+      "name": "Pepe",
+      "symbol": "PEPE",
+      "baseAsset": "PEPE",
+      "price": 0.00000364,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "usdd",
+        "instrument": "pepe",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "usdd",
+        "instrument": "pepe",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": 0.49,
       "marketCapRank": 54,
       "direction": "觀望",
-      "riskLevel": "中",
+      "riskLevel": "低",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -7519,56 +7530,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "0.49%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "0%",
+          "value": "-8.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,379,511 USD",
+          "value": "117,631,940 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 54",
-        "24h 漲跌 0%",
-        "7d 漲跌 0%"
+        "24h 漲跌 0.49%",
+        "7d 漲跌 -8.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "pepe",
-      "name": "Pepe",
-      "symbol": "PEPE",
-      "baseAsset": "PEPE",
-      "price": 0.00000363,
+      "coinId": "usdd",
+      "name": "USDD",
+      "symbol": "USDD",
+      "baseAsset": "USDD",
+      "price": 0.999378,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "pepe",
+        "instrument": "usdd",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "pepe",
+        "instrument": "usdd",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.15,
+      "change24h": -0.01,
       "marketCapRank": 55,
       "direction": "觀望",
-      "riskLevel": "低",
+      "riskLevel": "中",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -7656,33 +7667,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.15%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-6.9%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "117,078,136 USD",
+          "value": "1,361,471 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 55",
-        "24h 漲跌 0.15%",
-        "7d 漲跌 -6.9%"
+        "24h 漲跌 -0.01%",
+        "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "htx-dao",
@@ -7702,7 +7713,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.08,
+      "change24h": 0.09,
       "marketCapRank": 56,
       "direction": "觀望",
       "riskLevel": "低",
@@ -7793,40 +7804,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.08%",
+          "value": "0.09%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-3.6%",
+          "value": "-3.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "23,322,173 USD",
+          "value": "24,111,011 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 56",
-        "24h 漲跌 -0.08%",
-        "7d 漲跌 -3.6%"
+        "24h 漲跌 0.09%",
+        "7d 漲跌 -3.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "polkadot",
       "name": "Polkadot",
       "symbol": "DOT",
       "baseAsset": "DOT",
-      "price": 0.844258,
+      "price": 0.852914,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "polkadot",
@@ -7839,7 +7850,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.81,
+      "change24h": 1.39,
       "marketCapRank": 57,
       "direction": "觀望",
       "riskLevel": "低",
@@ -7930,56 +7941,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.81%",
+          "value": "1.39%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-5.6%",
+          "value": "-5.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "72,558,712 USD",
+          "value": "76,135,300 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 57",
-        "24h 漲跌 0.81%",
-        "7d 漲跌 -5.6%"
+        "24h 漲跌 1.39%",
+        "7d 漲跌 -5.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "bitget-token",
-      "name": "Bitget Token",
-      "symbol": "BGB",
-      "baseAsset": "BGB",
-      "price": 1.93,
+      "coinId": "worldcoin-wld",
+      "name": "Worldcoin",
+      "symbol": "WLD",
+      "baseAsset": "WLD",
+      "price": 0.375665,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "bitget-token",
+        "instrument": "worldcoin-wld",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "bitget-token",
+        "instrument": "worldcoin-wld",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.48,
+      "change24h": 0.14,
       "marketCapRank": 58,
       "direction": "觀望",
-      "riskLevel": "中",
+      "riskLevel": "低",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -8067,40 +8078,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.48%",
+          "value": "0.14%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.4%",
+          "value": "-2.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "6,078,677 USD",
+          "value": "79,098,523 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 58",
-        "24h 漲跌 0.48%",
-        "7d 漲跌 2.4%"
+        "24h 漲跌 0.14%",
+        "7d 漲跌 -2.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "internet-computer",
       "name": "Internet Computer",
       "symbol": "ICP",
       "baseAsset": "ICP",
-      "price": 2.43,
+      "price": 2.44,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "internet-computer",
@@ -8113,7 +8124,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -1.83,
+      "change24h": -1.73,
       "marketCapRank": 59,
       "direction": "觀望",
       "riskLevel": "低",
@@ -8204,56 +8215,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-1.83%",
+          "value": "-1.73%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "1.3%",
+          "value": "0.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "36,899,639 USD",
+          "value": "34,120,069 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 59",
-        "24h 漲跌 -1.83%",
-        "7d 漲跌 1.3%"
+        "24h 漲跌 -1.73%",
+        "7d 漲跌 0.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "worldcoin-wld",
-      "name": "Worldcoin",
-      "symbol": "WLD",
-      "baseAsset": "WLD",
-      "price": 0.371571,
+      "coinId": "bitget-token",
+      "name": "Bitget Token",
+      "symbol": "BGB",
+      "baseAsset": "BGB",
+      "price": 1.93,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "worldcoin-wld",
+        "instrument": "bitget-token",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "worldcoin-wld",
+        "instrument": "bitget-token",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -1.09,
+      "change24h": 0.69,
       "marketCapRank": 60,
       "direction": "觀望",
-      "riskLevel": "低",
+      "riskLevel": "中",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -8341,40 +8352,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-1.09%",
+          "value": "0.69%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-1.2%",
+          "value": "1.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "76,100,072 USD",
+          "value": "5,715,913 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 60",
-        "24h 漲跌 -1.09%",
-        "7d 漲跌 -1.2%"
+        "24h 漲跌 0.69%",
+        "7d 漲跌 1.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "falcon-finance",
       "name": "Falcon USD",
       "symbol": "USDF",
       "baseAsset": "USDF",
-      "price": 0.996356,
+      "price": 0.996253,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "falcon-finance",
@@ -8387,7 +8398,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.01,
+      "change24h": -0.01,
       "marketCapRank": 61,
       "direction": "觀望",
       "riskLevel": "高",
@@ -8478,7 +8489,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.01%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -8490,28 +8501,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "147,829 USD",
+          "value": "151,945 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 61",
-        "24h 漲跌 0.01%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "bfusd",
       "name": "BFUSD",
       "symbol": "BFUSD",
       "baseAsset": "BFUSD",
-      "price": 0.999899,
+      "price": 0.999554,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "bfusd",
@@ -8524,7 +8535,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.03,
+      "change24h": 0,
       "marketCapRank": 62,
       "direction": "觀望",
       "riskLevel": "中",
@@ -8615,7 +8626,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.03%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -8627,28 +8638,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "1,084,573 USD",
+          "value": "1,015,797 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 62",
-        "24h 漲跌 0.03%",
+        "24h 漲跌 0%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "united-stables",
       "name": "United Stables",
       "symbol": "U",
       "baseAsset": "U",
-      "price": 0.999463,
+      "price": 0.999361,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "united-stables",
@@ -8661,7 +8672,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": -0.01,
       "marketCapRank": 63,
       "direction": "觀望",
       "riskLevel": "低",
@@ -8752,7 +8763,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -8764,28 +8775,28 @@
         },
         {
           "label": "24h 成交量",
-          "value": "73,972,237 USD",
+          "value": "74,153,711 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 63",
-        "24h 漲跌 0%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "usdgo",
       "name": "USDGO",
       "symbol": "USDGO",
       "baseAsset": "USDGO",
-      "price": 1,
+      "price": 0.999997,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "usdgo",
@@ -8798,7 +8809,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.01,
+      "change24h": -0.01,
       "marketCapRank": 64,
       "direction": "觀望",
       "riskLevel": "低",
@@ -8889,7 +8900,7 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.01%",
+          "value": "-0.01%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
@@ -8901,21 +8912,21 @@
         },
         {
           "label": "24h 成交量",
-          "value": "22,880,552 USD",
+          "value": "21,014,431 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 64",
-        "24h 漲跌 0.01%",
+        "24h 漲跌 -0.01%",
         "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "spiko-amundi-overnight-swap-fund-eur",
@@ -9052,14 +9063,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "ethereum-classic",
       "name": "Ethereum Classic",
       "symbol": "ETC",
       "baseAsset": "ETC",
-      "price": 7.39,
+      "price": 7.41,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "ethereum-classic",
@@ -9072,7 +9083,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -1.08,
+      "change24h": -0.69,
       "marketCapRank": 66,
       "direction": "觀望",
       "riskLevel": "低",
@@ -9163,40 +9174,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-1.08%",
+          "value": "-0.69%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-4.6%",
+          "value": "-5.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "35,303,353 USD",
+          "value": "36,189,217 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 66",
-        "24h 漲跌 -1.08%",
-        "7d 漲跌 -4.6%"
+        "24h 漲跌 -0.69%",
+        "7d 漲跌 -5.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "polygon-ecosystem-token",
       "name": "POL (ex-MATIC)",
       "symbol": "POL",
       "baseAsset": "POL",
-      "price": 0.103922,
+      "price": 0.104497,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "polygon-ecosystem-token",
@@ -9209,7 +9220,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -1.35,
+      "change24h": -0.52,
       "marketCapRank": 67,
       "direction": "觀望",
       "riskLevel": "低",
@@ -9300,40 +9311,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-1.35%",
+          "value": "-0.52%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-0.3%",
+          "value": "-2.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "62,541,603 USD",
+          "value": "69,487,887 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 67",
-        "24h 漲跌 -1.35%",
-        "7d 漲跌 -0.3%"
+        "24h 漲跌 -0.52%",
+        "7d 漲跌 -2.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "bitway",
       "name": "Bitway",
       "symbol": "BTW",
       "baseAsset": "BTW",
-      "price": 0.398434,
+      "price": 0.401006,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "bitway",
@@ -9346,7 +9357,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.36,
+      "change24h": 0.56,
       "marketCapRank": 68,
       "direction": "觀望",
       "riskLevel": "低",
@@ -9437,40 +9448,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.36%",
+          "value": "0.56%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-11%",
+          "value": "-7.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "14,646,541 USD",
+          "value": "14,989,352 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 68",
-        "24h 漲跌 -0.36%",
-        "7d 漲跌 -11%"
+        "24h 漲跌 0.56%",
+        "7d 漲跌 -7.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "pi-network",
       "name": "Pi Network",
       "symbol": "PI",
       "baseAsset": "PI",
-      "price": 0.091319,
+      "price": 0.091202,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "pi-network",
@@ -9483,7 +9494,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.79,
+      "change24h": -0.48,
       "marketCapRank": 69,
       "direction": "觀望",
       "riskLevel": "中",
@@ -9574,33 +9585,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.79%",
+          "value": "-0.48%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "2.9%",
+          "value": "1.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "3,425,212 USD",
+          "value": "3,434,965 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 69",
-        "24h 漲跌 -0.79%",
-        "7d 漲跌 2.9%"
+        "24h 漲跌 -0.48%",
+        "7d 漲跌 1.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "blockchain-capital",
@@ -9737,14 +9748,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "kucoin-shares",
       "name": "KuCoin",
       "symbol": "KCS",
       "baseAsset": "KCS",
-      "price": 6.92,
+      "price": 6.96,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "kucoin-shares",
@@ -9757,10 +9768,10 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.13,
+      "change24h": 0.67,
       "marketCapRank": 71,
       "direction": "觀望",
-      "riskLevel": "中",
+      "riskLevel": "低",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -9848,40 +9859,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.13%",
+          "value": "0.67%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-6.5%",
+          "value": "-5.6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "8,428,021 USD",
+          "value": "11,036,185 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 71",
-        "24h 漲跌 0.13%",
-        "7d 漲跌 -6.5%"
+        "24h 漲跌 0.67%",
+        "7d 漲跌 -5.6%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "quant-network",
       "name": "Quant",
       "symbol": "QNT",
       "baseAsset": "QNT",
-      "price": 61.52,
+      "price": 61.64,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "quant-network",
@@ -9894,7 +9905,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.58,
+      "change24h": 1.19,
       "marketCapRank": 72,
       "direction": "觀望",
       "riskLevel": "低",
@@ -9985,33 +9996,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.58%",
+          "value": "1.19%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-1.7%",
+          "value": "-3.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "11,536,073 USD",
+          "value": "11,618,217 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 72",
-        "24h 漲跌 0.58%",
-        "7d 漲跌 -1.7%"
+        "24h 漲跌 1.19%",
+        "7d 漲跌 -3.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "eutbl",
@@ -10148,30 +10159,30 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "janus-henderson-anemoy-treasury-fund",
-      "name": "Janus Henderson Anemoy Treasury Fund",
-      "symbol": "JTRSY",
-      "baseAsset": "JTRSY",
-      "price": 1.11,
+      "coinId": "lighter",
+      "name": "Lighter",
+      "symbol": "LIT",
+      "baseAsset": "LIT",
+      "price": 3.49,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "janus-henderson-anemoy-treasury-fund",
+        "instrument": "lighter",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "janus-henderson-anemoy-treasury-fund",
+        "instrument": "lighter",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0,
+      "change24h": 1.73,
       "marketCapRank": 74,
       "direction": "觀望",
-      "riskLevel": "高",
+      "riskLevel": "低",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -10259,56 +10270,56 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0%",
+          "value": "1.73%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "0.1%",
+          "value": "6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "0 USD",
+          "value": "34,242,905 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 74",
-        "24h 漲跌 0%",
-        "7d 漲跌 0.1%"
+        "24h 漲跌 1.73%",
+        "7d 漲跌 6%"
       ],
       "warnings": [
-        "波動或流動性風險偏高",
+        "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "lighter",
-      "name": "Lighter",
-      "symbol": "LIT",
-      "baseAsset": "LIT",
-      "price": 3.47,
+      "coinId": "janus-henderson-anemoy-treasury-fund",
+      "name": "Janus Henderson Anemoy Treasury Fund",
+      "symbol": "JTRSY",
+      "baseAsset": "JTRSY",
+      "price": 1.11,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "lighter",
+        "instrument": "janus-henderson-anemoy-treasury-fund",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "lighter",
+        "instrument": "janus-henderson-anemoy-treasury-fund",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.7,
+      "change24h": 0,
       "marketCapRank": 75,
       "direction": "觀望",
-      "riskLevel": "低",
+      "riskLevel": "高",
       "timeframe": "1h / 4h",
       "plans": {
         "long": {
@@ -10396,40 +10407,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.7%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "8.8%",
+          "value": "0.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "33,901,606 USD",
+          "value": "0 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 75",
-        "24h 漲跌 0.7%",
-        "7d 漲跌 8.8%"
+        "24h 漲跌 0%",
+        "7d 漲跌 0.1%"
       ],
       "warnings": [
-        "輕量分析需等待後續技術指標確認",
+        "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "gatechain-token",
       "name": "Gate",
       "symbol": "GT",
       "baseAsset": "GT",
-      "price": 8.08,
+      "price": 8.11,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "gatechain-token",
@@ -10442,7 +10453,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 3.07,
+      "change24h": 2.14,
       "marketCapRank": 76,
       "direction": "觀望",
       "riskLevel": "中",
@@ -10533,40 +10544,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "3.07%",
+          "value": "2.14%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "8%",
+          "value": "6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,031,793 USD",
+          "value": "1,020,790 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 76",
-        "24h 漲跌 3.07%",
-        "7d 漲跌 8%"
+        "24h 漲跌 2.14%",
+        "7d 漲跌 6%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "nexo",
       "name": "NEXO",
       "symbol": "NEXO",
       "baseAsset": "NEXO",
-      "price": 0.860556,
+      "price": 0.856429,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "nexo",
@@ -10579,7 +10590,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 4.67,
+      "change24h": 4.04,
       "marketCapRank": 77,
       "direction": "觀望",
       "riskLevel": "中",
@@ -10670,33 +10681,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "4.67%",
+          "value": "4.04%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "4.5%",
+          "value": "5.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "2,217,729 USD",
+          "value": "3,141,817 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 77",
-        "24h 漲跌 4.67%",
-        "7d 漲跌 4.5%"
+        "24h 漲跌 4.04%",
+        "7d 漲跌 5.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "superstate-short-duration-us-government-securities-fund-ustb",
@@ -10833,14 +10844,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "venice-token",
       "name": "Venice Token",
       "symbol": "VVV",
       "baseAsset": "VVV",
-      "price": 16.67,
+      "price": 16.75,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "venice-token",
@@ -10853,7 +10864,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 4.69,
+      "change24h": 3.79,
       "marketCapRank": 79,
       "direction": "觀望",
       "riskLevel": "低",
@@ -10944,190 +10955,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "4.69%",
+          "value": "3.79%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-1.7%",
+          "value": "-0.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "14,291,289 USD",
+          "value": "14,133,290 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 79",
-        "24h 漲跌 4.69%",
-        "7d 漲跌 -1.7%"
+        "24h 漲跌 3.79%",
+        "7d 漲跌 -0.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "just",
-      "name": "JUST",
-      "symbol": "JST",
-      "baseAsset": "JST",
-      "price": 0.096122,
+      "coinId": "cosmos",
+      "name": "Cosmos Hub",
+      "symbol": "ATOM",
+      "baseAsset": "ATOM",
+      "price": 1.49,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "just",
+        "instrument": "cosmos",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "just",
+        "instrument": "cosmos",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -3.42,
-      "marketCapRank": 80,
-      "direction": "觀望",
-      "riskLevel": "低",
-      "timeframe": "1h / 4h",
-      "plans": {
-        "long": {
-          "direction": "做多",
-          "score": 0,
-          "status": "資料不足",
-          "planState": "資料不足",
-          "entryZone": null,
-          "stopLoss": null,
-          "takeProfit": [],
-          "conditions": {
-            "trend": false,
-            "position": false,
-            "rsi": false,
-            "momentum": false
-          }
-        },
-        "short": {
-          "direction": "做空",
-          "score": 0,
-          "status": "資料不足",
-          "planState": "資料不足",
-          "entryZone": null,
-          "stopLoss": null,
-          "takeProfit": [],
-          "conditions": {
-            "trend": false,
-            "position": false,
-            "rsi": false,
-            "momentum": false
-          }
-        }
-      },
-      "primaryDirection": "觀望",
-      "candles": [],
-      "strategy": {
-        "plans": {
-          "long": {
-            "direction": "做多",
-            "score": 0,
-            "status": "資料不足",
-            "planState": "資料不足",
-            "entryZone": null,
-            "stopLoss": null,
-            "takeProfit": [],
-            "conditions": {
-              "trend": false,
-              "position": false,
-              "rsi": false,
-              "momentum": false
-            }
-          },
-          "short": {
-            "direction": "做空",
-            "score": 0,
-            "status": "資料不足",
-            "planState": "資料不足",
-            "entryZone": null,
-            "stopLoss": null,
-            "takeProfit": [],
-            "conditions": {
-              "trend": false,
-              "position": false,
-              "rsi": false,
-              "momentum": false
-            }
-          }
-        },
-        "primaryDirection": "觀望",
-        "indicators": {},
-        "direction": "觀望",
-        "planState": "資料不足",
-        "entryZone": null,
-        "stopLoss": null,
-        "takeProfit": []
-      },
-      "strategySource": "CoinGecko 市場快照（備援）",
-      "sourceMode": "fallback",
-      "details": [
-        {
-          "label": "市值排名",
-          "value": 80,
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko market_cap_rank"
-        },
-        {
-          "label": "24h 漲跌",
-          "value": "-3.42%",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko price_change_percentage_24h"
-        },
-        {
-          "label": "7d 漲跌",
-          "value": "-8.9%",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko price_change_percentage_7d"
-        },
-        {
-          "label": "24h 成交量",
-          "value": "23,463,637 USD",
-          "sourceMode": "fallback",
-          "calculationMode": "CoinGecko total_volume"
-        }
-      ],
-      "reasons": [
-        "市值排名 80",
-        "24h 漲跌 -3.42%",
-        "7d 漲跌 -8.9%"
-      ],
-      "warnings": [
-        "輕量分析需等待後續技術指標確認",
-        "此版本未逐一計算 K 線技術指標"
-      ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
-    },
-    {
-      "coinId": "algorand",
-      "name": "Algorand",
-      "symbol": "ALGO",
-      "baseAsset": "ALGO",
-      "price": 0.086509,
-      "priceSource": {
-        "source": "CoinGecko",
-        "instrument": "algorand",
-        "quoteAsset": "USD"
-      },
-      "indicatorSource": {
-        "source": "CoinGecko",
-        "instrument": "algorand",
-        "timeframe": "1h / 4h"
-      },
-      "liveMode": "snapshot-only",
-      "liveInstrument": null,
-      "change24h": 0.85,
+      "change24h": -0.94,
       "marketCapRank": 81,
       "direction": "觀望",
       "riskLevel": "低",
@@ -11218,53 +11092,190 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.85%",
+          "value": "-0.94%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-3.1%",
+          "value": "-4.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "19,948,262 USD",
+          "value": "25,827,899 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 81",
-        "24h 漲跌 0.85%",
-        "7d 漲跌 -3.1%"
+        "24h 漲跌 -0.94%",
+        "7d 漲跌 -4.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "cosmos",
-      "name": "Cosmos Hub",
-      "symbol": "ATOM",
-      "baseAsset": "ATOM",
-      "price": 1.48,
+      "coinId": "just",
+      "name": "JUST",
+      "symbol": "JST",
+      "baseAsset": "JST",
+      "price": 0.096012,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "cosmos",
+        "instrument": "just",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "cosmos",
+        "instrument": "just",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.86,
+      "change24h": -3.78,
+      "marketCapRank": 80,
+      "direction": "觀望",
+      "riskLevel": "低",
+      "timeframe": "1h / 4h",
+      "plans": {
+        "long": {
+          "direction": "做多",
+          "score": 0,
+          "status": "資料不足",
+          "planState": "資料不足",
+          "entryZone": null,
+          "stopLoss": null,
+          "takeProfit": [],
+          "conditions": {
+            "trend": false,
+            "position": false,
+            "rsi": false,
+            "momentum": false
+          }
+        },
+        "short": {
+          "direction": "做空",
+          "score": 0,
+          "status": "資料不足",
+          "planState": "資料不足",
+          "entryZone": null,
+          "stopLoss": null,
+          "takeProfit": [],
+          "conditions": {
+            "trend": false,
+            "position": false,
+            "rsi": false,
+            "momentum": false
+          }
+        }
+      },
+      "primaryDirection": "觀望",
+      "candles": [],
+      "strategy": {
+        "plans": {
+          "long": {
+            "direction": "做多",
+            "score": 0,
+            "status": "資料不足",
+            "planState": "資料不足",
+            "entryZone": null,
+            "stopLoss": null,
+            "takeProfit": [],
+            "conditions": {
+              "trend": false,
+              "position": false,
+              "rsi": false,
+              "momentum": false
+            }
+          },
+          "short": {
+            "direction": "做空",
+            "score": 0,
+            "status": "資料不足",
+            "planState": "資料不足",
+            "entryZone": null,
+            "stopLoss": null,
+            "takeProfit": [],
+            "conditions": {
+              "trend": false,
+              "position": false,
+              "rsi": false,
+              "momentum": false
+            }
+          }
+        },
+        "primaryDirection": "觀望",
+        "indicators": {},
+        "direction": "觀望",
+        "planState": "資料不足",
+        "entryZone": null,
+        "stopLoss": null,
+        "takeProfit": []
+      },
+      "strategySource": "CoinGecko 市場快照（備援）",
+      "sourceMode": "fallback",
+      "details": [
+        {
+          "label": "市值排名",
+          "value": 80,
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko market_cap_rank"
+        },
+        {
+          "label": "24h 漲跌",
+          "value": "-3.78%",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko price_change_percentage_24h"
+        },
+        {
+          "label": "7d 漲跌",
+          "value": "-8%",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko price_change_percentage_7d"
+        },
+        {
+          "label": "24h 成交量",
+          "value": "21,765,489 USD",
+          "sourceMode": "fallback",
+          "calculationMode": "CoinGecko total_volume"
+        }
+      ],
+      "reasons": [
+        "市值排名 80",
+        "24h 漲跌 -3.78%",
+        "7d 漲跌 -8%"
+      ],
+      "warnings": [
+        "輕量分析需等待後續技術指標確認",
+        "此版本未逐一計算 K 線技術指標"
+      ],
+      "updatedAt": "2026-08-30T12:06:02.861Z"
+    },
+    {
+      "coinId": "algorand",
+      "name": "Algorand",
+      "symbol": "ALGO",
+      "baseAsset": "ALGO",
+      "price": 0.086832,
+      "priceSource": {
+        "source": "CoinGecko",
+        "instrument": "algorand",
+        "quoteAsset": "USD"
+      },
+      "indicatorSource": {
+        "source": "CoinGecko",
+        "instrument": "algorand",
+        "timeframe": "1h / 4h"
+      },
+      "liveMode": "snapshot-only",
+      "liveInstrument": null,
+      "change24h": 1.34,
       "marketCapRank": 82,
       "direction": "觀望",
       "riskLevel": "低",
@@ -11355,40 +11366,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.86%",
+          "value": "1.34%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-4.2%",
+          "value": "-5.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "24,432,165 USD",
+          "value": "20,223,619 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 82",
-        "24h 漲跌 -0.86%",
-        "7d 漲跌 -4.2%"
+        "24h 漲跌 1.34%",
+        "7d 漲跌 -5.5%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "kaspa",
       "name": "Kaspa",
       "symbol": "KAS",
       "baseAsset": "KAS",
-      "price": 0.02774355,
+      "price": 0.02780242,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "kaspa",
@@ -11401,7 +11412,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.04,
+      "change24h": 0.77,
       "marketCapRank": 83,
       "direction": "觀望",
       "riskLevel": "中",
@@ -11492,40 +11503,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.04%",
+          "value": "0.77%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-2%",
+          "value": "-3.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "4,014,279 USD",
+          "value": "3,974,493 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 83",
-        "24h 漲跌 0.04%",
-        "7d 漲跌 -2%"
+        "24h 漲跌 0.77%",
+        "7d 漲跌 -3.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "render-token",
       "name": "Render",
       "symbol": "RENDER",
       "baseAsset": "RENDER",
-      "price": 1.45,
+      "price": 1.46,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "render-token",
@@ -11538,7 +11549,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.99,
+      "change24h": 2.87,
       "marketCapRank": 84,
       "direction": "觀望",
       "riskLevel": "低",
@@ -11629,40 +11640,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.99%",
+          "value": "2.87%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "3%",
+          "value": "0.4%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "27,903,354 USD",
+          "value": "27,520,466 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 84",
-        "24h 漲跌 2.99%",
-        "7d 漲跌 3%"
+        "24h 漲跌 2.87%",
+        "7d 漲跌 0.4%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "jupiter-exchange-solana",
       "name": "Jupiter",
       "symbol": "JUP",
       "baseAsset": "JUP",
-      "price": 0.2137,
+      "price": 0.213984,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "jupiter-exchange-solana",
@@ -11675,7 +11686,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -1.51,
+      "change24h": -1.69,
       "marketCapRank": 85,
       "direction": "觀望",
       "riskLevel": "低",
@@ -11766,33 +11777,33 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-1.51%",
+          "value": "-1.69%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "8.7%",
+          "value": "6.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "31,778,327 USD",
+          "value": "31,376,232 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 85",
-        "24h 漲跌 -1.51%",
-        "7d 漲跌 8.7%"
+        "24h 漲跌 -1.69%",
+        "7d 漲跌 6.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "janus-henderson-anemoy-aaa-clo-fund",
@@ -11929,14 +11940,14 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "gho",
       "name": "GHO",
       "symbol": "GHO",
       "baseAsset": "GHO",
-      "price": 0.999321,
+      "price": 0.999155,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "gho",
@@ -11949,7 +11960,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.01,
+      "change24h": -0.02,
       "marketCapRank": 87,
       "direction": "觀望",
       "riskLevel": "中",
@@ -12040,40 +12051,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.01%",
+          "value": "-0.02%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "0.1%",
+          "value": "0%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "1,624,875 USD",
+          "value": "1,760,356 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 87",
-        "24h 漲跌 0.01%",
-        "7d 漲跌 0.1%"
+        "24h 漲跌 -0.02%",
+        "7d 漲跌 0%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "stable-2",
       "name": "​​Stable",
       "symbol": "STABLE",
       "baseAsset": "STABLE",
-      "price": 0.02672334,
+      "price": 0.02669761,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "stable-2",
@@ -12086,7 +12097,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.07,
+      "change24h": 1.32,
       "marketCapRank": 88,
       "direction": "觀望",
       "riskLevel": "中",
@@ -12177,40 +12188,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.07%",
+          "value": "1.32%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-12.5%",
+          "value": "-15.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "8,835,105 USD",
+          "value": "8,563,040 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 88",
-        "24h 漲跌 2.07%",
-        "7d 漲跌 -12.5%"
+        "24h 漲跌 1.32%",
+        "7d 漲跌 -15.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "official-trump",
       "name": "Official Trump",
       "symbol": "TRUMP",
       "baseAsset": "TRUMP",
-      "price": 2.57,
+      "price": 2.54,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "official-trump",
@@ -12223,7 +12234,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -6.93,
+      "change24h": -7.08,
       "marketCapRank": 89,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12314,40 +12325,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-6.93%",
+          "value": "-7.08%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "5.9%",
+          "value": "2.2%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "329,806,249 USD",
+          "value": "337,899,996 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 89",
-        "24h 漲跌 -6.93%",
-        "7d 漲跌 5.9%"
+        "24h 漲跌 -7.08%",
+        "7d 漲跌 2.2%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "beldex",
       "name": "Beldex",
       "symbol": "BDX",
       "baseAsset": "BDX",
-      "price": 0.079519,
+      "price": 0.079413,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "beldex",
@@ -12360,7 +12371,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.31,
+      "change24h": -0.5,
       "marketCapRank": 90,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12451,40 +12462,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.31%",
+          "value": "-0.5%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-3.3%",
+          "value": "-3.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "10,158,357 USD",
+          "value": "10,142,477 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 90",
-        "24h 漲跌 0.31%",
-        "7d 漲跌 -3.3%"
+        "24h 漲跌 -0.5%",
+        "7d 漲跌 -3.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "vechain",
       "name": "VeChain",
       "symbol": "VET",
       "baseAsset": "VET",
-      "price": 0.00703175,
+      "price": 0.00701746,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "vechain",
@@ -12497,7 +12508,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 5,
+      "change24h": 5.65,
       "marketCapRank": 91,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12588,40 +12599,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "5%",
+          "value": "5.65%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "30.2%",
+          "value": "24.3%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "14,753,622 USD",
+          "value": "14,952,643 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 91",
-        "24h 漲跌 5%",
-        "7d 漲跌 30.2%"
+        "24h 漲跌 5.65%",
+        "7d 漲跌 24.3%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "arbitrum",
       "name": "Arbitrum",
       "symbol": "ARB",
       "baseAsset": "ARB",
-      "price": 0.086396,
+      "price": 0.08786,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "arbitrum",
@@ -12634,7 +12645,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.86,
+      "change24h": 0.99,
       "marketCapRank": 92,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12725,40 +12736,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.86%",
+          "value": "0.99%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-10.4%",
+          "value": "-11.7%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "30,651,699 USD",
+          "value": "33,517,276 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 92",
-        "24h 漲跌 -0.86%",
-        "7d 漲跌 -10.4%"
+        "24h 漲跌 0.99%",
+        "7d 漲跌 -11.7%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "pudgy-penguins",
       "name": "Pudgy Penguins",
       "symbol": "PENGU",
       "baseAsset": "PENGU",
-      "price": 0.00901509,
+      "price": 0.00918442,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "pudgy-penguins",
@@ -12771,7 +12782,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.31,
+      "change24h": 2.02,
       "marketCapRank": 93,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12862,53 +12873,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.31%",
+          "value": "2.02%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "10.6%",
+          "value": "8.8%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "108,006,298 USD",
+          "value": "114,089,972 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 93",
-        "24h 漲跌 0.31%",
-        "7d 漲跌 10.6%"
+        "24h 漲跌 2.02%",
+        "7d 漲跌 8.8%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "filecoin",
-      "name": "Filecoin",
-      "symbol": "FIL",
-      "baseAsset": "FIL",
-      "price": 0.67905,
+      "coinId": "pancakeswap-token",
+      "name": "PancakeSwap",
+      "symbol": "CAKE",
+      "baseAsset": "CAKE",
+      "price": 1.77,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "filecoin",
+        "instrument": "pancakeswap-token",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "filecoin",
+        "instrument": "pancakeswap-token",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": -0.3,
+      "change24h": 3.98,
       "marketCapRank": 94,
       "direction": "觀望",
       "riskLevel": "低",
@@ -12999,53 +13010,53 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "-0.3%",
+          "value": "3.98%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-8.3%",
+          "value": "3.9%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "33,564,688 USD",
+          "value": "37,936,298 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 94",
-        "24h 漲跌 -0.3%",
-        "7d 漲跌 -8.3%"
+        "24h 漲跌 3.98%",
+        "7d 漲跌 3.9%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "pancakeswap-token",
-      "name": "PancakeSwap",
-      "symbol": "CAKE",
-      "baseAsset": "CAKE",
-      "price": 1.75,
+      "coinId": "filecoin",
+      "name": "Filecoin",
+      "symbol": "FIL",
+      "baseAsset": "FIL",
+      "price": 0.683273,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "pancakeswap-token",
+        "instrument": "filecoin",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "pancakeswap-token",
+        "instrument": "filecoin",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 2.16,
+      "change24h": 0.69,
       "marketCapRank": 95,
       "direction": "觀望",
       "riskLevel": "低",
@@ -13136,40 +13147,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "2.16%",
+          "value": "0.69%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "4.6%",
+          "value": "-9.6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "34,820,626 USD",
+          "value": "34,274,534 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 95",
-        "24h 漲跌 2.16%",
-        "7d 漲跌 4.6%"
+        "24h 漲跌 0.69%",
+        "7d 漲跌 -9.6%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "xdce-crowd-sale",
       "name": "XDC Network",
       "symbol": "XDC",
       "baseAsset": "XDC",
-      "price": 0.02774991,
+      "price": 0.02784859,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "xdce-crowd-sale",
@@ -13182,7 +13193,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 0.36,
+      "change24h": 0.69,
       "marketCapRank": 96,
       "direction": "觀望",
       "riskLevel": "中",
@@ -13273,40 +13284,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "0.36%",
+          "value": "0.69%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-2.7%",
+          "value": "-3%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "3,926,245 USD",
+          "value": "4,061,310 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 96",
-        "24h 漲跌 0.36%",
-        "7d 漲跌 -2.7%"
+        "24h 漲跌 0.69%",
+        "7d 漲跌 -3%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "flare-networks",
       "name": "Flare",
       "symbol": "FLR",
       "baseAsset": "FLR",
-      "price": 0.00635185,
+      "price": 0.00635806,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "flare-networks",
@@ -13319,7 +13330,7 @@
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.54,
+      "change24h": 1.1,
       "marketCapRank": 97,
       "direction": "觀望",
       "riskLevel": "中",
@@ -13410,40 +13421,40 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.54%",
+          "value": "1.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-9%",
+          "value": "-10.1%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "2,566,596 USD",
+          "value": "2,677,542 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 97",
-        "24h 漲跌 1.54%",
-        "7d 漲跌 -9%"
+        "24h 漲跌 1.1%",
+        "7d 漲跌 -10.1%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
       "coinId": "usual-usd",
       "name": "Usual USD",
       "symbol": "USD0",
       "baseAsset": "USD0",
-      "price": 0.999719,
+      "price": 0.999671,
       "priceSource": {
         "source": "CoinGecko",
         "instrument": "usual-usd",
@@ -13559,7 +13570,7 @@
         },
         {
           "label": "24h 成交量",
-          "value": "48,884 USD",
+          "value": "45,891 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
@@ -13573,27 +13584,27 @@
         "波動或流動性風險偏高",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     },
     {
-      "coinId": "ether-fi",
-      "name": "Ether.fi",
-      "symbol": "ETHFI",
-      "baseAsset": "ETHFI",
-      "price": 0.541015,
+      "coinId": "dash",
+      "name": "Dash",
+      "symbol": "DASH",
+      "baseAsset": "DASH",
+      "price": 41.52,
       "priceSource": {
         "source": "CoinGecko",
-        "instrument": "ether-fi",
+        "instrument": "dash",
         "quoteAsset": "USD"
       },
       "indicatorSource": {
         "source": "CoinGecko",
-        "instrument": "ether-fi",
+        "instrument": "dash",
         "timeframe": "1h / 4h"
       },
       "liveMode": "snapshot-only",
       "liveInstrument": null,
-      "change24h": 1.73,
+      "change24h": 6.04,
       "marketCapRank": 99,
       "direction": "觀望",
       "riskLevel": "低",
@@ -13684,45 +13695,45 @@
         },
         {
           "label": "24h 漲跌",
-          "value": "1.73%",
+          "value": "6.04%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_24h"
         },
         {
           "label": "7d 漲跌",
-          "value": "-6.7%",
+          "value": "1.6%",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko price_change_percentage_7d"
         },
         {
           "label": "24h 成交量",
-          "value": "35,410,463 USD",
+          "value": "102,609,455 USD",
           "sourceMode": "fallback",
           "calculationMode": "CoinGecko total_volume"
         }
       ],
       "reasons": [
         "市值排名 99",
-        "24h 漲跌 1.73%",
-        "7d 漲跌 -6.7%"
+        "24h 漲跌 6.04%",
+        "7d 漲跌 1.6%"
       ],
       "warnings": [
         "輕量分析需等待後續技術指標確認",
         "此版本未逐一計算 K 線技術指標"
       ],
-      "updatedAt": "2026-08-30T09:50:38.958Z"
+      "updatedAt": "2026-08-30T12:06:02.861Z"
     }
   ],
   "watchlist": [
     {
       "coinId": "bitcoin",
       "symbol": "BTC",
-      "reason": "市值排名 1、24h 漲跌 0.5%、7d 漲跌 2.8%"
+      "reason": "市值排名 1、24h 漲跌 0.76%、7d 漲跌 1.8%"
     },
     {
       "coinId": "ethereum",
       "symbol": "ETH",
-      "reason": "市值排名 2、24h 漲跌 0.76%、7d 漲跌 2.9%"
+      "reason": "市值排名 2、24h 漲跌 0.99%、7d 漲跌 1.8%"
     },
     {
       "coinId": "tether",
@@ -13732,87 +13743,87 @@
     {
       "coinId": "binancecoin",
       "symbol": "BNB",
-      "reason": "市值排名 4、24h 漲跌 0.5%、7d 漲跌 1.5%"
+      "reason": "市值排名 4、24h 漲跌 0.54%、7d 漲跌 0.4%"
     },
     {
       "coinId": "ripple",
       "symbol": "XRP",
-      "reason": "市值排名 5、24h 漲跌 0.22%、7d 漲跌 -4.7%"
+      "reason": "市值排名 5、24h 漲跌 0.67%、7d 漲跌 -5.7%"
     },
     {
       "coinId": "usd-coin",
       "symbol": "USDC",
-      "reason": "市值排名 6、24h 漲跌 0%、7d 漲跌 0%"
+      "reason": "市值排名 6、24h 漲跌 -0.01%、7d 漲跌 0%"
     },
     {
       "coinId": "solana",
       "symbol": "SOL",
-      "reason": "市值排名 7、24h 漲跌 1.22%、7d 漲跌 13.3%"
+      "reason": "市值排名 7、24h 漲跌 1.54%、7d 漲跌 12.2%"
     },
     {
       "coinId": "tron",
       "symbol": "TRX",
-      "reason": "市值排名 8、24h 漲跌 0.59%、7d 漲跌 -0.6%"
+      "reason": "市值排名 8、24h 漲跌 0.6%、7d 漲跌 -0.9%"
     },
     {
       "coinId": "figure-heloc",
       "symbol": "FIGR_HELOC",
-      "reason": "市值排名 9、24h 漲跌 0%、7d 漲跌 0%"
+      "reason": "市值排名 9、24h 漲跌 -3.82%、7d 漲跌 0%"
     },
     {
       "coinId": "hyperliquid",
       "symbol": "HYPE",
-      "reason": "市值排名 9、24h 漲跌 2.14%、7d 漲跌 6.1%"
+      "reason": "市值排名 9、24h 漲跌 2.97%、7d 漲跌 5.1%"
     },
     {
       "coinId": "zcash",
       "symbol": "ZEC",
-      "reason": "市值排名 10、24h 漲跌 5.1%、7d 漲跌 4.4%"
+      "reason": "市值排名 10、24h 漲跌 4.1%、7d 漲跌 3.7%"
     },
     {
       "coinId": "dogecoin",
       "symbol": "DOGE",
-      "reason": "市值排名 11、24h 漲跌 0.26%、7d 漲跌 -6.3%"
+      "reason": "市值排名 11、24h 漲跌 0.47%、7d 漲跌 -7.9%"
     },
     {
       "coinId": "rain",
       "symbol": "RAIN",
-      "reason": "市值排名 12、24h 漲跌 -0.9%、7d 漲跌 26.5%"
+      "reason": "市值排名 12、24h 漲跌 -0.73%、7d 漲跌 25.4%"
     },
     {
       "coinId": "usds",
       "symbol": "USDS",
-      "reason": "市值排名 13、24h 漲跌 -0.01%、7d 漲跌 0%"
+      "reason": "市值排名 13、24h 漲跌 0%、7d 漲跌 0%"
     },
     {
       "coinId": "monero",
       "symbol": "XMR",
-      "reason": "市值排名 14、24h 漲跌 2.17%、7d 漲跌 10.9%"
+      "reason": "市值排名 14、24h 漲跌 2.92%、7d 漲跌 10.7%"
     },
     {
       "coinId": "leo-token",
       "symbol": "LEO",
-      "reason": "市值排名 15、24h 漲跌 0.43%、7d 漲跌 2.3%"
+      "reason": "市值排名 15、24h 漲跌 -1.42%、7d 漲跌 0.2%"
     },
     {
       "coinId": "chainlink",
       "symbol": "LINK",
-      "reason": "市值排名 17、24h 漲跌 0.32%、7d 漲跌 0.8%"
+      "reason": "市值排名 16、24h 漲跌 0.92%、7d 漲跌 -0.2%"
     },
     {
       "coinId": "whitebit",
       "symbol": "WBT",
-      "reason": "市值排名 16、24h 漲跌 0.63%、7d 漲跌 1.7%"
+      "reason": "市值排名 17、24h 漲跌 0.76%、7d 漲跌 0.8%"
     },
     {
       "coinId": "cardano",
       "symbol": "ADA",
-      "reason": "市值排名 18、24h 漲跌 0.3%、7d 漲跌 -7.8%"
+      "reason": "市值排名 18、24h 漲跌 0.56%、7d 漲跌 -9.2%"
     },
     {
       "coinId": "stellar",
       "symbol": "XLM",
-      "reason": "市值排名 19、24h 漲跌 0.73%、7d 漲跌 -5.7%"
+      "reason": "市值排名 19、24h 漲跌 1.38%、7d 漲跌 -7.2%"
     }
   ],
   "highRisk": [
@@ -13876,6 +13887,5 @@
       "symbol": "USD0",
       "reason": "波動或流動性風險偏高"
     }
-  ],
-  "schemaVersion": 1
+  ]
 }

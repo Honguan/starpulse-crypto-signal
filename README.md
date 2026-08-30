@@ -34,6 +34,8 @@ EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing�
 
 GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
 
+CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多重試 2 次，採 bounded exponential backoff 並遵守最多 30 秒的 `Retry-After`。永久 4xx 與 malformed JSON 不重試。歷史補齊明確維持 concurrency 1 以控制 demo API 配額；payload 的 `dataQuality` 公布成功、失敗、缺歷史與逐資產失敗分類，任何 partial failure 都使整體狀態降級。
+
 訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
 
 Fallback 用來保護回訪者免受短暫的 live publication 或上游讀取故障：每個瀏覽器只在 schema 與 render 驗證成功後，於 localStorage 覆寫 1 份 last-known-good snapshot，不建立 Git 版本。資料超過 24 小時便刪除且不顯示為可用交易快照；首次造訪、清除瀏覽器資料或所有來源同時失效時不保證有 fallback。
