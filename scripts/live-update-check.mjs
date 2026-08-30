@@ -106,6 +106,15 @@ await refreshTimeSeries(state, [coins[0]], now + 20 * 60_000, async () => {
 }, 0);
 assert.deepEqual({ version: state.version, hourly: state.hourly, fourHourly: state.fourHourly }, before);
 
+const staleState = {
+  version: 2,
+  hourly: { bitcoin: hourly, delisted: hourly },
+  fourHourly: { bitcoin: fourHourly, delisted: fourHourly }
+};
+await refreshTimeSeries(staleState, [coins[0]], now, async () => { throw new Error("retained series should not be fetched"); }, 0);
+assert.deepEqual(Object.keys(staleState.hourly), ["bitcoin"]);
+assert.deepEqual(Object.keys(staleState.fourHourly), ["bitcoin"]);
+
 const payload = buildLivePayload(coins, state, now, liveInstruments);
 assert.equal(validateSignalPayload(payload), payload);
 assert.equal(payload.signals.length, 2);

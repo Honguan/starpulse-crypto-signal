@@ -59,6 +59,10 @@ export async function refreshTimeSeries(state, coins, now = Date.now(), fetchImp
   state.version = 2;
   state.hourly ||= {};
   state.fourHourly ||= {};
+  const tracked = new Set(coins.map((coin) => coin.id).filter(Boolean));
+  for (const series of [state.hourly, state.fourHourly]) {
+    for (const coinId of Object.keys(series)) if (!tracked.has(coinId)) delete series[coinId];
+  }
   const failures = [];
 
   for (const [index, coin] of coins.entries()) {
