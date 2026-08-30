@@ -18,7 +18,7 @@ function readState() {
 }
 
 function updatedAt(now) {
-  return new Date(now).toISOString().slice(0, 19).replace("T", " ");
+  return new Date(now).toISOString();
 }
 
 function signalFrom(coin, index, history, now) {

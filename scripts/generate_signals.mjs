@@ -4,7 +4,7 @@ import { strategyFor } from "../assets/js/strategy.mjs";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
 const TOP_100_PAGES = [1];
-const UPDATED_AT = new Date().toISOString().slice(0, 19).replace("T", " ");
+const UPDATED_AT = new Date().toISOString();
 
 function number(value, fallback = 0) {
   return Number.isFinite(Number(value)) ? Number(value) : fallback;

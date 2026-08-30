@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { applyTicker } from "../assets/js/live-prices.js";
+import { applyTicker, setLiveState } from "../assets/js/live-prices.js";
 
 function element(textContent = "") {
   return {
@@ -45,5 +45,11 @@ const insufficientCard = {
 };
 assert.equal(applyTicker({ s: "ETHUSDT", c: "51", P: "1" }, { querySelector: () => insufficientCard }), true);
 assert.equal(insufficientState.textContent, "資料不足");
+
+const websocketState = element("連線中…");
+const strategyFreshness = element("過期");
+setLiveState(true, { querySelector: (selector) => selector.includes("websocket") ? websocketState : strategyFreshness });
+assert.equal(websocketState.textContent, "已連線");
+assert.equal(strategyFreshness.textContent, "過期");
 
 console.log("live price check ok");

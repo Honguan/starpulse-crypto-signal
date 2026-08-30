@@ -1,6 +1,7 @@
 import { renderDashboard } from "./signal-render.js";
 import { getStrongNotifications } from "./notification.js";
 import { startLivePrices, syncLiveStatus } from "./live-prices.js";
+import { prepareSnapshot } from "./data-freshness.mjs";
 
 const errorEl = document.querySelector("#error");
 const coinInput = document.querySelector("#coin-symbol");
@@ -62,23 +63,45 @@ async function loadSignals(url = "data/signals.json") {
   return response.json();
 }
 
+function clearDashboard() {
+  document.querySelector("#status").replaceChildren();
+  document.querySelector("#market").replaceChildren();
+  document.querySelector("#plan-list").replaceChildren();
+}
+
 async function refreshLiveSignals() {
   try {
-    signalData = await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`);
-    errorEl.hidden = true;
+    signalData = prepareSnapshot(await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`));
+    errorEl.hidden = signalData.freshness.state === "fresh";
+    errorEl.textContent = signalData.freshness.state === "delayed"
+      ? "策略資料更新延遲，暫不顯示為即時資料。"
+      : "策略資料已過期，交易計畫僅供參考且不可執行。";
   } catch {
-    if (!signalData) {
-      signalData = await loadSignals();
+    try {
+      signalData = signalData
+        ? prepareSnapshot(signalData, { fallback: signalData.freshness?.fallback })
+        : prepareSnapshot(await loadSignals(), { fallback: true });
+    } catch (error) {
+      signalData = undefined;
+      clearDashboard();
+      errorEl.textContent = error.message || "沒有可用的近期策略資料。";
+      errorEl.hidden = false;
+      return false;
     }
-    errorEl.textContent = "即時策略資料暫時無法讀取，顯示備援快照。";
+    errorEl.textContent = signalData.freshness.fallback && signalData.freshness.state === "stale"
+      ? "即時策略資料無法讀取；備援資料已過期，交易計畫不可執行。"
+      : signalData.freshness.fallback
+        ? "即時策略資料暫時無法讀取，顯示近期備援快照。"
+        : "即時策略資料暫時無法更新，保留最後一次快照。";
     errorEl.hidden = false;
   }
   render();
+  return true;
 }
 
 async function init() {
   try {
-    await refreshLiveSignals();
+    if (!await refreshLiveSignals()) return;
     startLivePrices();
     getStrongNotifications(signalData);
     globalThis.setInterval(refreshLiveSignals, LIVE_REFRESH_MS);

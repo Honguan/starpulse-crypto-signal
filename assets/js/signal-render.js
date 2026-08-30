@@ -10,7 +10,8 @@ const directionClass = {
 
 const statusLabels = {
   status: "資料狀態",
-  live: "LIVE 狀態",
+  freshness: "策略資料",
+  websocket: "即時價格",
   updatedAt: "最後更新",
   condition: "目前市場",
   riskLevel: "市場風險",
@@ -47,7 +48,8 @@ export function renderDashboard(data, options = "") {
 function renderStatus(data) {
   const status = {
     status: data.status === "normal" ? "正常" : "異常",
-    live: data.live ? "LIVE" : "OFFLINE",
+    freshness: data.freshness?.label || "未知",
+    websocket: "連線中…",
     updatedAt: data.updatedAt,
     condition: data.market.condition,
     riskLevel: data.market.riskLevel,

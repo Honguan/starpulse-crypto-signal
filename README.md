@@ -34,6 +34,7 @@ Binance USDT 現貨幣種在頁面開啟時會透過公開 WebSocket 更新價�
 
 ```powershell
 node scripts/strategy-check.mjs
+node scripts/freshness-check.mjs
 node scripts/live-update-check.mjs
 node scripts/candle-chart-check.mjs
 node --no-warnings scripts/live-price-check.mjs
