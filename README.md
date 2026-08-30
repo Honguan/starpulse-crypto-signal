@@ -26,6 +26,8 @@ StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不�
 
 1h 指標只使用帶 UTC 時間戳的 CoinGecko hourly 資料，4h 趨勢與結構價位使用官方 OHLC。最近 220 個 1h 點或 50 根 4h K 線若有缺口，該幣種不產生交易計畫。
 
+EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing（無跌幅時為 100）；MACD 使用 EMA(12,26,9)，至少 34 筆資料後才輸出完整 signal／histogram。固定測試資料與 `technicalindicators` 3.1.0 比對，EMA／MACD 容許誤差 `1e-9`，該參考實作將 RSI 四捨五入至小數二位，因此 RSI 容許誤差 `0.005`。
+
 畫面的「條件」是四項策略條件的加權分數（40／20／20／20），不是勝率。「主要 RR」以進場區中心、停損及第二段止盈計算；條件未完成或計畫停損失效時不顯示。詳細資料逐項標示來源與計算模式，不代表歷史績效、機率或期望值；未實作的 Vegas Tunnel 與 TD Sequential 不會顯示。
 
 ## 資料更新
@@ -40,6 +42,7 @@ Binance USDT 現貨幣種在頁面開啟時會透過公開 WebSocket 更新價�
 
 ```powershell
 node scripts/strategy-check.mjs
+node scripts/indicator-check.mjs
 node scripts/freshness-check.mjs
 node scripts/live-update-check.mjs
 node scripts/candle-chart-check.mjs

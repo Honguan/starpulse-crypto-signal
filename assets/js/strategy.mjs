@@ -16,35 +16,54 @@ function round(value, digits = 6) {
   return Math.round(number(value) * factor) / factor;
 }
 
-function ema(values, period) {
+function emaSeries(values, period) {
+  const result = Array(values.length).fill(null);
+  if (values.length < period) return result;
+  let current = values.slice(0, period).reduce((sum, value) => sum + value, 0) / period;
+  result[period - 1] = current;
   const factor = 2 / (period + 1);
-  return values.reduce((result, value, index) => {
-    result.push(index ? value * factor + result[index - 1] * (1 - factor) : value);
-    return result;
-  }, []);
+  for (let index = period; index < values.length; index += 1) {
+    current = values[index] * factor + current * (1 - factor);
+    result[index] = current;
+  }
+  return result;
 }
 
-function rsi(values, period = 14) {
-  if (values.length <= period) return 50;
+export function ema(values, period) {
+  return emaSeries(values, period).filter((value) => value !== null);
+}
+
+export function rsi(values, period = 14) {
+  if (values.length <= period) return null;
 
   let gains = 0;
   let losses = 0;
-  for (let index = values.length - period; index < values.length; index += 1) {
+  for (let index = 1; index <= period; index += 1) {
     const change = values[index] - values[index - 1];
     gains += Math.max(change, 0);
     losses += Math.max(-change, 0);
   }
-  if (!losses) return 100;
-  return 100 - 100 / (1 + gains / losses);
+  let averageGain = gains / period;
+  let averageLoss = losses / period;
+  for (let index = period + 1; index < values.length; index += 1) {
+    const change = values[index] - values[index - 1];
+    averageGain = (averageGain * (period - 1) + Math.max(change, 0)) / period;
+    averageLoss = (averageLoss * (period - 1) + Math.max(-change, 0)) / period;
+  }
+  return averageLoss ? 100 - 100 / (1 + averageGain / averageLoss) : 100;
 }
 
-function macd(values) {
-  const fast = ema(values, 12);
-  const slow = ema(values, 26);
-  const line = values.map((_, index) => fast[index] - slow[index]);
-  const signal = ema(line, 9);
-  const histogram = line.map((value, index) => value - signal[index]);
-  return { line, signal, histogram };
+export function macd(values, fastPeriod = 12, slowPeriod = 26, signalPeriod = 9) {
+  if (values.length < slowPeriod + signalPeriod - 1) return null;
+  const fast = emaSeries(values, fastPeriod);
+  const slow = emaSeries(values, slowPeriod);
+  const rawLine = values.slice(slowPeriod - 1).map((_, index) => {
+    const sourceIndex = index + slowPeriod - 1;
+    return fast[sourceIndex] - slow[sourceIndex];
+  });
+  const signal = ema(rawLine, signalPeriod);
+  const line = rawLine.slice(signalPeriod - 1);
+  return { line, signal, histogram: line.map((value, index) => value - signal[index]) };
 }
 
 function volatility(values) {
@@ -176,6 +195,7 @@ export function strategyFor(hourly, candles4h, currentPrice, now = Date.now()) {
   const ema1h20 = ema(closes, 20).at(-1);
   const currentRsi = rsi(closes);
   const currentMacd = macd(closes);
+  if (currentRsi === null || !currentMacd) return emptyStrategy("資料不足");
   const last = currentMacd.histogram.length - 1;
   const indicators = {
     price,

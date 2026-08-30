@@ -15,9 +15,9 @@ const insufficient = strategyFor(series([100, 101, 102]), [], 102);
 assert.equal(insufficient.planState, "資料不足");
 
 const uptrend = series([
-  ...Array.from({ length: 200 }, (_, index) => 100 + index * 0.25),
-  ...Array.from({ length: 18 }, (_, index) => 149.75 - index * 0.18),
-  ...Array.from({ length: 9 }, (_, index) => 146.5 + index * 0.2)
+  ...Array.from({ length: 201 }, (_, index) => 100 + index * 0.25),
+  ...Array.from({ length: 15 }, (_, index) => 150 - (index + 1) * 0.2),
+  ...Array.from({ length: 14 }, (_, index) => 147 + (index + 1) * 0.05)
 ]);
 const longResult = strategyFor(uptrend, candles(uptrend), 148.1, uptrend.at(-1)[0]);
 assert.equal(longResult.plans.long.status, "可執行");
@@ -32,9 +32,9 @@ assert(longResult.plans.short.takeProfit[0] < longResult.plans.short.entryZone.l
 assert(longResult.plans.short.takeProfit[1] < longResult.plans.short.takeProfit[0]);
 
 const downtrend = series([
-  ...Array.from({ length: 200 }, (_, index) => 150 - index * 0.25),
-  ...Array.from({ length: 18 }, (_, index) => 100.25 + index * 0.18),
-  ...Array.from({ length: 9 }, (_, index) => 103.5 - index * 0.2)
+  ...Array.from({ length: 201 }, (_, index) => 150 - index * 0.25),
+  ...Array.from({ length: 15 }, (_, index) => 100 + (index + 1) * 0.2),
+  ...Array.from({ length: 14 }, (_, index) => 103 - (index + 1) * 0.05)
 ]);
 const shortResult = strategyFor(downtrend, candles(downtrend), 101.9, downtrend.at(-1)[0]);
 assert.equal(shortResult.plans.short.status, "可執行");
