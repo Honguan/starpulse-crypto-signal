@@ -8,19 +8,19 @@ const coinInput = document.querySelector("#coin-symbol");
 const addFavoriteButton = document.querySelector("#add-favorite");
 const clearSymbolButton = document.querySelector("#clear-symbol");
 const modeButtons = document.querySelectorAll("[data-mode]");
-const FAVORITES_KEY = "starpulse.favoriteSymbols";
+const FAVORITES_KEY = "starpulse.favoriteCoinIds";
 const LIVE_DATA_URL = "https://raw.githubusercontent.com/Honguan/starpulse-crypto-signal/live-data/data/signals.json";
 const LIVE_REFRESH_MS = 10 * 60 * 1000;
 let signalData;
 let favoriteOnly = false;
-let favoriteSymbols = readFavorites();
+let favoriteCoinIds = readFavorites();
 
 function normalizeSymbol(value) {
   const symbol = value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
   if (!symbol) {
     return "";
   }
-  return symbol.endsWith("USDT") ? symbol : `${symbol}USDT`;
+  return symbol.length > 4 && symbol.endsWith("USDT") ? symbol.slice(0, -4) : symbol;
 }
 
 function readFavorites() {
@@ -32,7 +32,7 @@ function readFavorites() {
 }
 
 function saveFavorites() {
-  localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favoriteSymbols].sort()));
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favoriteCoinIds].sort()));
 }
 
 function render() {
@@ -42,7 +42,7 @@ function render() {
   renderDashboard(signalData, {
     symbolFilter: normalizeSymbol(coinInput.value),
     favoriteOnly,
-    favoriteSymbols
+    favoriteCoinIds
   });
   syncLiveStatus();
 }
@@ -116,11 +116,10 @@ coinInput.addEventListener("input", () => {
 });
 
 addFavoriteButton.addEventListener("click", () => {
-  const symbol = normalizeSymbol(coinInput.value);
-  if (!symbol) {
-    return;
-  }
-  favoriteSymbols.add(symbol);
+  const query = normalizeSymbol(coinInput.value);
+  const matches = signalData.signals.filter((signal) => [signal.symbol, signal.coinId, signal.name].some((value) => String(value || "").toUpperCase() === query));
+  if (matches.length !== 1) return;
+  favoriteCoinIds.add(matches[0].coinId);
   saveFavorites();
   render();
 });
@@ -139,11 +138,11 @@ document.addEventListener("click", (event) => {
   if (!button) {
     return;
   }
-  const symbol = button.dataset.symbol;
-  if (favoriteSymbols.has(symbol)) {
-    favoriteSymbols.delete(symbol);
+  const coinId = button.dataset.coinId;
+  if (favoriteCoinIds.has(coinId)) {
+    favoriteCoinIds.delete(coinId);
   } else {
-    favoriteSymbols.add(symbol);
+    favoriteCoinIds.add(coinId);
   }
   saveFavorites();
   render();

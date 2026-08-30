@@ -18,7 +18,7 @@ const primaryRr = element("2.5:1");
 const longBox = { dataset: { planDirection: "做多", planStatus: "可執行", entryLow: "99", entryHigh: "101", stopLoss: "96", takeProfit: "104" } };
 const shortBox = { dataset: { planDirection: "做空", planStatus: "可執行", entryLow: "104", entryHigh: "106", stopLoss: "110", takeProfit: "100" } };
 const card = {
-  dataset: { symbol: "BTCUSDT" },
+  dataset: { livePair: "BTCUSDT", snapshotPrice: "100" },
   querySelector(selector) {
     return selector === "[data-live-price]" ? price
       : selector === "[data-live-change]" ? change
@@ -31,22 +31,25 @@ const card = {
                     : selector === "[data-plan-rr]" ? primaryRr : null;
   }
 };
-const root = { querySelector: () => card };
+const root = { querySelector: (selector) => selector.includes('data-live-pair="BTCUSDT"') ? card : null };
 
-assert.equal(applyTicker({ s: "BTCUSDT", c: "105", P: "1.23" }, root), true);
-assert.equal(price.textContent, "105");
+assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, root), true);
+assert.equal(price.textContent, "104");
 assert.equal(change.textContent, "+1.23%");
 assert.equal(longState.textContent, "已到止盈區");
 assert.equal(shortState.textContent, "可進場");
 assert.equal(primaryRr.textContent, "2.5:1");
 
-applyTicker({ s: "BTCUSDT", c: "95", P: "-1" }, root);
+applyTicker({ s: "BTCUSDT", c: "96", P: "-1" }, root);
 assert.equal(primaryState.textContent, "停損失效");
 assert.equal(primaryRr.textContent, "-");
+assert.equal(applyTicker({ s: "BTCUSDT", c: "110", P: "10" }, root), false);
+assert.equal(price.textContent, "96");
+assert.equal(applyTicker({ s: "ETHUSDT", c: "100", P: "1" }, root), false);
 
 const insufficientState = element("資料不足");
 const insufficientCard = {
-  dataset: { symbol: "ETHUSDT" },
+  dataset: { livePair: "ETHUSDT", snapshotPrice: "50" },
   querySelector(selector) {
     return selector === "[data-live-price]" ? element("50")
       : selector === '[data-plan="long"]' || selector === '[data-plan="short"]' ? { dataset: { planDirection: "觀望", planStatus: "資料不足", entryLow: "", entryHigh: "", stopLoss: "", takeProfit: "" } }

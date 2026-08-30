@@ -5,7 +5,7 @@ StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不�
 ## 使用方式
 
 - 預設顯示策略分數最高的 5 個幣種。
-- 在「指定幣種」輸入 `BTC` 或 `BTCUSDT`，即可查看該幣種的雙向計畫。
+- 在「指定幣種」輸入 `BTC`、`bitcoin` 或 `BTCUSDT`，即可查看該資產的雙向計畫；同代號資產以 CoinGecko ID 區分。
 - 按「加入最愛」保存幣種，再切換「最愛」查看收藏清單。
 - 每張卡同時列出做多、做空的條件、進場區、停損與兩段止盈。
 - 展開「K 線圖」查看最近 4h 蠟燭、EMA20／EMA50 與計畫價位。
@@ -36,7 +36,7 @@ GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 
 
 啟用自動更新前，在 GitHub Repository Secrets 設定 `COINGECKO_API_KEY`。金鑰只會在 Actions 使用，不會送到瀏覽器。
 
-Binance USDT 現貨幣種在頁面開啟時會透過公開 WebSocket 更新價格，並即時重新判定兩套計畫的狀態；其他幣種等待下一次快照。
+只有明確對應 CoinGecko ID、且由 Binance `exchangeInfo` 確認仍可交易的 USDT 現貨，才會透過公開 WebSocket 更新價格。若兩來源價格相差超過 5%，或資產沒有已驗證配對，畫面明示快照模式並等待下一次 CoinGecko 快照。
 
 ## 本機檢查
 

@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
 import { signalFor } from "./generate_signals.mjs";
 import { fetchMarkets, refreshTimeSeries } from "./live-signal-update.mjs";
+import { fetchVerifiedInstruments } from "./binance-instruments.mjs";
 
 const outputDir = process.env.LIVE_DATA_DIR || "data";
 const stateFile = path.join(outputDir, "price-history.json");
@@ -22,7 +23,7 @@ function updatedAt(now) {
   return new Date(now).toISOString();
 }
 
-function signalFrom(coin, index, hourly, candles4h, now) {
+function signalFrom(coin, index, hourly, candles4h, now, liveInstrument) {
   const base = signalFor(coin, index);
   const strategy = strategyFor(hourly, candles4h, coin.current_price, now);
   const primaryPlan = strategy.primaryDirection === "做多" ? strategy.plans.long : strategy.primaryDirection === "做空" ? strategy.plans.short : null;
@@ -31,7 +32,8 @@ function signalFrom(coin, index, hourly, candles4h, now) {
 
   return {
     ...base,
-    coinId: coin.id,
+    liveMode: liveInstrument ? "websocket" : "snapshot-only",
+    liveInstrument: liveInstrument || null,
     price: Number(coin.current_price),
     change24h: Number(coin.price_change_percentage_24h) || 0,
     direction: strategy.primaryDirection,
@@ -66,9 +68,9 @@ function signalFrom(coin, index, hourly, candles4h, now) {
   };
 }
 
-export function buildLivePayload(coins, state, now = Date.now()) {
+export function buildLivePayload(coins, state, now = Date.now(), liveInstruments = new Map()) {
   const signals = coins.map((coin, index) => ({
-    ...signalFrom(coin, index, state.hourly?.[coin.id] || [], state.fourHourly?.[coin.id] || [], now),
+    ...signalFrom(coin, index, state.hourly?.[coin.id] || [], state.fourHourly?.[coin.id] || [], now, liveInstruments.get(coin.id)),
     candles: state.fourHourly?.[coin.id] || []
   }));
   const count = (direction) => signals.filter((signal) => signal.direction === direction).length;
@@ -82,21 +84,22 @@ export function buildLivePayload(coins, state, now = Date.now()) {
     market: {
       condition: count("做多") > count("做空") ? "偏多" : count("做空") > count("做多") ? "偏空" : "震盪",
       riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 20 ? "高" : "中",
-      btcDirection: signals.find((signal) => signal.symbol === "BTCUSDT")?.direction || "觀望",
-      ethDirection: signals.find((signal) => signal.symbol === "ETHUSDT")?.direction || "觀望",
+      btcDirection: signals.find((signal) => signal.coinId === "bitcoin")?.direction || "觀望",
+      ethDirection: signals.find((signal) => signal.coinId === "ethereum")?.direction || "觀望",
       summary: "CoinGecko 市值前 100，1h／4h 策略資料。"
     },
     signals,
-    watchlist: signals.filter((signal) => signal.direction === "觀望").slice(0, 20).map((signal) => ({ symbol: signal.symbol, reason: signal.strategy.planState })),
-    highRisk: signals.filter((signal) => signal.riskLevel === "高").slice(0, 20).map((signal) => ({ symbol: signal.symbol, reason: `波動 ${signal.strategy.indicators.volatility}%` }))
+    watchlist: signals.filter((signal) => signal.direction === "觀望").slice(0, 20).map((signal) => ({ coinId: signal.coinId, symbol: signal.symbol, reason: signal.strategy.planState })),
+    highRisk: signals.filter((signal) => signal.riskLevel === "高").slice(0, 20).map((signal) => ({ coinId: signal.coinId, symbol: signal.symbol, reason: `波動 ${signal.strategy.indicators.volatility}%` }))
   };
 }
 
 export async function updateLiveSignals(now = Date.now()) {
   const coins = await fetchMarkets();
+  const liveInstruments = await fetchVerifiedInstruments(coins);
   const state = readState();
   await refreshTimeSeries(state, coins, now);
-  const payload = buildLivePayload(coins, state, now);
+  const payload = buildLivePayload(coins, state, now, liveInstruments);
 
   fs.mkdirSync(outputDir, { recursive: true });
   fs.writeFileSync(stateFile, `${JSON.stringify(state)}\n`);

@@ -3,6 +3,7 @@ import { planStateFor } from "./strategy.mjs";
 const BINANCE_STREAM = "wss://stream.binance.com:9443/ws/!miniTicker@arr";
 const MAX_RECONNECT_DELAY = 30000;
 const FLASH_MS = 650;
+const MAX_SOURCE_DIVERGENCE = 0.05;
 
 let socket;
 let reconnectTimer;
@@ -68,14 +69,16 @@ export function applyTicker(ticker, root = globalThis.document) {
   const nextPrice = Number(ticker?.c);
   const nextChange = Number(ticker?.P);
 
-  if (!root || !symbol || !symbol.endsWith("USDT") || !Number.isFinite(nextPrice)) {
+  if (!root || !/^[A-Z0-9]+USDT$/.test(symbol || "") || !Number.isFinite(nextPrice)) {
     return false;
   }
 
-  const card = root.querySelector(`.card[data-symbol="${symbol}"]`);
+  const card = root.querySelector(`.card[data-live-pair="${symbol}"]`);
   if (!card) {
     return false;
   }
+  const snapshotPrice = Number(card.dataset.snapshotPrice);
+  if (!(snapshotPrice > 0) || Math.abs(nextPrice / snapshotPrice - 1) > MAX_SOURCE_DIVERGENCE) return false;
 
   const priceEl = card.querySelector("[data-live-price]");
   const changeEl = card.querySelector("[data-live-change]");
