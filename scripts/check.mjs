@@ -39,6 +39,8 @@ assert(render.includes("data-live-change"), "cards expose live change selector")
 assert(app.includes("live-prices.js"), "app imports live price module");
 assert(app.includes("startLivePrices"), "app starts live price updates");
 assert(app.includes("LIVE_DATA_URL"), "app reads live-data branch");
+assert(app.includes("parseSignalPayload"), "app validates payload before replacement");
+assert(app.includes("refreshLiveSignals().catch"), "interval refresh handles rejected promises");
 assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
 assert(livePrices.includes('data-status-value="websocket"'), "live prices expose a separate connection state");
@@ -59,6 +61,7 @@ assert(workflow.includes("schedule:"), "update workflow has schedule");
 assert(workflow.includes("7,17,27,37,47,57"), "workflow runs every ten minutes off the hour");
 assert(workflow.includes("live-data"), "workflow publishes live-data branch");
 assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count is within expected range");
+assert.equal(data.schemaVersion, 1, "fallback data exposes signal schema version");
 assert(data.signals.every((signal) => signal.plans?.long && signal.plans?.short), "signals expose long and short plans");
 assert(data.signals.every((signal) => Array.isArray(signal.candles)), "signals expose candles");
 assert(data.signals.every((signal) => signal.coinId && signal.priceSource?.instrument === signal.coinId && signal.indicatorSource?.instrument === signal.coinId), "signals identify CoinGecko source instruments");

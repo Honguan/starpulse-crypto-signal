@@ -2,6 +2,7 @@ import { renderDashboard } from "./signal-render.js";
 import { getStrongNotifications } from "./notification.js";
 import { startLivePrices, syncLiveStatus } from "./live-prices.js";
 import { prepareSnapshot } from "./data-freshness.mjs";
+import { parseSignalPayload } from "./signal-schema.mjs";
 
 const errorEl = document.querySelector("#error");
 const coinInput = document.querySelector("#coin-symbol");
@@ -35,16 +36,41 @@ function saveFavorites() {
   localStorage.setItem(FAVORITES_KEY, JSON.stringify([...favoriteCoinIds].sort()));
 }
 
-function render() {
-  if (!signalData) {
-    return;
-  }
-  renderDashboard(signalData, {
+function loadError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+function errorMessage(error) {
+  return {
+    network: "策略資料網路讀取失敗",
+    parse: "策略 JSON 已截斷或損壞",
+    schema: "策略資料欄位或版本無效",
+    stale: "策略資料時間已失效",
+    render: "策略畫面無法安全呈現"
+  }[error?.code] || "策略資料更新失敗";
+}
+
+function renderData(data) {
+  renderDashboard(data, {
     symbolFilter: normalizeSymbol(coinInput.value),
     favoriteOnly,
     favoriteCoinIds
   });
   syncLiveStatus();
+}
+
+function render() {
+  if (!signalData) return false;
+  try {
+    renderData(signalData);
+    return true;
+  } catch {
+    errorEl.textContent = errorMessage({ code: "render" });
+    errorEl.hidden = false;
+    return false;
+  }
 }
 
 function setMode(mode) {
@@ -56,11 +82,21 @@ function setMode(mode) {
 }
 
 async function loadSignals(url = "data/signals.json") {
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`signals.json 讀取失敗：HTTP ${response.status}`);
+  let response;
+  try {
+    response = await fetch(url, { cache: "no-store" });
+  } catch {
+    throw loadError("network", "signals.json request failed");
   }
-  return response.json();
+  if (!response.ok) {
+    throw loadError("network", `signals.json 讀取失敗：HTTP ${response.status}`);
+  }
+  try {
+    return parseSignalPayload(await response.text());
+  } catch (error) {
+    if (error?.code) throw error;
+    throw loadError("network", "signals.json response failed");
+  }
 }
 
 function clearDashboard() {
@@ -71,31 +107,33 @@ function clearDashboard() {
 
 async function refreshLiveSignals() {
   try {
-    signalData = prepareSnapshot(await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`));
-    errorEl.hidden = signalData.freshness.state === "fresh";
-    errorEl.textContent = signalData.freshness.state === "delayed"
+    const candidate = prepareSnapshot(await loadSignals(`${LIVE_DATA_URL}?t=${Math.floor(Date.now() / LIVE_REFRESH_MS)}`));
+    try {
+      renderData(candidate);
+    } catch {
+      throw loadError("render", "render failed");
+    }
+    signalData = candidate;
+    errorEl.hidden = candidate.freshness.state === "fresh";
+    errorEl.textContent = candidate.freshness.state === "delayed"
       ? "策略資料更新延遲，暫不顯示為即時資料。"
       : "策略資料已過期，交易計畫僅供參考且不可執行。";
-  } catch {
+  } catch (liveError) {
     try {
-      signalData = signalData
+      const candidate = signalData
         ? prepareSnapshot(signalData, { fallback: signalData.freshness?.fallback })
         : prepareSnapshot(await loadSignals(), { fallback: true });
-    } catch (error) {
-      signalData = undefined;
+      renderData(candidate);
+      signalData = candidate;
+    } catch (fallbackError) {
       clearDashboard();
-      errorEl.textContent = error.message || "沒有可用的近期策略資料。";
+      errorEl.textContent = `${errorMessage(fallbackError)}；沒有可用的有效快照。`;
       errorEl.hidden = false;
       return false;
     }
-    errorEl.textContent = signalData.freshness.fallback && signalData.freshness.state === "stale"
-      ? "即時策略資料無法讀取；備援資料已過期，交易計畫不可執行。"
-      : signalData.freshness.fallback
-        ? "即時策略資料暫時無法讀取，顯示近期備援快照。"
-        : "即時策略資料暫時無法更新，保留最後一次快照。";
+    errorEl.textContent = `${errorMessage(liveError)}；${signalData.freshness.fallback ? "顯示已驗證的備援快照。" : "保留最後一次有效快照。"}`;
     errorEl.hidden = false;
   }
-  render();
   return true;
 }
 
@@ -104,7 +142,12 @@ async function init() {
     if (!await refreshLiveSignals()) return;
     startLivePrices();
     getStrongNotifications(signalData);
-    globalThis.setInterval(refreshLiveSignals, LIVE_REFRESH_MS);
+    globalThis.setInterval(() => {
+      refreshLiveSignals().catch((error) => {
+        errorEl.textContent = errorMessage(error);
+        errorEl.hidden = false;
+      });
+    }, LIVE_REFRESH_MS);
   } catch (error) {
     errorEl.hidden = false;
     errorEl.textContent = error.message || "資料讀取失敗，請稍後再試。";
@@ -116,6 +159,7 @@ coinInput.addEventListener("input", () => {
 });
 
 addFavoriteButton.addEventListener("click", () => {
+  if (!signalData) return;
   const query = normalizeSymbol(coinInput.value);
   const matches = signalData.signals.filter((signal) => [signal.symbol, signal.coinId, signal.name].some((value) => String(value || "").toUpperCase() === query));
   if (matches.length !== 1) return;

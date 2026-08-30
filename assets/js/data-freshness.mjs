@@ -9,6 +9,12 @@ function timestampFor(value) {
   return Date.parse(value);
 }
 
+function freshnessError(message) {
+  const error = new Error(message);
+  error.code = "stale";
+  return error;
+}
+
 export function freshnessFor(updatedAt, now = Date.now()) {
   const timestamp = timestampFor(updatedAt);
   if (!Number.isFinite(timestamp) || timestamp > now + 5 * MINUTE) return { state: "unavailable", age: NaN };
@@ -35,8 +41,8 @@ function disablePlans(data) {
 
 export function prepareSnapshot(data, { fallback = false, now = Date.now() } = {}) {
   const freshness = freshnessFor(data?.updatedAt, now);
-  if (freshness.state === "unavailable") throw new Error("策略資料時間格式無效");
-  if (fallback && freshness.age > MAX_FALLBACK_MS) throw new Error("備援策略資料已超過 24 小時");
+  if (freshness.state === "unavailable") throw freshnessError("策略資料時間格式無效");
+  if (fallback && freshness.age > MAX_FALLBACK_MS) throw freshnessError("備援策略資料已超過 24 小時");
 
   const labels = { fresh: "即時", delayed: "延遲", stale: "過期" };
   data.freshness = { ...freshness, fallback, label: `${fallback ? "備援／" : ""}${labels[freshness.state]}` };

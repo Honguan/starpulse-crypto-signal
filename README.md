@@ -34,6 +34,8 @@ EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing�
 
 GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
 
+訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
+
 啟用自動更新前，在 GitHub Repository Secrets 設定 `COINGECKO_API_KEY`。金鑰只會在 Actions 使用，不會送到瀏覽器。
 
 只有明確對應 CoinGecko ID、且由 Binance `exchangeInfo` 確認仍可交易的 USDT 現貨，才會透過公開 WebSocket 更新價格。若兩來源價格相差超過 5%，或資產沒有已驗證配對，畫面明示快照模式並等待下一次 CoinGecko 快照。
@@ -44,6 +46,7 @@ GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 
 node scripts/strategy-check.mjs
 node scripts/indicator-check.mjs
 node scripts/freshness-check.mjs
+node scripts/signal-schema-check.mjs
 node scripts/live-update-check.mjs
 node scripts/candle-chart-check.mjs
 node --no-warnings scripts/live-price-check.mjs
