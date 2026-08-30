@@ -43,9 +43,16 @@ function signalFrom(coin, index, hourly, candles4h, now) {
     plans: strategy.plans,
     primaryDirection: strategy.primaryDirection,
     candles: [],
+    strategySource: "CoinGecko hourly／4h OHLC",
     strategy: { ...strategy, dataSource: "CoinGecko hourly／4h OHLC", updatedAt: updatedAt(now) },
-    vegas: { ...base.vegas, text: `4h EMA20 ${strategy.indicators.ema4h20 || "-"} / EMA50 ${strategy.indicators.ema4h50 || "-"}` },
-    tdSequential: { ...base.tdSequential, riskText: `1h RSI ${strategy.indicators.rsi14 || "-"} / MACD ${strategy.indicators.macd || "-"}` },
+    sourceMode: "live",
+    details: [
+      { label: "4h EMA20／EMA50", value: `${strategy.indicators.ema4h20 ?? "-"}／${strategy.indicators.ema4h50 ?? "-"}`, sourceMode: "live", calculationMode: "4h close EMA(20,50)" },
+      { label: "1h EMA20", value: strategy.indicators.ema1h20 ?? "-", sourceMode: "live", calculationMode: "1h close EMA(20)" },
+      { label: "1h RSI14", value: strategy.indicators.rsi14 ?? "-", sourceMode: "live", calculationMode: "1h close RSI(14)" },
+      { label: "1h MACD", value: `${strategy.indicators.macd ?? "-"}／${strategy.indicators.macdSignal ?? "-"}`, sourceMode: "live", calculationMode: "1h close MACD(12,26,9)" },
+      { label: "條件分數", value: `多 ${strategy.plans.long.score}%／空 ${strategy.plans.short.score}%`, sourceMode: "live", calculationMode: "trend 40 + position 20 + RSI 20 + MACD 20" }
+    ],
     reasons: [
       `做多方案：${strategy.plans.long.status}（${strategy.plans.long.score}%）`,
       `做空方案：${strategy.plans.short.status}（${strategy.plans.short.score}%）`,
@@ -77,8 +84,6 @@ export function buildLivePayload(coins, state, now = Date.now()) {
       riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 20 ? "高" : "中",
       btcDirection: signals.find((signal) => signal.symbol === "BTCUSDT")?.direction || "觀望",
       ethDirection: signals.find((signal) => signal.symbol === "ETHUSDT")?.direction || "觀望",
-      btcVegas: signals.find((signal) => signal.symbol === "BTCUSDT")?.vegas.state || "neutral",
-      ethVegas: signals.find((signal) => signal.symbol === "ETHUSDT")?.vegas.state || "neutral",
       summary: "CoinGecko 市值前 100，1h／4h 策略資料。"
     },
     signals,
