@@ -26,7 +26,6 @@ function signalFrom(coin, index, hourly, candles4h, now) {
   const base = signalFor(coin, index);
   const strategy = strategyFor(hourly, candles4h, coin.current_price, now);
   const primaryPlan = strategy.primaryDirection === "做多" ? strategy.plans.long : strategy.primaryDirection === "做空" ? strategy.plans.short : null;
-  const active = Boolean(primaryPlan && primaryPlan.status === "可執行");
   const volatility = strategy.indicators.volatility || 0;
   const riskLevel = volatility >= 4 ? "高" : volatility >= 2 ? "中" : "低";
 
@@ -36,10 +35,6 @@ function signalFrom(coin, index, hourly, candles4h, now) {
     price: Number(coin.current_price),
     change24h: Number(coin.price_change_percentage_24h) || 0,
     direction: strategy.primaryDirection,
-    confidence: Math.max(strategy.plans.long.score, strategy.plans.short.score),
-    winRate: strategy.indicators.rsi14 || 0,
-    ev: active ? 1 : 0,
-    rr: active ? 2.5 : 0,
     riskLevel,
     timeframe: "1h / 4h",
     entryZone: primaryPlan?.entryZone || null,

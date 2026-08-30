@@ -107,7 +107,8 @@ function planFor(direction, indicators, values, candles4h, evaluationPrice) {
   const score = Object.values(conditions).reduce((sum, passed, index) => sum + (passed ? weights[index] : 0), 0);
   const levels = levelsFor(direction, indicators, values, candles4h);
   const plan = { direction, score, status: score === 100 ? READY : WAITING, ...levels, conditions };
-  return { ...plan, planState: planStateFor(plan, evaluationPrice) };
+  plan.planState = planStateFor(plan, evaluationPrice);
+  return { ...plan, riskReward: riskRewardFor(plan) };
 }
 
 function hasContinuousTail(rows, interval, minimum, width) {
@@ -137,6 +138,14 @@ export function planStateFor(plan, price) {
   }
 
   return price >= plan.entryZone.low && price <= plan.entryZone.high ? "可進場" : "等待回踩";
+}
+
+export function riskRewardFor(plan, targetIndex = 1) {
+  if (plan?.status !== READY || plan.planState === "停損失效" || !plan.entryZone || !plan.takeProfit?.[targetIndex]) return null;
+  const entry = (Number(plan.entryZone.low) + Number(plan.entryZone.high)) / 2;
+  const risk = plan.direction === LONG ? entry - Number(plan.stopLoss) : Number(plan.stopLoss) - entry;
+  const reward = plan.direction === LONG ? Number(plan.takeProfit[targetIndex]) - entry : entry - Number(plan.takeProfit[targetIndex]);
+  return risk > 0 && reward > 0 ? round(reward / risk, 2) : null;
 }
 
 export function strategyFor(hourly, candles4h, currentPrice, now = Date.now()) {
