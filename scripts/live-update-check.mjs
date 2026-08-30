@@ -25,6 +25,7 @@ assert.deepEqual(state.history.bitcoin.at(-1), [Date.UTC(2026, 0, 1, 11), 101]);
 
 const payload = buildLivePayload(coins, state, Date.UTC(2026, 0, 1, 11, 10));
 assert.equal(payload.signals.length, 2);
+assert.equal(payload.updatedAt, "2026-01-01T11:10:00.000Z");
 assert.equal(payload.signals[0].coinId, "bitcoin");
 assert.equal(payload.signals[0].strategy.planState, "資料不足");
 assert(payload.signals[0].plans.long);

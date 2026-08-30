@@ -40,7 +40,7 @@ assert(app.includes("startLivePrices"), "app starts live price updates");
 assert(app.includes("LIVE_DATA_URL"), "app reads live-data branch");
 assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
-assert(livePrices.includes("OFFLINE"), "live prices expose offline state");
+assert(livePrices.includes('data-status-value="websocket"'), "live prices expose a separate connection state");
 assert(livePrices.includes("setTimeout"), "live prices schedule reconnects");
 assert(livePrices.includes("data-plan-state"), "live prices update plan status");
 assert(livePrices.includes("data-${direction}-plan-state"), "live prices update both plan statuses");

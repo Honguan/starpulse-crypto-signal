@@ -51,9 +51,9 @@ export function setLiveState(nextState, root = globalThis.document) {
   if (!root) {
     return;
   }
-  const liveEl = root.querySelector('[data-status-value="live"]');
+  const liveEl = root.querySelector('[data-status-value="websocket"]');
   if (liveEl) {
-    liveEl.textContent = nextState ? "LIVE" : "OFFLINE";
+    liveEl.textContent = nextState ? "已連線" : "未連線";
   }
 }
 
