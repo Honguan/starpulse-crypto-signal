@@ -6,6 +6,7 @@ const workflows = Object.fromEntries(files.map((file) => [file, fs.readFileSync(
 const expectedPins = new Map([
   ["actions/checkout", ["11d5960a326750d5838078e36cf38b85af677262", "v4.4.0"]],
   ["actions/setup-node", ["49933ea5288caeca8642d1e84afbd3f7d6820020", "v4.4.0"]],
+  ["actions/cache", ["cdf6c1fa76f9f475f3d7449005a359c84ca0f306", "v5.0.3"]],
   ["actions/configure-pages", ["983d7736d9b0ae728b81ab479565c72886d7745b", "v5.0.0"]],
   ["actions/upload-pages-artifact", ["56afc609e74202658d3ffba0e8f6dda462b719fa", "v3.0.1"]],
   ["actions/deploy-pages", ["d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e", "v4.0.5"]]

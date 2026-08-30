@@ -8,7 +8,7 @@ import { fetchMarkets, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments } from "./binance-instruments.mjs";
 
 const outputDir = process.env.LIVE_DATA_DIR || "data";
-const stateFile = path.join(outputDir, "price-history.json");
+const stateFile = process.env.LIVE_STATE_FILE || path.join(outputDir, "price-history.json");
 const signalsFile = path.join(outputDir, "signals.json");
 
 function readState() {
@@ -106,6 +106,7 @@ export async function updateLiveSignals(now = Date.now()) {
   const payload = buildLivePayload(coins, state, now, liveInstruments);
 
   fs.mkdirSync(outputDir, { recursive: true });
+  fs.mkdirSync(path.dirname(stateFile), { recursive: true });
   fs.writeFileSync(stateFile, `${JSON.stringify(state)}\n`);
   fs.writeFileSync(signalsFile, `${JSON.stringify(payload)}\n`);
   return payload;

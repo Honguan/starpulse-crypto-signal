@@ -32,51 +32,41 @@ jobs:
           fi
         env:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
-      - name: Prepare live data branch
+      - name: Restore bounded internal state
+        if: steps.api.outputs.ready == 'true'
+        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        with:
+          path: .live-state
+          key: live-state-v2-${{ github.run_id }}
+          restore-keys: live-state-v2-
+      - name: Prepare live snapshot branch
         if: steps.api.outputs.ready == 'true'
         run: |
           LIVE_DIR="$GITHUB_WORKSPACE/live-data"
-          if git ls-remote --exit-code --heads origin live-data; then
-            git fetch origin live-data
-            git worktree add --detach "$LIVE_DIR" origin/live-data
-          else
-            git worktree add -b live-data "$LIVE_DIR"
-          fi
+          git fetch --no-tags origin live-data
+          git worktree add --detach "$LIVE_DIR" origin/live-data
+          echo "LIVE_DATA_EXPECTED_SHA=$(git rev-parse origin/live-data)" >> "$GITHUB_ENV"
       - name: Generate live signals
         if: steps.api.outputs.ready == 'true'
         env:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
-          LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
+          LIVE_DATA_DIR: ${{ github.workspace }}/live-output
+          LIVE_STATE_FILE: ${{ github.workspace }}/.live-state/price-history.json
         run: node scripts/update-live-signals.mjs
-      - name: Commit and publish live signals
+      - name: Publish single-commit live snapshot
         if: steps.api.outputs.ready == 'true'
         env:
-          COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
-          LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd "$GITHUB_WORKSPACE/live-data"
+          git switch --orphan snapshot
+          test -z "$(git ls-files)" || { echo "::error::orphan index is not empty"; exit 1; }
+          mkdir -p data
+          cp "$GITHUB_WORKSPACE/live-output/signals.json" data/signals.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           AUTH_HEADER=$(printf "x-access-token:%s" "$GH_TOKEN" | base64 -w0)
-          for attempt in 1 2; do
-            git add data/signals.json data/price-history.json
-            if git diff --cached --quiet; then
-              echo "signals unchanged"
-              exit 0
-            fi
-            git commit -m "chore: update live signals"
-            if git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $AUTH_HEADER" push origin HEAD:live-data; then
-              exit 0
-            fi
-            if [ "$attempt" = 2 ]; then
-              echo "::error::live-data changed again; publication aborted without force-pushing"
-              exit 1
-            fi
-            echo "::warning::live-data push conflict; regenerating once from the latest remote state"
-            git fetch origin live-data
-            git reset --hard origin/live-data
-            cd "$GITHUB_WORKSPACE"
-            node scripts/update-live-signals.mjs
-            cd "$GITHUB_WORKSPACE/live-data"
-          done
+          git add data/signals.json
+          git commit -m "chore: publish live snapshot"
+          git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $AUTH_HEADER" push \
+            --force-with-lease="refs/heads/live-data:$LIVE_DATA_EXPECTED_SHA" origin HEAD:live-data

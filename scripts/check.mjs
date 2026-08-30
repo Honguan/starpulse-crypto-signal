@@ -75,8 +75,9 @@ assert(workflow.includes("7,17,27,37,47,57"), "workflow runs every ten minutes o
 assert(workflow.includes("live-data"), "workflow publishes live-data branch");
 assert(workflow.includes("group: live-data-publisher") && workflow.includes("cancel-in-progress: false"), "live-data publication is serialized");
 assert(workflow.includes("timeout-minutes: 15"), "live-data publication has a bounded runtime");
-assert(workflow.includes("git reset --hard origin/live-data") && workflow.includes("regenerating once from the latest remote state"), "push conflicts reload and regenerate without force-pushing");
-assert(!workflow.includes("--force"), "live-data publication never force-pushes");
+assert(workflow.includes("key: live-state-v2-${{ github.run_id }}") && workflow.includes("restore-keys: live-state-v2-") && workflow.includes("LIVE_STATE_FILE"), "internal price history uses bounded Actions cache storage");
+assert(workflow.includes("git switch --orphan snapshot") && workflow.includes("--force-with-lease=\"refs/heads/live-data:$LIVE_DATA_EXPECTED_SHA\""), "live-data publishes one lease-protected snapshot commit");
+assert(workflow.includes('test -z "$(git ls-files)"') && workflow.includes("git add data/signals.json") && !workflow.includes("git add data/signals.json data/price-history.json"), "public snapshot starts empty and excludes internal price history");
 assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count is within expected range");
 assert.equal(data.schemaVersion, 1, "fallback data exposes signal schema version");
 assert(data.signals.every((signal) => signal.plans?.long && signal.plans?.short), "signals expose long and short plans");

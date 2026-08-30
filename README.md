@@ -32,11 +32,13 @@ EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing�
 
 ## 資料更新
 
-GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
+GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。公開的 `live-data` 分支永遠只有一個 orphan snapshot commit，且只包含前端需要的 `data/signals.json`；其資料上限為 100 個訊號、每個訊號最多 60 根 4h K 線。主分支同名檔案是讀取失敗時的備援快照。內部 `price-history.json` 不公開也不進 Git，而以 Actions cache 保存；未存取 7 天的 cache 會淘汰，repository 預設 cache 上限 10 GB，滿額時由最舊項目開始逐出。
 
 CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多重試 2 次，採 bounded exponential backoff 並遵守最多 30 秒的 `Retry-After`。永久 4xx 與 malformed JSON 不重試。歷史補齊明確維持 concurrency 1 以控制 demo API 配額；payload 的 `dataQuality` 公布成功、失敗、缺歷史與逐資產失敗分類，任何 partial failure 都使整體狀態降級。若中斷多個窗口，下一次成功 run 會重新取得 CoinGecko 30 日 hourly 與官方 OHLC，再驗證連續區間，不會自行把缺口接成連續資料。
 
-所有 `live-data` 發布共用單一 GitHub Actions concurrency group，一次只允許一個 run 寫入；job 最長執行 15 分鐘。若 push 發現遠端已更新，run 會從最新狀態完整重產生一次再發布，第二次衝突即失敗，絕不 force-push。可同時手動 dispatch 兩次 `Update Live Signals`，確認後一個 run 保持 pending，直到前一個完成。
+所有 `live-data` 發布共用單一 GitHub Actions concurrency group，一次只允許一個 run 寫入；job 最長執行 15 分鐘。每次發布以開始時的 remote SHA 執行 `--force-with-lease`，把舊 snapshot 替換成新的單一 commit；lease 不符即失敗，不會覆蓋外部更新。這讓 routine update 只保留約一份 `signals.json`，不累積每 10 分鐘一份永久 blob。每次取得新的前 100 清單後，已離開清單的 hourly／4h state 會立即刪除。
+
+既有 `live-data` 歷史的清理方式是成功執行一次新版 `Update Live Signals`：首次 single-commit 發布會讓舊 commit 全部不可達，之後由 GitHub 依服務端排程回收物件。若 repository size 在服務端垃圾回收後仍未下降，請攜帶 `live-data` 最新 commit SHA 聯絡 GitHub Support；不要在 `main` 重寫歷史。
 
 所有第三方 Actions 固定至完整 commit SHA，並在旁註記已審查版本。token 權限僅設於個別 job：健康檢查只有 `contents: read`，Pages 只有 `contents: read`／`pages: write`／`id-token: write`，只有 `live-data` 發布 job 可寫 repository contents。所有 checkout 均不持久化 Git credential，發布 step 才以 `GITHUB_TOKEN` 驗證單次 push；每個 job 也有明確 timeout。`workflow-security-check.mjs` 由 freshness workflow 持續驗證這些限制。
 
