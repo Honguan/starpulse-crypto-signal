@@ -20,7 +20,7 @@ export function freshnessFor(updatedAt, now = Date.now()) {
   if (!Number.isFinite(timestamp) || timestamp > now + 5 * MINUTE) return { state: "unavailable", age: NaN };
 
   const age = Math.max(0, now - timestamp);
-  return { state: age <= FRESH_MS ? "fresh" : age <= STALE_MS ? "delayed" : "stale", age };
+  return { state: age < FRESH_MS ? "fresh" : age <= STALE_MS ? "delayed" : "stale", age };
 }
 
 function disablePlans(data) {

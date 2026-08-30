@@ -21,6 +21,8 @@ const liveUpdater = fs.existsSync("scripts/update-live-signals.mjs")
   : "";
 const snapshotStore = read("assets/js/snapshot-store.mjs");
 const apiRequest = read("scripts/api-request.mjs");
+const healthCheck = read("scripts/health-check.mjs");
+const healthWorkflow = read(".github/workflows/live-data-health.yml");
 const workflow = fs.existsSync(".github/workflows/update-signals.yml")
   ? read(".github/workflows/update-signals.yml")
   : "";
@@ -46,6 +48,8 @@ assert(app.includes("refreshLiveSignals().catch"), "interval refresh handles rej
 assert(app.includes("loadLastKnownGood") && app.includes("saveLastKnownGood"), "app maintains a browser last-known-good snapshot");
 assert(snapshotStore.includes("prepareSnapshot") && snapshotStore.includes("validateSignalPayload"), "stored snapshots reuse schema and maximum-age validation");
 assert(apiRequest.includes("AbortSignal.timeout") && apiRequest.includes("retry-after"), "API requests have deadlines and rate-limit backoff");
+assert(healthCheck.includes("freshnessFor") && healthCheck.includes("validateSignalPayload"), "health check verifies published data rather than workflow status");
+assert(healthWorkflow.includes("schedule:") && healthWorkflow.includes("timeout-minutes: 5"), "freshness heartbeat is independently scheduled and bounded");
 assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
 assert(livePrices.includes('data-status-value="websocket"'), "live prices expose a separate connection state");
