@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { buildLivePayload } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
-import { verifiedInstruments } from "./binance-instruments.mjs";
+import { fetchVerifiedInstruments, verifiedInstruments } from "./binance-instruments.mjs";
 
 const HOUR = 60 * 60 * 1000;
 const FOUR_HOURS = 4 * HOUR;
@@ -25,6 +25,10 @@ assert.equal(liveInstruments.get("bitcoin").symbol, "BTCUSDT");
 assert.equal(liveInstruments.has("wrapped-bitcoin"), false);
 assert.equal(liveInstruments.has("ethereum"), false);
 assert.equal(liveInstruments.has("dogecoin"), false);
+assert.equal((await fetchVerifiedInstruments(coins, async (url) => {
+  assert(url.startsWith("https://data-api.binance.vision/"));
+  return { ok: false };
+})).size, 0);
 const duplicatePayload = buildLivePayload(duplicateAndMissing, {}, now, liveInstruments);
 assert.deepEqual(duplicatePayload.signals.filter((signal) => signal.symbol === "BTC").map((signal) => signal.coinId), ["bitcoin", "wrapped-bitcoin"]);
 assert.equal(duplicatePayload.signals.find((signal) => signal.coinId === "wrapped-bitcoin").liveMode, "snapshot-only");
