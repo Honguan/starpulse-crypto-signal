@@ -19,16 +19,6 @@ function symbolFor(coin) {
   return `${String(coin.symbol || "").toUpperCase()}USDT`;
 }
 
-function directionFor(change24h, change7d, riskLevel) {
-  const trend = change24h + change7d / 2;
-  if (riskLevel === "高" && Math.abs(change24h) > 18) return "觀望";
-  if (trend >= 10) return "強烈做多";
-  if (trend >= 3) return "做多";
-  if (trend <= -10) return "強烈做空";
-  if (trend <= -3) return "做空";
-  return "觀望";
-}
-
 function riskLevelFor(coin, change24h) {
   const volume = number(coin.total_volume);
   if (volume < 1_000_000 || Math.abs(change24h) >= 18) return "高";
@@ -36,35 +26,10 @@ function riskLevelFor(coin, change24h) {
   return "低";
 }
 
-function marketCondition(signals) {
-  const longCount = signals.filter((signal) => ["強烈做多", "做多"].includes(signal.direction)).length;
-  const shortCount = signals.filter((signal) => ["強烈做空", "做空"].includes(signal.direction)).length;
-  if (longCount > shortCount * 1.3) return "偏多";
-  if (shortCount > longCount * 1.3) return "偏空";
-  return "震盪";
-}
-
-function tradeLevels(price, direction) {
-  const safePrice = Math.max(number(price), 0.000001);
-  const longSide = ["強烈做多", "做多"].includes(direction);
-  const shortSide = ["強烈做空", "做空"].includes(direction);
-  const entryLow = round(safePrice * 0.995, safePrice < 1 ? 6 : 2);
-  const entryHigh = round(safePrice * 1.005, safePrice < 1 ? 6 : 2);
-  const stopLoss = round(safePrice * (longSide ? 0.965 : 1.035), safePrice < 1 ? 6 : 2);
-  const takeProfit = [
-    round(safePrice * (shortSide ? 0.95 : 1.05), safePrice < 1 ? 6 : 2),
-    round(safePrice * (shortSide ? 0.92 : 1.08), safePrice < 1 ? 6 : 2)
-  ];
-
-  return { entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit };
-}
-
 export function signalFor(coin, index) {
   const change24h = round(coin.price_change_percentage_24h);
   const change7d = round(coin.price_change_percentage_7d_in_currency);
   const riskLevel = riskLevelFor(coin, change24h);
-  const direction = directionFor(change24h, change7d, riskLevel);
-  const levels = tradeLevels(coin.current_price, direction);
   const fallbackStrategy = strategyFor([], [], coin.current_price);
   const rank = coin.market_cap_rank || index + 1;
 
@@ -74,10 +39,9 @@ export function signalFor(coin, index) {
     price: number(coin.current_price),
     change24h,
     marketCapRank: rank,
-    direction,
+    direction: "觀望",
     riskLevel,
     timeframe: "1h / 4h",
-    ...levels,
     plans: fallbackStrategy.plans,
     primaryDirection: "觀望",
     candles: [],
@@ -117,10 +81,10 @@ export async function buildSignals() {
   const coins = (await Promise.all(TOP_100_PAGES.map(fetchPage))).flat().slice(0, 100);
   const signals = coins.map(signalFor);
   const market = {
-    condition: marketCondition(signals),
+    condition: "震盪",
     riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 80 ? "高" : "中",
-    btcDirection: signals.find((signal) => signal.symbol === "BTCUSDT")?.direction || "震盪",
-    ethDirection: signals.find((signal) => signal.symbol === "ETHUSDT")?.direction || "震盪",
+    btcDirection: "觀望",
+    ethDirection: "觀望",
     summary: "CoinGecko 市值前 100 備援快照已更新。"
   };
 

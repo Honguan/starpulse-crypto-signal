@@ -64,6 +64,7 @@ assert(data.signals.every((signal) => !("winRate" in signal) && !("ev" in signal
 assert(data.signals.every((signal) => signal.sourceMode === "fallback" && signal.details.every((detail) => detail.sourceMode === "fallback" && detail.calculationMode)), "fallback details identify their source and calculation mode");
 assert(data.signals.every((signal) => !("vegas" in signal) && !("tdSequential" in signal)), "fallback data excludes unimplemented named indicators");
 assert(!("btcVegas" in data.market) && !("ethVegas" in data.market), "market summary excludes unimplemented Vegas labels");
+assert(data.market.condition === "震盪" && data.signals.every((signal) => signal.primaryDirection === "觀望" && signal.direction === "觀望"), "fallback data does not claim an actionable setup");
 assert(css.includes("@media (max-width: 430px)"), "small phone breakpoint exists");
 assert(css.includes("overflow-wrap: anywhere"), "long mobile text can wrap");
 assert(css.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "mobile metrics use two compact columns");

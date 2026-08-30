@@ -55,6 +55,8 @@ assert(!payload.signals[0].details.some((detail) => String(detail.value).include
 assert.notEqual(payload.signals[0].strategy.planState, "資料不足");
 assert.deepEqual(payload.signals[0].candles.at(-1), fourHourly.at(-1));
 assert.equal(payload.signals[1].strategy.planState, "資料不足");
+assert.equal(payload.market.condition, "震盪");
+assert.equal(payload.signals[0].primaryDirection, "觀望");
 
 const missing = structuredClone(state);
 missing.hourly.bitcoin.splice(-2, 1);

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { planStateFor, riskRewardFor, strategyFor } from "../assets/js/strategy.mjs";
+import { actionableDirectionFor, planStateFor, riskRewardFor, strategyFor } from "../assets/js/strategy.mjs";
 
 function series(values) {
   return values.map((price, index) => [Date.UTC(2026, 0, 1, index), price]);
@@ -55,5 +55,18 @@ assert.equal(planStateFor({ direction: "做空", status: "可執行", entryZone:
 assert.equal(planStateFor({ direction: "做多", status: "等待條件", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 106] }, 100), "等待條件");
 assert.equal(riskRewardFor({ direction: "做多", status: "可執行", planState: "可進場", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 110] }), 2.5);
 assert.equal(riskRewardFor({ direction: "做多", status: "可執行", planState: "停損失效", entryZone: { low: 99, high: 101 }, stopLoss: 96, takeProfit: [104, 110] }), null);
+
+const directionFor = (longScore, shortScore) => actionableDirectionFor({
+  long: { direction: "做多", score: longScore, status: longScore === 100 ? "可執行" : "等待條件" },
+  short: { direction: "做空", score: shortScore, status: shortScore === 100 ? "可執行" : "等待條件" }
+});
+assert.equal(directionFor(0, 0), "觀望");
+assert.equal(directionFor(40, 40), "觀望");
+assert.equal(directionFor(60, 40), "觀望");
+assert.equal(directionFor(40, 60), "觀望");
+assert.equal(directionFor(100, 40), "做多");
+assert.equal(directionFor(40, 100), "做空");
+assert.equal(directionFor(100, 100), "觀望");
+assert.equal(actionableDirectionFor({ long: { direction: "做多", score: 100, status: "可執行", planState: "停損失效" }, short: { direction: "做空", score: 40, status: "等待條件" } }), "觀望");
 
 console.log("strategy check ok");

@@ -148,6 +148,14 @@ export function riskRewardFor(plan, targetIndex = 1) {
   return risk > 0 && reward > 0 ? round(reward / risk, 2) : null;
 }
 
+export function actionableDirectionFor(plans) {
+  const qualified = Object.values(plans).filter((plan) =>
+    plan.score === 100
+      && plan.status === READY
+      && !["停損失效", "已到止盈區"].includes(plan.planState));
+  return qualified.length === 1 ? qualified[0].direction : "觀望";
+}
+
 export function strategyFor(hourly, candles4h, currentPrice, now = Date.now()) {
   if (hourly.length < MIN_HISTORY || candles4h.length < MIN_4H_HISTORY) return emptyStrategy("資料不足");
   const expected1h = Math.floor(now / HOUR) * HOUR;
@@ -187,17 +195,17 @@ export function strategyFor(hourly, candles4h, currentPrice, now = Date.now()) {
     long: planFor(LONG, indicators, closes, candles4hInput, evaluationPrice),
     short: planFor(SHORT, indicators, closes, candles4hInput, evaluationPrice)
   };
-  const primary = plans.long.score >= plans.short.score ? plans.long : plans.short;
-  const primaryDirection = primary.direction;
+  const primaryDirection = actionableDirectionFor(plans);
+  const primary = primaryDirection === LONG ? plans.long : primaryDirection === SHORT ? plans.short : null;
 
   return {
     plans,
     primaryDirection,
     indicators: Object.fromEntries(Object.entries(indicators).map(([key, value]) => [key, typeof value === "number" ? round(value, key === "rsi14" ? 2 : 6) : value])),
     direction: primaryDirection,
-    planState: primary.planState,
-    entryZone: primary.entryZone || null,
-    stopLoss: primary.stopLoss || null,
-    takeProfit: primary.takeProfit || []
+    planState: primary?.planState || WAITING,
+    entryZone: primary?.entryZone || null,
+    stopLoss: primary?.stopLoss || null,
+    takeProfit: primary?.takeProfit || []
   };
 }
