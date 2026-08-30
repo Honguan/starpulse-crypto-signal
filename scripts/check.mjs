@@ -19,6 +19,7 @@ const generator = fs.existsSync("scripts/generate_signals.mjs")
 const liveUpdater = fs.existsSync("scripts/update-live-signals.mjs")
   ? read("scripts/update-live-signals.mjs")
   : "";
+const snapshotStore = read("assets/js/snapshot-store.mjs");
 const workflow = fs.existsSync(".github/workflows/update-signals.yml")
   ? read(".github/workflows/update-signals.yml")
   : "";
@@ -41,6 +42,8 @@ assert(app.includes("startLivePrices"), "app starts live price updates");
 assert(app.includes("LIVE_DATA_URL"), "app reads live-data branch");
 assert(app.includes("parseSignalPayload"), "app validates payload before replacement");
 assert(app.includes("refreshLiveSignals().catch"), "interval refresh handles rejected promises");
+assert(app.includes("loadLastKnownGood") && app.includes("saveLastKnownGood"), "app maintains a browser last-known-good snapshot");
+assert(snapshotStore.includes("prepareSnapshot") && snapshotStore.includes("validateSignalPayload"), "stored snapshots reuse schema and maximum-age validation");
 assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
 assert(livePrices.includes('data-status-value="websocket"'), "live prices expose a separate connection state");
