@@ -34,7 +34,9 @@ EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing�
 
 GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。動態結果寫入 `live-data` 分支，主分支的 `data/signals.json` 是讀取失敗時的備援快照。
 
-CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多重試 2 次，採 bounded exponential backoff 並遵守最多 30 秒的 `Retry-After`。永久 4xx 與 malformed JSON 不重試。歷史補齊明確維持 concurrency 1 以控制 demo API 配額；payload 的 `dataQuality` 公布成功、失敗、缺歷史與逐資產失敗分類，任何 partial failure 都使整體狀態降級。
+CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多重試 2 次，採 bounded exponential backoff 並遵守最多 30 秒的 `Retry-After`。永久 4xx 與 malformed JSON 不重試。歷史補齊明確維持 concurrency 1 以控制 demo API 配額；payload 的 `dataQuality` 公布成功、失敗、缺歷史與逐資產失敗分類，任何 partial failure 都使整體狀態降級。若中斷多個窗口，下一次成功 run 會重新取得 CoinGecko 30 日 hourly 與官方 OHLC，再驗證連續區間，不會自行把缺口接成連續資料。
+
+更新 SLO 是每 10 分鐘發布一次，GitHub Actions cron 僅視為 best-effort。資料年齡達 20 分鐘（連續缺 2 個預期窗口）即顯示延遲／degraded，超過 60 分鐘顯示 stale 並停用計畫。獨立的 `Live Data Freshness` workflow 每 15 分鐘直接驗證已發布 payload 的 schema 與 `updatedAt`；超出 SLO 會產生失敗 Action 與 job summary，藉此區分「更新 workflow 曾成功」和「目前資料仍新鮮」。若 10 分鐘硬 SLA 是產品必要條件，需改用具排程 SLA 的外部 runtime，不能把 GitHub cron 當保證。
 
 訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
 

@@ -162,4 +162,20 @@ assert.deepEqual(partial.dataQuality.failures.map(({ coinId, resource, classific
 ]);
 assert.equal(buildLivePayload(coins, partial, now).status, "degraded");
 
+const missedWindows = {
+  version: 2,
+  hourly: { bitcoin: hourly.slice(0, -3) },
+  fourHourly: { bitcoin: fourHourly.slice(0, -2) }
+};
+const backfillRequests = [];
+await refreshTimeSeries(missedWindows, [coins[0]], now, async (url) => {
+  backfillRequests.push(url);
+  return url.includes("market_chart") ? response(200, { prices: hourly }) : response(200, fourHourly);
+}, 0);
+assert.equal(backfillRequests.length, 2);
+assert(backfillRequests.some((url) => url.includes("market_chart")) && backfillRequests.some((url) => url.includes("ohlc")));
+assert.deepEqual(missedWindows.hourly.bitcoin, hourly);
+assert.deepEqual(missedWindows.fourHourly.bitcoin, fourHourly);
+assert.equal(missedWindows.dataQuality.status, "normal");
+
 console.log("live update check ok");

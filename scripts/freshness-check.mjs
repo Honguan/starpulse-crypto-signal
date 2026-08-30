@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { prepareSnapshot } from "../assets/js/data-freshness.mjs";
 import { loadLastKnownGood, saveLastKnownGood } from "../assets/js/snapshot-store.mjs";
+import { assertFreshPayload } from "./health-check.mjs";
 
 const now = Date.UTC(2026, 7, 30, 6);
 const snapshot = (ageMinutes, updatedAt = new Date(now - ageMinutes * 60_000).toISOString()) => ({
@@ -23,6 +24,8 @@ const delayed = prepareSnapshot(snapshot(30), { now });
 assert.equal(delayed.freshness.state, "delayed");
 assert.equal(delayed.live, false);
 assert.equal(delayed.status, "degraded");
+assert.equal(prepareSnapshot(snapshot(19), { now }).freshness.state, "fresh");
+assert.equal(prepareSnapshot(snapshot(20), { now }).freshness.state, "delayed");
 
 const stale = prepareSnapshot(snapshot(120), { now });
 assert.equal(stale.freshness.state, "stale");
@@ -41,6 +44,10 @@ const storage = {
   removeItem: (key) => stored.delete(key)
 };
 const payload = JSON.parse(fs.readFileSync("data/signals.json", "utf8"));
+payload.updatedAt = new Date(now - 5 * 60_000).toISOString();
+assert.equal(assertFreshPayload(payload, now).state, "fresh");
+payload.updatedAt = new Date(now - 20 * 60_000).toISOString();
+assert.throws(() => assertFreshPayload(payload, now), { state: "delayed" });
 payload.updatedAt = new Date(now - 5 * 60_000).toISOString();
 saveLastKnownGood(payload, storage, now);
 const saved = [...stored.values()][0];
