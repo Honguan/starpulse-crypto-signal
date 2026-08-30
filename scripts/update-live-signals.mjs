@@ -3,7 +3,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
 import { signalFor } from "./generate_signals.mjs";
-import { fetchMarkets, fillMissingCandles, fillMissingHistory, updateCandles, updateHistory } from "./live-signal-update.mjs";
+import { fetchMarkets, refreshTimeSeries } from "./live-signal-update.mjs";
 
 const outputDir = process.env.LIVE_DATA_DIR || "data";
 const stateFile = path.join(outputDir, "price-history.json");
@@ -11,9 +11,10 @@ const signalsFile = path.join(outputDir, "signals.json");
 
 function readState() {
   try {
-    return JSON.parse(fs.readFileSync(stateFile, "utf8"));
+    const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+    return state.version === 2 ? state : {};
   } catch {
-    return { history: {} };
+    return {};
   }
 }
 
@@ -21,9 +22,9 @@ function updatedAt(now) {
   return new Date(now).toISOString();
 }
 
-function signalFrom(coin, index, history, now) {
+function signalFrom(coin, index, hourly, candles4h, now) {
   const base = signalFor(coin, index);
-  const strategy = strategyFor(history, coin.current_price);
+  const strategy = strategyFor(hourly, candles4h, coin.current_price, now);
   const primaryPlan = strategy.primaryDirection === "做多" ? strategy.plans.long : strategy.primaryDirection === "做空" ? strategy.plans.short : null;
   const active = Boolean(primaryPlan && primaryPlan.status === "可執行");
   const volatility = strategy.indicators.volatility || 0;
@@ -47,7 +48,7 @@ function signalFrom(coin, index, history, now) {
     plans: strategy.plans,
     primaryDirection: strategy.primaryDirection,
     candles: [],
-    strategy: { ...strategy, dataSource: "CoinGecko Demo", updatedAt: updatedAt(now) },
+    strategy: { ...strategy, dataSource: "CoinGecko hourly／4h OHLC", updatedAt: updatedAt(now) },
     vegas: { ...base.vegas, text: `4h EMA20 ${strategy.indicators.ema4h20 || "-"} / EMA50 ${strategy.indicators.ema4h50 || "-"}` },
     tdSequential: { ...base.tdSequential, riskText: `1h RSI ${strategy.indicators.rsi14 || "-"} / MACD ${strategy.indicators.macd || "-"}` },
     reasons: [
@@ -65,8 +66,8 @@ function signalFrom(coin, index, history, now) {
 
 export function buildLivePayload(coins, state, now = Date.now()) {
   const signals = coins.map((coin, index) => ({
-    ...signalFrom(coin, index, state.history[coin.id] || [], now),
-    candles: state.candles?.[coin.id] || []
+    ...signalFrom(coin, index, state.hourly?.[coin.id] || [], state.fourHourly?.[coin.id] || [], now),
+    candles: state.fourHourly?.[coin.id] || []
   }));
   const count = (direction) => signals.filter((signal) => signal.direction === direction).length;
 
@@ -74,7 +75,7 @@ export function buildLivePayload(coins, state, now = Date.now()) {
     project: "StarPulse Crypto Signal",
     status: "normal",
     live: true,
-    strategySource: "CoinGecko Demo／1h／4h",
+    strategySource: "CoinGecko hourly／4h OHLC",
     updatedAt: updatedAt(now),
     market: {
       condition: count("做多") > count("做空") ? "偏多" : count("做空") > count("做多") ? "偏空" : "震盪",
@@ -94,10 +95,7 @@ export function buildLivePayload(coins, state, now = Date.now()) {
 export async function updateLiveSignals(now = Date.now()) {
   const coins = await fetchMarkets();
   const state = readState();
-  await fillMissingHistory(state, coins);
-  await fillMissingCandles(state, coins);
-  updateHistory(state, coins, now);
-  updateCandles(state, coins, now);
+  await refreshTimeSeries(state, coins, now);
   const payload = buildLivePayload(coins, state, now);
 
   fs.mkdirSync(outputDir, { recursive: true });

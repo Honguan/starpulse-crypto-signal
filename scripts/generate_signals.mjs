@@ -77,7 +77,7 @@ export function signalFor(coin, index) {
   const tdCount = clamp(Math.round(Math.abs(change24h) / 2), 0, 9);
   const tdState = tdCount >= 7 && tdDirection !== "none" ? `${tdDirection}${tdCount}` : "none";
   const levels = tradeLevels(coin.current_price, direction);
-  const fallbackStrategy = strategyFor([], coin.current_price);
+  const fallbackStrategy = strategyFor([], [], coin.current_price);
   const rank = coin.market_cap_rank || index + 1;
 
   return {
