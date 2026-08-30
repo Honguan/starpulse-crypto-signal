@@ -20,6 +20,30 @@ const statusLabels = {
   source: "資料來源"
 };
 
+const COIN_ID = /^[a-z0-9][a-z0-9._~-]{0,127}$/i;
+const LIVE_PAIR = /^[A-Z0-9]+USDT$/;
+const PLAN_DIRECTIONS = new Set(["做多", "做空", "觀望"]);
+const PLAN_STATUSES = new Set(["可執行", "等待條件", "資料不足"]);
+
+function element(tag, options = {}, children = []) {
+  const node = document.createElement(tag);
+  if (options.className) node.className = options.className;
+  if (options.text !== undefined) node.textContent = String(options.text);
+  Object.entries(options.dataset || {}).forEach(([key, value]) => {
+    node.dataset[key] = String(value);
+  });
+  Object.entries(options.attributes || {}).forEach(([key, value]) => {
+    node.setAttribute(key, String(value));
+  });
+  node.append(...children);
+  return node;
+}
+
+function safeDataValue(value, pattern) {
+  const text = String(value || "");
+  return pattern.test(text) ? text : "";
+}
+
 export function renderDashboard(data, options = "") {
   renderStatus(data);
   renderMarket(data.market);
@@ -58,43 +82,35 @@ function renderStatus(data) {
     source: data.strategySource || (data.live ? "即時策略資料" : "備援快照")
   };
 
-  document.querySelector("#status").innerHTML = Object.entries(status)
-    .map(([key, value]) => `
-      <div class="status-item">
-        <span class="label">${statusLabels[key]}</span>
-        <span class="value" data-status-value="${key}">${value}</span>
-      </div>
-    `)
-    .join("");
+  document.querySelector("#status").replaceChildren(...Object.entries(status).map(([key, value]) => element("div", { className: "status-item" }, [
+    element("span", { className: "label", text: statusLabels[key] }),
+    element("span", { className: "value", text: value, dataset: { statusValue: key } })
+  ])));
 }
 
 function renderMarket(market) {
-  document.querySelector("#market").innerHTML = `
-    <div class="market-grid">
-      ${marketItem("市場狀態", market.condition)}
-      ${marketItem("市場風險", market.riskLevel)}
-      <div class="market-card market-summary">
-        <span class="label">摘要</span>
-        <strong>${market.summary}</strong>
-      </div>
-    </div>
-  `;
+  document.querySelector("#market").replaceChildren(element("div", { className: "market-grid" }, [
+    marketItem("市場狀態", market.condition),
+    marketItem("市場風險", market.riskLevel),
+    element("div", { className: "market-card market-summary" }, [
+      element("span", { className: "label", text: "摘要" }),
+      element("strong", { text: market.summary })
+    ])
+  ]));
 }
 
 function marketItem(label, value) {
-  return `
-    <div class="market-card">
-      <span class="label">${label}</span>
-      <strong>${value}</strong>
-    </div>
-  `;
+  return element("div", { className: "market-card" }, [
+    element("span", { className: "label", text: label }),
+    element("strong", { text: value })
+  ]);
 }
 
 function renderCards(selector, signals, favoriteCoinIds = new Set()) {
   const root = document.querySelector(selector);
-  root.innerHTML = signals.length
-    ? signals.map((signal) => renderCard(signal, favoriteCoinIds)).join("")
-    : '<p class="empty">目前沒有符合條件的訊號。</p>';
+  root.replaceChildren(...(signals.length
+    ? signals.map((signal) => renderCard(signal, favoriteCoinIds))
+    : [element("p", { className: "empty", text: "目前沒有符合條件的訊號。" })]));
 }
 
 function renderCard(signal, favoriteCoinIds) {
@@ -103,58 +119,57 @@ function renderCard(signal, favoriteCoinIds) {
   const plans = signal.plans || {};
   const primary = signal.primaryDirection === "做空" ? plans.short : plans.long;
   const conditionScore = Math.max(plans.long?.score || 0, plans.short?.score || 0);
-  return `
-    <article class="card" data-coin-id="${signal.coinId}" data-live-pair="${signal.liveInstrument?.symbol || ""}" data-snapshot-price="${signal.price}">
-      <div class="card-head">
-        <div>
-          <h3 class="symbol">${signal.symbol}</h3>
-          <span class="asset">
-            <span>${signal.name}／${signal.coinId}</span>
-            <span data-live-price>${signal.price}</span>
-            <span data-live-change>${signal.change24h}%</span>
-          </span>
-        </div>
-        <button class="favorite-toggle ${isFavorite ? "active" : ""}" type="button" data-coin-id="${signal.coinId}" aria-label="切換 ${signal.name} 最愛">★</button>
-        <span class="label">${signal.liveMode === "websocket" ? `${signal.liveInstrument.symbol} 即時` : "快照模式"}</span>
-        <span class="badge ${directionClass[signal.primaryDirection] || "watch"}">${signal.primaryDirection || signal.direction || "觀望"}</span>
-      </div>
-      <div class="card-body">
-        <div class="metrics">
-          ${metric("條件", `${conditionScore}%`)}
-          ${metric("RSI", strategy.indicators?.rsi14 ?? "-")}
-          ${metric("主要狀態", `<span data-plan-state>${strategy.planState || "資料延遲"}</span>`)}
-          ${metric("主要 RR", `<span data-plan-rr>${primary?.riskReward ? `${primary.riskReward}:1` : "-"}</span>`)}
-        </div>
+  const coinId = safeDataValue(signal.coinId, COIN_ID);
+  const livePair = safeDataValue(signal.liveInstrument?.symbol, LIVE_PAIR);
+  const reasons = element("ol", { className: "reason-list" }, signal.reasons.slice(0, 3).map((reason) => element("li", { text: reason })));
+  const warnings = element("ul", { className: "warnings" }, [
+    ...signal.warnings.map((warning) => element("li", { text: warning })),
+    element("li", { text: "請等待價格接近進場區，不要追價。" }),
+    element("li", { text: "若價格先觸及停損區，訊號失效。" }),
+    element("li", { text: "資料延遲或 API 異常時請勿依賴訊號。" })
+  ]);
+  const chartDetails = element("details", { className: "chart-details", dataset: { chartDetails: "", coinId } }, [
+    element("summary", { text: "K 線圖" }),
+    element("canvas", { className: "candle-chart", attributes: { width: 640, height: 240, "aria-label": `${signal.symbol} K 線圖` } }),
+    element("p", { className: "chart-empty", text: "展開後載入 K 線；歷史不足時不繪製。" })
+  ]);
 
-        <div class="plan-grid">
-          ${renderPlan("long", plans.long)}
-          ${renderPlan("short", plans.short)}
-        </div>
-
-        <ol class="reason-list">
-          ${signal.reasons.slice(0, 3).map((reason) => `<li>${reason}</li>`).join("")}
-        </ol>
-
-        <ul class="warnings">
-          ${signal.warnings.map((warning) => `<li>${warning}</li>`).join("")}
-          <li>請等待價格接近進場區，不要追價。</li>
-          <li>若價格先觸及停損區，訊號失效。</li>
-          <li>資料延遲或 API 異常時請勿依賴訊號。</li>
-        </ul>
-
-        <details class="chart-details" data-chart-details data-coin-id="${signal.coinId}">
-          <summary>K 線圖</summary>
-          <canvas class="candle-chart" width="640" height="240" aria-label="${signal.symbol} K 線圖"></canvas>
-          <p class="chart-empty">展開後載入 K 線；歷史不足時不繪製。</p>
-        </details>
-
-        <details>
-          <summary>為什麼</summary>
-          ${renderDetails(signal)}
-        </details>
-      </div>
-    </article>
-  `;
+  return element("article", {
+    className: "card",
+    dataset: { coinId, livePair, snapshotPrice: Number.isFinite(signal.price) ? signal.price : "" }
+  }, [
+    element("div", { className: "card-head" }, [
+      element("div", {}, [
+        element("h3", { className: "symbol", text: signal.symbol }),
+        element("span", { className: "asset" }, [
+          element("span", { text: `${signal.name}／${signal.coinId}` }),
+          element("span", { text: signal.price, dataset: { livePrice: "" } }),
+          element("span", { text: `${signal.change24h}%`, dataset: { liveChange: "" } })
+        ])
+      ]),
+      element("button", {
+        className: `favorite-toggle${isFavorite ? " active" : ""}`,
+        text: "★",
+        dataset: { coinId },
+        attributes: { type: "button", "aria-label": `切換 ${signal.name} 最愛` }
+      }),
+      element("span", { className: "label", text: signal.liveMode === "websocket" && livePair ? `${livePair} 即時` : "快照模式" }),
+      element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || signal.direction || "觀望" })
+    ]),
+    element("div", { className: "card-body" }, [
+      element("div", { className: "metrics" }, [
+        metric("條件", `${conditionScore}%`),
+        metric("RSI", strategy.indicators?.rsi14 ?? "-"),
+        metric("主要狀態", strategy.planState || "資料延遲", "planState"),
+        metric("主要 RR", primary?.riskReward ? `${primary.riskReward}:1` : "-", "planRr")
+      ]),
+      element("div", { className: "plan-grid" }, [renderPlan("long", plans.long), renderPlan("short", plans.short)]),
+      reasons,
+      warnings,
+      chartDetails,
+      element("details", {}, [element("summary", { text: "為什麼" }), renderDetails(signal)])
+    ])
+  ]);
 }
 
 function bindCandleCharts(signals) {
@@ -175,39 +190,54 @@ function renderPlan(key, plan = {}) {
   const entry = plan.entryZone ? `${plan.entryZone.low} - ${plan.entryZone.high}` : "-";
   const takeProfit = plan.takeProfit?.length ? plan.takeProfit.join(" / ") : "-";
   const prefix = isLong ? "long" : "short";
+  const planDirection = PLAN_DIRECTIONS.has(plan.direction) ? plan.direction : isLong ? "做多" : "做空";
+  const planStatus = PLAN_STATUSES.has(plan.status) ? plan.status : "資料不足";
   const conditionLabels = { trend: "4h 趨勢", position: "1h 位置", rsi: "RSI14", momentum: "MACD" };
-  const conditions = Object.entries(plan.conditions || {})
-    .map(([name, passed]) => `<span class="condition ${passed ? "passed" : "failed"}">${conditionLabels[name] || name}：${passed ? "符合" : "不足"}</span>`)
-    .join("");
+  const conditions = Object.entries(plan.conditions || {}).map(([name, passed]) => element("span", {
+    className: `condition ${passed ? "passed" : "failed"}`,
+    text: `${conditionLabels[name] || name}：${passed ? "符合" : "不足"}`
+  }));
 
-  return `
-    <section class="plan-box ${prefix}-plan" data-plan="${prefix}" data-plan-direction="${plan.direction || (isLong ? "做多" : "做空")}" data-plan-status="${plan.status || "資料不足"}" data-entry-low="${plan.entryZone?.low ?? ""}" data-entry-high="${plan.entryZone?.high ?? ""}" data-stop-loss="${plan.stopLoss ?? ""}" data-take-profit="${plan.takeProfit?.[0] ?? ""}">
-      <div class="plan-head">
-        <h4>${isLong ? "做多方案" : "做空方案"}</h4>
-        <span class="plan-state" data-${prefix}-plan-state>${plan.planState || plan.status || "資料不足"}</span>
-      </div>
-      <div class="plan-meta">
-        <span>條件分數 ${plan.score ?? 0}%</span>
-        <span>進場 ${entry}</span>
-        <span>停損 ${plan.stopLoss ?? "-"}</span>
-        <span>止盈 ${takeProfit}</span>
-      </div>
-      <div class="conditions">${conditions || "資料不足"}</div>
-    </section>
-  `;
+  return element("section", {
+    className: `plan-box ${prefix}-plan`,
+    dataset: {
+      plan: prefix,
+      planDirection,
+      planStatus,
+      entryLow: Number.isFinite(plan.entryZone?.low) ? plan.entryZone.low : "",
+      entryHigh: Number.isFinite(plan.entryZone?.high) ? plan.entryZone.high : "",
+      stopLoss: Number.isFinite(plan.stopLoss) ? plan.stopLoss : "",
+      takeProfit: Number.isFinite(plan.takeProfit?.[0]) ? plan.takeProfit[0] : ""
+    }
+  }, [
+    element("div", { className: "plan-head" }, [
+      element("h4", { text: isLong ? "做多方案" : "做空方案" }),
+      element("span", { className: "plan-state", text: plan.planState || plan.status || "資料不足", dataset: { [`${prefix}PlanState`]: "" } })
+    ]),
+    element("div", { className: "plan-meta" }, [
+      element("span", { text: `條件分數 ${plan.score ?? 0}%` }),
+      element("span", { text: `進場 ${entry}` }),
+      element("span", { text: `停損 ${plan.stopLoss ?? "-"}` }),
+      element("span", { text: `止盈 ${takeProfit}` })
+    ]),
+    element("div", { className: "conditions", text: conditions.length ? undefined : "資料不足" }, conditions)
+  ]);
 }
 
-function metric(label, value) {
-  return `
-    <div class="metric">
-      <span class="label">${label}</span>
-      <strong>${value}</strong>
-    </div>
-  `;
+function metric(label, value, marker) {
+  const dataset = marker ? { [marker]: "" } : {};
+  return element("div", { className: "metric" }, [
+    element("span", { className: "label", text: label }),
+    element("strong", { text: value, dataset })
+  ]);
 }
 
 function renderDetails(signal) {
-  return `<div class="analysis">
-    ${(signal.details || []).map((detail) => `<p><strong>${detail.label}</strong>：${detail.value}<br><span class="label">${detail.sourceMode}／${detail.calculationMode}</span></p>`).join("") || "沒有可用的計算明細。"}
-  </div>`;
+  const details = (signal.details || []).map((detail) => element("p", {}, [
+    element("strong", { text: detail.label }),
+    document.createTextNode(`：${detail.value}`),
+    element("br"),
+    element("span", { className: "label", text: `${detail.sourceMode}／${detail.calculationMode}` })
+  ]));
+  return element("div", { className: "analysis", text: details.length ? undefined : "沒有可用的計算明細。" }, details);
 }
