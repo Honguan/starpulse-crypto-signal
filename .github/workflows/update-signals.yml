@@ -5,20 +5,21 @@ on:
     - cron: "7,17,27,37,47,57 * * * *"
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 concurrency:
   group: live-data-publisher
   cancel-in-progress: false
 
 jobs:
   update:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
       - id: api
@@ -52,10 +53,12 @@ jobs:
         env:
           COINGECKO_API_KEY: ${{ secrets.COINGECKO_API_KEY }}
           LIVE_DATA_DIR: ${{ github.workspace }}/live-data/data
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd "$GITHUB_WORKSPACE/live-data"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          AUTH_HEADER=$(printf "x-access-token:%s" "$GH_TOKEN" | base64 -w0)
           for attempt in 1 2; do
             git add data/signals.json data/price-history.json
             if git diff --cached --quiet; then
@@ -63,7 +66,7 @@ jobs:
               exit 0
             fi
             git commit -m "chore: update live signals"
-            if git push origin HEAD:live-data; then
+            if git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $AUTH_HEADER" push origin HEAD:live-data; then
               exit 0
             fi
             if [ "$attempt" = 2 ]; then
