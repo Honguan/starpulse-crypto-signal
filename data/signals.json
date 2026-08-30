@@ -21,15 +21,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 63852.14,
-        "high": 64493.86
-      },
-      "stopLoss": 66419.05,
-      "takeProfit": [
-        67381.65,
-        69306.84
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -141,15 +132,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1791.07,
-        "high": 1809.07
-      },
-      "stopLoss": 1863.07,
-      "takeProfit": [
-        1890.07,
-        1944.08
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -261,15 +243,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994193,
-        "high": 1.004185
-      },
-      "stopLoss": 1.034161,
-      "takeProfit": [
-        1.049148,
-        1.079124
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -381,15 +354,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 573.56,
-        "high": 579.32
-      },
-      "stopLoss": 596.62,
-      "takeProfit": [
-        605.26,
-        622.56
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -501,15 +465,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994867,
-        "high": 1.004865
-      },
-      "stopLoss": 1.034861,
-      "takeProfit": [
-        1.049859,
-        1.079855
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -621,15 +576,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.1,
-        "high": 1.12
-      },
-      "stopLoss": 1.15,
-      "takeProfit": [
-        1.17,
-        1.2
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -738,18 +684,9 @@
       "price": 77.99,
       "change24h": -1.21,
       "marketCapRank": 7,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 77.6,
-        "high": 78.38
-      },
-      "stopLoss": 80.72,
-      "takeProfit": [
-        74.09,
-        71.75
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -861,15 +798,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.328139,
-        "high": 0.331437
-      },
-      "stopLoss": 0.341331,
-      "takeProfit": [
-        0.346277,
-        0.356171
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -978,18 +906,9 @@
       "price": 1.033,
       "change24h": 3.05,
       "marketCapRank": 9,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.03,
-        "high": 1.04
-      },
-      "stopLoss": 1,
-      "takeProfit": [
-        1.08,
-        1.12
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1098,18 +1017,9 @@
       "price": 66.38,
       "change24h": -2.49,
       "marketCapRank": 10,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 66.05,
-        "high": 66.71
-      },
-      "stopLoss": 68.7,
-      "takeProfit": [
-        63.06,
-        61.07
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1221,15 +1131,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.073873,
-        "high": 0.074615
-      },
-      "stopLoss": 0.076843,
-      "takeProfit": [
-        0.077956,
-        0.080184
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1341,15 +1242,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994779,
-        "high": 1.004777
-      },
-      "stopLoss": 1.03477,
-      "takeProfit": [
-        1.049767,
-        1.07976
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1458,18 +1350,9 @@
       "price": 0.01439553,
       "change24h": -0.05,
       "marketCapRank": 13,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.014324,
-        "high": 0.014468
-      },
-      "stopLoss": 0.014899,
-      "takeProfit": [
-        0.013676,
-        0.013244
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1581,15 +1464,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 9.42,
-        "high": 9.52
-      },
-      "stopLoss": 9.8,
-      "takeProfit": [
-        9.94,
-        10.23
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1698,18 +1572,9 @@
       "price": 499.34,
       "change24h": -0.34,
       "marketCapRank": 15,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 496.84,
-        "high": 501.84
-      },
-      "stopLoss": 481.86,
-      "takeProfit": [
-        524.31,
-        539.29
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1821,15 +1686,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 55.89,
-        "high": 56.45
-      },
-      "stopLoss": 58.14,
-      "takeProfit": [
-        58.98,
-        60.66
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -1938,18 +1794,9 @@
       "price": 0.189811,
       "change24h": -0.46,
       "marketCapRank": 17,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.188862,
-        "high": 0.19076
-      },
-      "stopLoss": 0.196454,
-      "takeProfit": [
-        0.18032,
-        0.174626
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2061,15 +1908,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.166368,
-        "high": 0.16804
-      },
-      "stopLoss": 0.173056,
-      "takeProfit": [
-        0.175564,
-        0.18058
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2181,15 +2019,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 320.8,
-        "high": 324.02
-      },
-      "stopLoss": 333.69,
-      "takeProfit": [
-        338.53,
-        348.2
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2301,15 +2130,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 7.94,
-        "high": 8.02
-      },
-      "stopLoss": 8.26,
-      "takeProfit": [
-        8.38,
-        8.62
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2421,15 +2241,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.134267,
-        "high": 0.135617
-      },
-      "stopLoss": 0.139665,
-      "takeProfit": [
-        0.141689,
-        0.145737
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2538,18 +2349,9 @@
       "price": 244.39,
       "change24h": 0.6,
       "marketCapRank": 22,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 243.17,
-        "high": 245.61
-      },
-      "stopLoss": 235.84,
-      "takeProfit": [
-        256.61,
-        263.94
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2661,15 +2463,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.99475,
-        "high": 1.004748
-      },
-      "stopLoss": 1.03474,
-      "takeProfit": [
-        1.049736,
-        1.079729
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2781,15 +2574,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.67,
-        "high": 1.69
-      },
-      "stopLoss": 1.74,
-      "takeProfit": [
-        1.76,
-        1.81
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -2901,15 +2685,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994081,
-        "high": 1.004071
-      },
-      "stopLoss": 1.034044,
-      "takeProfit": [
-        1.04903,
-        1.079002
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3021,15 +2796,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994671,
-        "high": 1.004667
-      },
-      "stopLoss": 1.034657,
-      "takeProfit": [
-        1.049652,
-        1.079643
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3141,15 +2907,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 44.73,
-        "high": 45.17
-      },
-      "stopLoss": 46.52,
-      "takeProfit": [
-        47.2,
-        48.55
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3261,15 +3018,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994468,
-        "high": 1.004462
-      },
-      "stopLoss": 1.034446,
-      "takeProfit": [
-        1.049438,
-        1.079422
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3381,15 +3129,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.070207,
-        "high": 0.070913
-      },
-      "stopLoss": 0.07303,
-      "takeProfit": [
-        0.074088,
-        0.076205
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3501,15 +3240,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.12,
-        "high": 1.14
-      },
-      "stopLoss": 1.17,
-      "takeProfit": [
-        1.19,
-        1.22
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3621,15 +3351,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.742244,
-        "high": 0.749704
-      },
-      "stopLoss": 0.772083,
-      "takeProfit": [
-        0.783273,
-        0.805652
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3741,15 +3462,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 6.68,
-        "high": 6.74
-      },
-      "stopLoss": 6.94,
-      "takeProfit": [
-        7.05,
-        7.25
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3861,15 +3573,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1,
-        "high": 1
-      },
-      "stopLoss": 1.03,
-      "takeProfit": [
-        1.05,
-        1.08
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -3981,15 +3684,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994806,
-        "high": 1.004804
-      },
-      "stopLoss": 1.034798,
-      "takeProfit": [
-        1.049795,
-        1.079789
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4101,15 +3795,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.000004,
-        "high": 0.000004
-      },
-      "stopLoss": 0.000005,
-      "takeProfit": [
-        0.000005,
-        0.000005
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4218,18 +3903,9 @@
       "price": 0.055791,
       "change24h": -1.79,
       "marketCapRank": 36,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.055512,
-        "high": 0.05607
-      },
-      "stopLoss": 0.057744,
-      "takeProfit": [
-        0.053001,
-        0.051328
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4341,15 +4017,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 4085.15,
-        "high": 4126.21
-      },
-      "stopLoss": 4249.38,
-      "takeProfit": [
-        4310.96,
-        4434.13
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4458,18 +4125,9 @@
       "price": 1.88,
       "change24h": -2.69,
       "marketCapRank": 38,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.87,
-        "high": 1.89
-      },
-      "stopLoss": 1.95,
-      "takeProfit": [
-        1.79,
-        1.73
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4578,18 +4236,9 @@
       "price": 3.52,
       "change24h": 0.19,
       "marketCapRank": 39,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 3.5,
-        "high": 3.54
-      },
-      "stopLoss": 3.4,
-      "takeProfit": [
-        3.7,
-        3.8
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4701,15 +4350,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.13,
-        "high": 1.15
-      },
-      "stopLoss": 1.18,
-      "takeProfit": [
-        1.2,
-        1.23
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4821,15 +4461,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 211.49,
-        "high": 213.61
-      },
-      "stopLoss": 219.99,
-      "takeProfit": [
-        223.18,
-        229.55
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -4941,15 +4572,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.057821,
-        "high": 0.058403
-      },
-      "stopLoss": 0.060146,
-      "takeProfit": [
-        0.061018,
-        0.062761
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5061,15 +4683,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 4089.24,
-        "high": 4130.34
-      },
-      "stopLoss": 4253.63,
-      "takeProfit": [
-        4315.28,
-        4438.57
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5181,15 +4794,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.32,
-        "high": 1.34
-      },
-      "stopLoss": 1.38,
-      "takeProfit": [
-        1.4,
-        1.44
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5298,18 +4902,9 @@
       "price": 36.68,
       "change24h": 1.91,
       "marketCapRank": 45,
-      "direction": "強烈做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 36.5,
-        "high": 36.86
-      },
-      "stopLoss": 35.4,
-      "takeProfit": [
-        38.51,
-        39.61
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5421,15 +5016,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 80.21,
-        "high": 81.01
-      },
-      "stopLoss": 83.43,
-      "takeProfit": [
-        84.64,
-        87.06
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5541,15 +5127,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.623995,
-        "high": 0.630267
-      },
-      "stopLoss": 0.649081,
-      "takeProfit": [
-        0.658488,
-        0.677301
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5658,18 +5235,9 @@
       "price": 0.00000184,
       "change24h": -0.63,
       "marketCapRank": 48,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.000002,
-        "high": 0.000002
-      },
-      "stopLoss": 0.000002,
-      "takeProfit": [
-        0.000002,
-        0.000002
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5781,15 +5349,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.32535,
-        "high": 0.32862
-      },
-      "stopLoss": 0.338429,
-      "takeProfit": [
-        0.343334,
-        0.353144
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -5901,15 +5460,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994223,
-        "high": 1.004215
-      },
-      "stopLoss": 1.034192,
-      "takeProfit": [
-        1.04918,
-        1.079157
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6021,15 +5571,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994954,
-        "high": 1.004954
-      },
-      "stopLoss": 1.034952,
-      "takeProfit": [
-        1.049952,
-        1.07995
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6138,18 +5679,9 @@
       "price": 0.875894,
       "change24h": 3.44,
       "marketCapRank": 52,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.871515,
-        "high": 0.880273
-      },
-      "stopLoss": 0.845238,
-      "takeProfit": [
-        0.919689,
-        0.945966
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6258,18 +5790,9 @@
       "price": 95.86,
       "change24h": 1.47,
       "marketCapRank": 53,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 95.38,
-        "high": 96.34
-      },
-      "stopLoss": 92.5,
-      "takeProfit": [
-        100.65,
-        103.53
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6381,15 +5904,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.429027,
-        "high": 0.433339
-      },
-      "stopLoss": 0.446274,
-      "takeProfit": [
-        0.452742,
-        0.465678
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6501,15 +6015,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.991832,
-        "high": 1.0018
-      },
-      "stopLoss": 1.031705,
-      "takeProfit": [
-        1.046657,
-        1.076561
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6618,18 +6123,9 @@
       "price": 0.059541,
       "change24h": 2.09,
       "marketCapRank": 56,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.059243,
-        "high": 0.059839
-      },
-      "stopLoss": 0.057457,
-      "takeProfit": [
-        0.062518,
-        0.064304
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6738,18 +6234,9 @@
       "price": 0.390033,
       "change24h": 1.87,
       "marketCapRank": 57,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.388083,
-        "high": 0.391983
-      },
-      "stopLoss": 0.403684,
-      "takeProfit": [
-        0.370531,
-        0.35883
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6858,18 +6345,9 @@
       "price": 2.08,
       "change24h": -7.47,
       "marketCapRank": 58,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 2.07,
-        "high": 2.09
-      },
-      "stopLoss": 2.15,
-      "takeProfit": [
-        1.98,
-        1.91
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -6981,15 +6459,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.993756,
-        "high": 1.003744
-      },
-      "stopLoss": 1.033706,
-      "takeProfit": [
-        1.048688,
-        1.07865
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7101,15 +6570,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 2.27,
-        "high": 2.29
-      },
-      "stopLoss": 2.36,
-      "takeProfit": [
-        2.39,
-        2.46
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7221,15 +6681,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.66,
-        "high": 1.68
-      },
-      "stopLoss": 1.73,
-      "takeProfit": [
-        1.75,
-        1.8
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7338,18 +6789,9 @@
       "price": 0.00000275,
       "change24h": 3.93,
       "marketCapRank": 62,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.000003,
-        "high": 0.000003
-      },
-      "stopLoss": 0.000003,
-      "takeProfit": [
-        0.000003,
-        0.000003
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7461,15 +6903,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 7.05,
-        "high": 7.13
-      },
-      "stopLoss": 7.34,
-      "takeProfit": [
-        7.44,
-        7.66
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7578,18 +7011,9 @@
       "price": 0.098728,
       "change24h": -1.03,
       "marketCapRank": 64,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.098234,
-        "high": 0.099222
-      },
-      "stopLoss": 0.102183,
-      "takeProfit": [
-        0.093792,
-        0.09083
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7701,15 +7125,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994715,
-        "high": 1.004713
-      },
-      "stopLoss": 1.034704,
-      "takeProfit": [
-        1.0497,
-        1.079691
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7821,15 +7236,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.19,
-        "high": 1.21
-      },
-      "stopLoss": 1.24,
-      "takeProfit": [
-        1.26,
-        1.3
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -7941,15 +7347,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 67.25,
-        "high": 67.93
-      },
-      "stopLoss": 69.96,
-      "takeProfit": [
-        70.97,
-        73
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8061,15 +7458,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 106.1,
-        "high": 107.16
-      },
-      "stopLoss": 110.36,
-      "takeProfit": [
-        111.96,
-        115.16
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8181,15 +7569,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 6.98,
-        "high": 7.06
-      },
-      "stopLoss": 7.27,
-      "takeProfit": [
-        7.37,
-        7.58
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8301,15 +7680,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994993,
-        "high": 1.004993
-      },
-      "stopLoss": 1.034993,
-      "takeProfit": [
-        1.049993,
-        1.079992
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8421,15 +7791,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 2.84,
-        "high": 2.86
-      },
-      "stopLoss": 2.95,
-      "takeProfit": [
-        2.99,
-        3.08
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8538,18 +7899,9 @@
       "price": 0.102686,
       "change24h": 3.33,
       "marketCapRank": 71,
-      "direction": "強烈做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.102173,
-        "high": 0.103199
-      },
-      "stopLoss": 0.099092,
-      "takeProfit": [
-        0.10782,
-        0.110901
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8661,15 +8013,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.1,
-        "high": 1.12
-      },
-      "stopLoss": 1.15,
-      "takeProfit": [
-        1.17,
-        1.2
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8781,15 +8124,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.035379,
-        "high": 0.035735
-      },
-      "stopLoss": 0.036802,
-      "takeProfit": [
-        0.037335,
-        0.038402
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -8898,18 +8232,9 @@
       "price": 0.080123,
       "change24h": 4.01,
       "marketCapRank": 75,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.079722,
-        "high": 0.080524
-      },
-      "stopLoss": 0.077319,
-      "takeProfit": [
-        0.084129,
-        0.086533
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9021,15 +8346,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.58,
-        "high": 1.6
-      },
-      "stopLoss": 1.65,
-      "takeProfit": [
-        1.67,
-        1.72
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9141,15 +8457,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.57,
-        "high": 1.59
-      },
-      "stopLoss": 1.64,
-      "takeProfit": [
-        1.66,
-        1.71
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9261,15 +8568,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.029491,
-        "high": 0.029788
-      },
-      "stopLoss": 0.030677,
-      "takeProfit": [
-        0.031121,
-        0.032011
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9378,18 +8676,9 @@
       "price": 6.32,
       "change24h": 0.78,
       "marketCapRank": 79,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 6.29,
-        "high": 6.35
-      },
-      "stopLoss": 6.1,
-      "takeProfit": [
-        6.64,
-        6.83
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9501,15 +8790,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 11.08,
-        "high": 11.2
-      },
-      "stopLoss": 11.53,
-      "takeProfit": [
-        11.7,
-        12.03
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9618,18 +8898,9 @@
       "price": 0.08164,
       "change24h": 3.15,
       "marketCapRank": 81,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.081232,
-        "high": 0.082048
-      },
-      "stopLoss": 0.078783,
-      "takeProfit": [
-        0.085722,
-        0.088171
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9741,15 +9012,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.14,
-        "high": 1.16
-      },
-      "stopLoss": 1.19,
-      "takeProfit": [
-        1.21,
-        1.24
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9861,15 +9123,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.085591,
-        "high": 0.086451
-      },
-      "stopLoss": 0.089032,
-      "takeProfit": [
-        0.090322,
-        0.092903
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -9981,15 +9234,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.75264,
-        "high": 0.760204
-      },
-      "stopLoss": 0.782897,
-      "takeProfit": [
-        0.794243,
-        0.816936
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10101,15 +9345,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1,
-        "high": 1
-      },
-      "stopLoss": 1.03,
-      "takeProfit": [
-        1.05,
-        1.08
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10221,15 +9456,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 6.71,
-        "high": 6.77
-      },
-      "stopLoss": 6.98,
-      "takeProfit": [
-        7.08,
-        7.28
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10338,18 +9564,9 @@
       "price": 0.089398,
       "change24h": -5.16,
       "marketCapRank": 87,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.088951,
-        "high": 0.089845
-      },
-      "stopLoss": 0.092527,
-      "takeProfit": [
-        0.084928,
-        0.082246
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10461,15 +9678,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 1.04,
-        "high": 1.05
-      },
-      "stopLoss": 1.08,
-      "takeProfit": [
-        1.09,
-        1.12
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10578,18 +9786,9 @@
       "price": 0.205296,
       "change24h": -1.76,
       "marketCapRank": 89,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.20427,
-        "high": 0.206322
-      },
-      "stopLoss": 0.212481,
-      "takeProfit": [
-        0.195031,
-        0.188872
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10701,15 +9900,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.67183,
-        "high": 0.678582
-      },
-      "stopLoss": 0.698838,
-      "takeProfit": [
-        0.708966,
-        0.729222
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10818,18 +10008,9 @@
       "price": 2.6,
       "change24h": 4.23,
       "marketCapRank": 91,
-      "direction": "強烈做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 2.59,
-        "high": 2.61
-      },
-      "stopLoss": 2.51,
-      "takeProfit": [
-        2.73,
-        2.81
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -10941,15 +10122,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.785176,
-        "high": 0.793068
-      },
-      "stopLoss": 0.816741,
-      "takeProfit": [
-        0.828578,
-        0.852252
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11061,15 +10233,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.993456,
-        "high": 1.00344
-      },
-      "stopLoss": 1.033394,
-      "takeProfit": [
-        1.04837,
-        1.078324
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11178,18 +10341,9 @@
       "price": 0.090875,
       "change24h": -2.18,
       "marketCapRank": 94,
-      "direction": "做多",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.090421,
-        "high": 0.091329
-      },
-      "stopLoss": 0.087694,
-      "takeProfit": [
-        0.095419,
-        0.098145
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11298,18 +10452,9 @@
       "price": 0.00143557,
       "change24h": -4.71,
       "marketCapRank": 95,
-      "direction": "強烈做空",
+      "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.001428,
-        "high": 0.001443
-      },
-      "stopLoss": 0.001486,
-      "takeProfit": [
-        0.001364,
-        0.001321
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11418,18 +10563,9 @@
       "price": 0.00662337,
       "change24h": -0.67,
       "marketCapRank": 96,
-      "direction": "做空",
+      "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.00659,
-        "high": 0.006656
-      },
-      "stopLoss": 0.006855,
-      "takeProfit": [
-        0.006292,
-        0.006094
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11541,15 +10677,6 @@
       "direction": "觀望",
       "riskLevel": "高",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994712,
-        "high": 1.00471
-      },
-      "stopLoss": 1.034701,
-      "takeProfit": [
-        1.049697,
-        1.079688
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11661,15 +10788,6 @@
       "direction": "觀望",
       "riskLevel": "中",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.027021,
-        "high": 0.027293
-      },
-      "stopLoss": 0.028107,
-      "takeProfit": [
-        0.028515,
-        0.029329
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11781,15 +10899,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.994802,
-        "high": 1.0048
-      },
-      "stopLoss": 1.034794,
-      "takeProfit": [
-        1.049791,
-        1.079785
-      ],
       "plans": {
         "long": {
           "direction": "做多",
@@ -11901,15 +11010,6 @@
       "direction": "觀望",
       "riskLevel": "低",
       "timeframe": "1h / 4h",
-      "entryZone": {
-        "low": 0.626665,
-        "high": 0.632963
-      },
-      "stopLoss": 0.651857,
-      "takeProfit": [
-        0.661305,
-        0.680199
-      ],
       "plans": {
         "long": {
           "direction": "做多",
