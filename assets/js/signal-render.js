@@ -73,8 +73,6 @@ function renderMarket(market) {
     <div class="market-grid">
       ${marketItem("市場狀態", market.condition)}
       ${marketItem("市場風險", market.riskLevel)}
-      ${marketItem("BTC Vegas", market.btcVegas)}
-      ${marketItem("ETH Vegas", market.ethVegas)}
       <div class="market-card market-summary">
         <span class="label">摘要</span>
         <strong>${market.summary}</strong>
@@ -208,16 +206,7 @@ function metric(label, value) {
 }
 
 function renderDetails(signal) {
-  const scores = Object.entries(signal.detailScores)
-    .map(([key, value]) => `<span>${key}：${value}</span>`)
-    .join("");
-
-  const analysis = Object.entries(signal.analysis)
-    .map(([key, value]) => `<p><strong>${key}</strong>：${value}</p>`)
-    .join("");
-
-  return `
-    <div class="detail-grid">${scores}</div>
-    <div class="analysis">${analysis}</div>
-  `;
+  return `<div class="analysis">
+    ${(signal.details || []).map((detail) => `<p><strong>${detail.label}</strong>：${detail.value}<br><span class="label">${detail.sourceMode}／${detail.calculationMode}</span></p>`).join("") || "沒有可用的計算明細。"}
+  </div>`;
 }

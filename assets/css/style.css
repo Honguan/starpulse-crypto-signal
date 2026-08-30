@@ -438,14 +438,6 @@ summary {
   font-weight: 800;
 }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin: 12px 0;
-}
-
-.detail-grid span,
 .analysis p {
   padding: 9px;
   border-radius: 12px;

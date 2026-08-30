@@ -61,6 +61,9 @@ assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count i
 assert(data.signals.every((signal) => signal.plans?.long && signal.plans?.short), "signals expose long and short plans");
 assert(data.signals.every((signal) => Array.isArray(signal.candles)), "signals expose candles");
 assert(data.signals.every((signal) => !("winRate" in signal) && !("ev" in signal) && !("rr" in signal)), "fallback data excludes unsupported performance metrics");
+assert(data.signals.every((signal) => signal.sourceMode === "fallback" && signal.details.every((detail) => detail.sourceMode === "fallback" && detail.calculationMode)), "fallback details identify their source and calculation mode");
+assert(data.signals.every((signal) => !("vegas" in signal) && !("tdSequential" in signal)), "fallback data excludes unimplemented named indicators");
+assert(!("btcVegas" in data.market) && !("ethVegas" in data.market), "market summary excludes unimplemented Vegas labels");
 assert(css.includes("@media (max-width: 430px)"), "small phone breakpoint exists");
 assert(css.includes("overflow-wrap: anywhere"), "long mobile text can wrap");
 assert(css.includes("grid-template-columns: repeat(2, minmax(0, 1fr))"), "mobile metrics use two compact columns");
