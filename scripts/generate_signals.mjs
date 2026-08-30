@@ -2,6 +2,7 @@ import fs from "node:fs";
 import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
 import { SIGNAL_SCHEMA_VERSION } from "../assets/js/signal-schema.mjs";
+import { fetchJson } from "./api-request.mjs";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
 const TOP_100_PAGES = [1];
@@ -73,11 +74,7 @@ export function signalFor(coin, index) {
 async function fetchPage(page) {
   const url = `${API}?vs_currency=usd&order=market_cap_desc&per_page=100&page=${page}&sparkline=false&price_change_percentage=7d`;
   const headers = process.env.COINGECKO_API_KEY ? { "x-cg-demo-api-key": process.env.COINGECKO_API_KEY } : {};
-  const response = await fetch(url, { headers });
-  if (!response.ok) {
-    throw new Error(`CoinGecko page ${page} failed: HTTP ${response.status}`);
-  }
-  return response.json();
+  return fetchJson(url, { headers, label: `CoinGecko page ${page}` });
 }
 
 export async function buildSignals() {
@@ -94,10 +91,11 @@ export async function buildSignals() {
   return {
     schemaVersion: SIGNAL_SCHEMA_VERSION,
     project: "StarPulse Crypto Signal",
-    status: "normal",
+    status: "degraded",
     live: false,
     strategySource: "CoinGecko 市場快照（備援）",
     updatedAt: UPDATED_AT,
+    dataQuality: { source: "CoinGecko", status: "degraded", successCount: signals.length, failedCount: 0, requestFailureCount: 0, missingHistoryCount: signals.length, concurrency: 1, failures: [] },
     market,
     signals,
     watchlist: signals

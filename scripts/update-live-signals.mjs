@@ -79,10 +79,11 @@ export function buildLivePayload(coins, state, now = Date.now(), liveInstruments
   return {
     schemaVersion: SIGNAL_SCHEMA_VERSION,
     project: "StarPulse Crypto Signal",
-    status: "normal",
+    status: state.dataQuality?.status || "degraded",
     live: true,
     strategySource: "CoinGecko hourly／4h OHLC",
     updatedAt: updatedAt(now),
+    dataQuality: state.dataQuality || { source: "CoinGecko", status: "degraded", successCount: 0, failedCount: 0, requestFailureCount: 0, missingHistoryCount: signals.length, concurrency: 1, failures: [] },
     market: {
       condition: count("做多") > count("做空") ? "偏多" : count("做空") > count("做多") ? "偏空" : "震盪",
       riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 20 ? "高" : "中",
@@ -101,6 +102,7 @@ export async function updateLiveSignals(now = Date.now()) {
   const liveInstruments = await fetchVerifiedInstruments(coins);
   const state = readState();
   await refreshTimeSeries(state, coins, now);
+  for (const failure of state.dataQuality.failures) console.warn(`CoinGecko ${failure.resource} ${failure.coinId}: ${failure.classification}${failure.status ? ` HTTP ${failure.status}` : ""}`);
   const payload = buildLivePayload(coins, state, now, liveInstruments);
 
   fs.mkdirSync(outputDir, { recursive: true });

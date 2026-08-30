@@ -3,6 +3,7 @@ import { buildLivePayload } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments, verifiedInstruments } from "./binance-instruments.mjs";
 import { validateSignalPayload } from "../assets/js/signal-schema.mjs";
+import { fetchJson } from "./api-request.mjs";
 
 const HOUR = 60 * 60 * 1000;
 const FOUR_HOURS = 4 * HOUR;
@@ -16,6 +17,53 @@ const coins = [
   { id: "bitcoin", symbol: "btc", current_price: 122, market_cap_rank: 1 },
   { id: "ethereum", symbol: "eth", current_price: 50, market_cap_rank: 2 }
 ];
+
+const response = (status, payload, retryAfter) => ({
+  ok: status >= 200 && status < 300,
+  status,
+  headers: { get: (name) => name === "retry-after" ? retryAfter || null : null },
+  json: async () => payload
+});
+
+await assert.rejects(fetchJson("timeout", {
+  fetchImpl: (_, { signal }) => new Promise((resolve, reject) => {
+    const keepAlive = setTimeout(resolve, 50);
+    signal.addEventListener("abort", () => { clearTimeout(keepAlive); reject(signal.reason); }, { once: true });
+  }),
+  timeoutMs: 5,
+  retries: 0
+}), { classification: "timeout" });
+
+let retryCalls = 0;
+const retryDelays = [];
+assert.deepEqual(await fetchJson("rate-limit", {
+  fetchImpl: async () => ++retryCalls === 1 ? response(429, {}, "2") : response(200, { ok: true }),
+  retries: 1,
+  sleepImpl: async (delay) => retryDelays.push(delay),
+  random: () => 0
+}), { ok: true });
+assert.deepEqual(retryDelays, [2000]);
+
+retryCalls = 0;
+assert.deepEqual(await fetchJson("upstream", {
+  fetchImpl: async () => ++retryCalls === 1 ? response(500, {}) : response(200, { ok: true }),
+  retries: 1,
+  sleepImpl: async () => {},
+  random: () => 0
+}), { ok: true });
+
+retryCalls = 0;
+await assert.rejects(fetchJson("bounded", {
+  fetchImpl: async () => { retryCalls += 1; return response(500, {}); },
+  sleepImpl: async () => {},
+  random: () => 0
+}), { classification: "upstream", status: 500 });
+assert.equal(retryCalls, 3);
+
+retryCalls = 0;
+await assert.rejects(fetchJson("permanent", { fetchImpl: async () => { retryCalls += 1; return response(404, {}); } }), { classification: "http", status: 404 });
+assert.equal(retryCalls, 1);
+await assert.rejects(fetchJson("malformed", { fetchImpl: async () => ({ ...response(200, {}), json: async () => { throw new SyntaxError(); } }) }), { classification: "malformed-json" });
 
 const duplicateAndMissing = [...coins, { id: "wrapped-bitcoin", symbol: "btc" }, { id: "dogecoin", symbol: "doge" }];
 const liveInstruments = verifiedInstruments(duplicateAndMissing, [
@@ -56,7 +104,7 @@ const before = structuredClone(state);
 await refreshTimeSeries(state, [coins[0]], now + 20 * 60_000, async () => {
   throw new Error("current authoritative candles must not be synthesized or refetched");
 }, 0);
-assert.deepEqual(state, before);
+assert.deepEqual({ version: state.version, hourly: state.hourly, fourHourly: state.fourHourly }, before);
 
 const payload = buildLivePayload(coins, state, now, liveInstruments);
 assert.equal(validateSignalPayload(payload), payload);
@@ -70,6 +118,8 @@ assert.equal(payload.signals[1].liveMode, "snapshot-only");
 assert.equal(payload.signals[1].liveInstrument, null);
 assert.deepEqual(payload.signals[0].priceSource, { source: "CoinGecko", instrument: "bitcoin", quoteAsset: "USD" });
 assert.equal(payload.signals[0].indicatorSource.instrument, "bitcoin");
+assert.equal(payload.status, "normal");
+assert.deepEqual(payload.dataQuality, { source: "CoinGecko", status: "normal", successCount: 1, failedCount: 0, requestFailureCount: 0, missingHistoryCount: 0, concurrency: 1, failures: [] });
 assert(!("winRate" in payload.signals[0]));
 assert(!("ev" in payload.signals[0]));
 assert(!("rr" in payload.signals[0]));
@@ -95,5 +145,21 @@ await refreshTimeSeries(missing, [coins[0]], now, async (url) => {
 }, 0);
 assert.equal(requests, 1);
 assert.deepEqual(missing.hourly.bitcoin, hourly);
+
+const partial = { version: 2, hourly: {}, fourHourly: {} };
+await refreshTimeSeries(partial, coins, now, async (url) => {
+  if (url.includes("ethereum")) return response(500, {});
+  return url.includes("market_chart") ? response(200, { prices: hourly }) : response(200, fourHourly);
+}, 0, { retries: 0 });
+assert.equal(partial.dataQuality.status, "degraded");
+assert.equal(partial.dataQuality.successCount, 1);
+assert.equal(partial.dataQuality.failedCount, 1);
+assert.equal(partial.dataQuality.requestFailureCount, 2);
+assert.equal(partial.dataQuality.missingHistoryCount, 1);
+assert.deepEqual(partial.dataQuality.failures.map(({ coinId, resource, classification }) => ({ coinId, resource, classification })), [
+  { coinId: "ethereum", resource: "hourly", classification: "upstream" },
+  { coinId: "ethereum", resource: "ohlc", classification: "upstream" }
+]);
+assert.equal(buildLivePayload(coins, partial, now).status, "degraded");
 
 console.log("live update check ok");
