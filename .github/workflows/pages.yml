@@ -28,6 +28,7 @@ jobs:
           node scripts/indicator-check.mjs
           node scripts/freshness-check.mjs
           node scripts/signal-schema-check.mjs
+          node scripts/payload-size-check.mjs
           node scripts/live-update-check.mjs
           node scripts/candle-chart-check.mjs
           node --no-warnings scripts/render-security-check.mjs

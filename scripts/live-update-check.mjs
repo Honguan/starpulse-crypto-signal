@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { buildLivePayload } from "./update-live-signals.mjs";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { buildLivePayload, writeCandleSnapshots } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments, verifiedInstruments } from "./binance-instruments.mjs";
 import { validateSignalPayload } from "../assets/js/signal-schema.mjs";
@@ -133,16 +136,43 @@ assert(!("winRate" in payload.signals[0]));
 assert(!("ev" in payload.signals[0]));
 assert(!("rr" in payload.signals[0]));
 assert.equal(payload.signals[0].sourceMode, "live");
-assert.equal(payload.signals[0].strategySource, "CoinGecko hourly／4h OHLC");
-assert(payload.signals[0].details.every((detail) => detail.sourceMode === "live" && detail.calculationMode));
+assert.deepEqual(Object.keys(payload.signals[0].strategy).sort(), ["indicators", "planState"]);
 assert(!("vegas" in payload.signals[0]));
 assert(!("tdSequential" in payload.signals[0]));
-assert(!payload.signals[0].details.some((detail) => String(detail.value).includes("備援")));
 assert.notEqual(payload.signals[0].strategy.planState, "資料不足");
-assert.deepEqual(payload.signals[0].candles.at(-1), fourHourly.at(-1));
+assert.equal(payload.signals[0].hasCandles, true);
+assert.equal("candles" in payload.signals[0], false);
+assert.equal("direction" in payload.signals[0], false);
 assert.equal(payload.signals[1].strategy.planState, "資料不足");
 assert.equal(payload.market.condition, "震盪");
 assert.equal(payload.signals[0].primaryDirection, "觀望");
+assert.equal(payload.market.btcDirection, payload.signals.find((signal) => signal.coinId === "bitcoin").primaryDirection);
+assert.equal(payload.market.ethDirection, payload.signals.find((signal) => signal.coinId === "ethereum").primaryDirection);
+
+const trendHourly = [
+  ...Array.from({ length: 201 }, (_, index) => 100 + index * 0.25),
+  ...Array.from({ length: 15 }, (_, index) => 150 - (index + 1) * 0.2),
+  ...Array.from({ length: 14 }, (_, index) => 147 + (index + 1) * 0.05)
+].map((priceValue, index) => [Date.UTC(2026, 0, 1, index), priceValue]);
+const trendCandles = trendHourly.filter(([timestamp]) => timestamp % FOUR_HOURS === 0)
+  .map(([timestamp, close]) => [timestamp, close, close + 1, close - 1, close]);
+const directional = buildLivePayload([{ ...coins[0], current_price: 148.1 }], { hourly: { bitcoin: trendHourly }, fourHourly: { bitcoin: trendCandles } }, trendHourly.at(-1)[0]);
+assert.equal(directional.signals[0].primaryDirection, "做多");
+assert.equal(directional.market.btcDirection, "做多");
+
+const candleDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "starpulse-candles-"));
+try {
+  writeCandleSnapshots(candleDirectory, payload, state);
+  assert.deepEqual(fs.readdirSync(candleDirectory), ["bitcoin.json"]);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(candleDirectory, "bitcoin.json"), "utf8")), {
+    schemaVersion: 1,
+    coinId: "bitcoin",
+    updatedAt: payload.updatedAt,
+    candles: fourHourly
+  });
+} finally {
+  fs.rmSync(candleDirectory, { recursive: true, force: true });
+}
 
 const missing = structuredClone(state);
 missing.hourly.bitcoin.splice(-2, 1);

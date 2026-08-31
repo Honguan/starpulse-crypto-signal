@@ -28,7 +28,8 @@ assert(workflows["update-signals.yml"].includes("GH_TOKEN: ${{ secrets.GITHUB_TO
 assert(workflows["live-data-health.yml"].includes("timeout-minutes: 5"));
 assert(workflows["pages.yml"].includes("timeout-minutes: 10"));
 assert(workflows["pages.yml"].includes("pull_request:") && workflows["pages.yml"].includes("needs: validate") && workflows["pages.yml"].includes("github.event_name != 'pull_request'"), "pull requests validate and deployment requires a successful validation job");
-assert(workflows["pages.yml"].includes("signal-schema-check.mjs") && workflows["pages.yml"].includes("git ls-files -z '*.js' '*.mjs'"), "CI validates fallback schema and JavaScript syntax");
+assert(workflows["pages.yml"].includes("signal-schema-check.mjs") && workflows["pages.yml"].includes("payload-size-check.mjs") && workflows["pages.yml"].includes("git ls-files -z '*.js' '*.mjs'"), "CI validates fallback schema, payload budget and JavaScript syntax");
 assert(workflows["update-signals.yml"].includes("timeout-minutes: 15"));
+assert(workflows["update-signals.yml"].includes('cp -R "$GITHUB_WORKSPACE/live-output/." data/') && workflows["update-signals.yml"].includes("git add data"), "publisher includes compact index and per-asset candle snapshots");
 
 console.log("workflow security check ok");

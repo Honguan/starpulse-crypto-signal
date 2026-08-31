@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { renderCandleChart } from "../assets/js/candle-chart.mjs";
+import { loadCandles } from "../assets/js/candle-data.mjs";
 
 const calls = [];
 const context = new Proxy({}, {
@@ -20,5 +21,15 @@ assert.equal(renderCandleChart(canvas, candles, plans), true);
 assert(calls.some(([name]) => name === "fillRect"));
 assert(calls.some(([name]) => name === "stroke"));
 assert.equal(renderCandleChart(canvas, [], plans), false);
+
+let requestedUrl;
+assert.deepEqual(await loadCandles("bitcoin", "2026-08-31T00:00:00Z", async (url, options) => {
+  requestedUrl = url;
+  assert.deepEqual(options, { cache: "no-store" });
+  return { ok: true, json: async () => ({ schemaVersion: 1, coinId: "bitcoin", updatedAt: "2026-08-31T00:00:00Z", candles }) };
+}), candles);
+assert(requestedUrl.endsWith("/bitcoin.json?t=2026-08-31T00%3A00%3A00Z"));
+await assert.rejects(loadCandles("../bitcoin", "", async () => ({ ok: true })), /invalid coin id/);
+await assert.rejects(loadCandles("bitcoin", "", async () => ({ ok: true, json: async () => ({ schemaVersion: 1, coinId: "ethereum", candles }) })), /invalid candle payload/);
 
 console.log("candle chart check ok");

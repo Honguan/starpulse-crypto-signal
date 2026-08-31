@@ -62,11 +62,11 @@ jobs:
           git switch --orphan snapshot
           test -z "$(git ls-files)" || { echo "::error::orphan index is not empty"; exit 1; }
           mkdir -p data
-          cp "$GITHUB_WORKSPACE/live-output/signals.json" data/signals.json
+          cp -R "$GITHUB_WORKSPACE/live-output/." data/
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           AUTH_HEADER=$(printf "x-access-token:%s" "$GH_TOKEN" | base64 -w0)
-          git add data/signals.json
+          git add data
           git commit -m "chore: publish live snapshot"
           git -c http.https://github.com/.extraheader="AUTHORIZATION: basic $AUTH_HEADER" push \
             --force-with-lease="refs/heads/live-data:$LIVE_DATA_EXPECTED_SHA" origin HEAD:live-data
