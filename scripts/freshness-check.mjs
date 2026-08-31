@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import { prepareSnapshot } from "../assets/js/data-freshness.mjs";
+import { formatLocalTimestamp, freshnessFor, prepareSnapshot } from "../assets/js/data-freshness.mjs";
 import { loadLastKnownGood, saveLastKnownGood } from "../assets/js/snapshot-store.mjs";
 import { assertFreshPayload } from "./health-check.mjs";
 
@@ -25,6 +25,12 @@ assert.equal(delayed.live, false);
 assert.equal(delayed.status, "degraded");
 assert.equal(prepareSnapshot(snapshot(19), { now }).freshness.state, "fresh");
 assert.equal(prepareSnapshot(snapshot(20), { now }).freshness.state, "delayed");
+assert.deepEqual(
+  ["2026-08-30T06:00:00Z", "2026-08-30T14:00:00+08:00", "2026-08-29T22:00:00-08:00"].map((value) => freshnessFor(value, now).age),
+  [0, 0, 0]
+);
+assert.match(formatLocalTimestamp("2026-03-08T06:30:00Z", { locale: "en-US", timeZone: "America/New_York" }), /01:30:00 AM EST/);
+assert.match(formatLocalTimestamp("2026-03-08T07:30:00Z", { locale: "en-US", timeZone: "America/New_York" }), /03:30:00 AM EDT/);
 
 const stale = prepareSnapshot(snapshot(120), { now });
 assert.equal(stale.freshness.state, "stale");

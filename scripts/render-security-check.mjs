@@ -113,7 +113,8 @@ malicious.signals = [{
 renderDashboard(malicious, { symbolFilter: attack });
 const rendered = Object.values(roots).flatMap(nodes);
 assert(!rendered.some((node) => ["IMG", "SCRIPT"].includes(node.tagName)));
-assert(rendered.filter((node) => node.textContent === attack).length >= 6);
+assert(rendered.filter((node) => node.textContent === attack).length >= 5);
+assert.equal(rendered.find((node) => node.dataset?.statusValue === "updatedAt").textContent, "時間無效");
 const card = rendered.find((node) => node.tagName === "ARTICLE");
 assert.equal(card.dataset.coinId, "");
 assert.equal(card.dataset.livePair, "");
