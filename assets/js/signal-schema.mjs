@@ -1,3 +1,5 @@
+import { marketFor } from "./market-summary.mjs";
+
 export const SIGNAL_SCHEMA_VERSION = 2;
 export const SIGNAL_PAYLOAD_MAX_BYTES = 180 * 1024;
 
@@ -53,6 +55,7 @@ function validateSignal(signal, index) {
   const path = `signals[${index}]`;
   record(signal, path);
   ["coinId", "name", "symbol", "primaryDirection", "riskLevel", "liveMode", "sourceMode"].forEach((key) => string(signal[key], `${path}.${key}`));
+  if (!["低", "中", "高"].includes(signal.riskLevel)) reject(`${path}.riskLevel`);
   ["price", "change24h", "marketCapRank"].forEach((key) => {
     if (!Number.isFinite(signal[key])) reject(`${path}.${key}`);
   });
@@ -84,6 +87,7 @@ export function validateSignalPayload(payload) {
   if (typeof payload.live !== "boolean") reject("live");
   const market = record(payload.market, "market");
   ["condition", "riskLevel", "btcDirection", "ethDirection", "summary"].forEach((key) => string(market[key], `market.${key}`));
+  const metrics = record(market.metrics, "market.metrics");
   const quality = record(payload.dataQuality, "dataQuality");
   ["source", "status"].forEach((key) => string(quality[key], `dataQuality.${key}`));
   ["successCount", "failedCount", "requestFailureCount", "missingHistoryCount", "concurrency"].forEach((key) => {
@@ -97,6 +101,10 @@ export function validateSignalPayload(payload) {
   array(payload.signals, "signals");
   if (!payload.signals.length) reject("signals");
   payload.signals.forEach(validateSignal);
+  const expectedMarket = marketFor(payload.signals);
+  if (market.condition !== expectedMarket.condition || market.riskLevel !== expectedMarket.riskLevel
+    || Object.keys(metrics).length !== Object.keys(expectedMarket.metrics).length
+    || Object.entries(expectedMarket.metrics).some(([key, value]) => metrics[key] !== value)) reject("market aggregation");
   finiteNumbers(payload);
   return payload;
 }

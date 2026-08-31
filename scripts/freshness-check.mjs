@@ -32,10 +32,15 @@ assert.deepEqual(
 assert.match(formatLocalTimestamp("2026-03-08T06:30:00Z", { locale: "en-US", timeZone: "America/New_York" }), /01:30:00 AM EST/);
 assert.match(formatLocalTimestamp("2026-03-08T07:30:00Z", { locale: "en-US", timeZone: "America/New_York" }), /03:30:00 AM EDT/);
 
-const stale = prepareSnapshot(snapshot(120), { now });
+const staleInput = snapshot(120);
+staleInput.signals[0].riskLevel = "低";
+staleInput.market = { condition: "偏多", riskLevel: "低", metrics: {} };
+const stale = prepareSnapshot(staleInput, { now });
 assert.equal(stale.freshness.state, "stale");
 assert.equal(stale.signals[0].plans.long.status, "資料過期");
 assert.equal(stale.signals[0].primaryDirection, "觀望");
+assert.equal(stale.market.condition, "震盪");
+assert.equal(stale.market.metrics.neutral, 1);
 
 assert.throws(() => prepareSnapshot(snapshot(0, "2026-08-30 06:00:00"), { now }), /時間格式無效/);
 assert.throws(() => prepareSnapshot({ signals: [] }, { now }), /時間格式無效/);

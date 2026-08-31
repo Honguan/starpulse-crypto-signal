@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { buildLivePayload, writeCandleSnapshots } from "./update-live-signals.mjs";
 import { fetchHistory, fetchMarkets, fetchOHLC, refreshTimeSeries } from "./live-signal-update.mjs";
+import { marketFor } from "../assets/js/market-summary.mjs";
 import { fetchVerifiedInstruments, verifiedInstruments } from "./binance-instruments.mjs";
 import { validateSignalPayload } from "../assets/js/signal-schema.mjs";
 import { fetchJson } from "./api-request.mjs";
@@ -20,6 +21,37 @@ const coins = [
   { id: "bitcoin", symbol: "btc", current_price: 122, market_cap_rank: 1 },
   { id: "ethereum", symbol: "eth", current_price: 50, market_cap_rank: 2 }
 ];
+
+const aggregate = (directions = [], risks = [], total = 100) => marketFor(Array.from({ length: total }, (_, index) => {
+  const primaryDirection = directions[index] || "觀望";
+  return {
+    primaryDirection,
+    riskLevel: risks[index] || "低",
+    plans: {
+      long: { status: primaryDirection === "做多" ? "可執行" : "等待條件" },
+      short: { status: primaryDirection === "做空" ? "可執行" : "等待條件" }
+    }
+  };
+}));
+
+assert.equal(marketFor([]).condition, "震盪");
+assert.equal(aggregate(Array(10).fill("做多")).condition, "偏多");
+assert.equal(aggregate(Array(9).fill("做多")).condition, "震盪");
+assert.equal(aggregate(Array(10).fill("做空")).condition, "偏空");
+assert.equal(aggregate(Array(9).fill("做空")).condition, "震盪");
+assert.equal(aggregate([...Array(10).fill("做多"), ...Array(7).fill("做空")], [], 30).condition, "偏多");
+assert.equal(aggregate([...Array(7).fill("做多"), ...Array(10).fill("做空")], [], 30).condition, "偏空");
+assert.equal(marketFor([{ primaryDirection: "做多", riskLevel: "低", plans: { long: { status: "等待條件" } } }]).metrics.neutral, 1);
+assert.equal(aggregate([], Array(30).fill("高")).riskLevel, "高");
+assert.equal(aggregate([], Array(29).fill("高")).riskLevel, "中");
+assert.equal(aggregate([], Array(10).fill("高")).riskLevel, "中");
+assert.equal(aggregate([], Array(9).fill("高")).riskLevel, "低");
+assert.equal(aggregate([], Array(30).fill("中")).riskLevel, "中");
+assert.equal(aggregate([], Array(29).fill("中")).riskLevel, "低");
+assert.deepEqual(aggregate(["做多"], ["高"]).metrics, {
+  total: 100, long: 1, short: 0, neutral: 99, highRisk: 1, mediumRisk: 0, lowRisk: 99,
+  longPct: 1, shortPct: 0, neutralPct: 99, highRiskPct: 1, mediumRiskPct: 0, lowRiskPct: 99
+});
 
 const response = (status, payload, retryAfter) => ({
   ok: status >= 200 && status < 300,
