@@ -52,7 +52,8 @@ assert(apiRequest.includes("AbortSignal.timeout") && apiRequest.includes("retry-
 assert(healthCheck.includes("freshnessFor") && healthCheck.includes("validateSignalPayload"), "health check verifies published data rather than workflow status");
 assert(healthWorkflow.includes("schedule:") && healthWorkflow.includes("timeout-minutes: 5"), "freshness heartbeat is independently scheduled and bounded");
 assert(healthWorkflow.includes("workflow-security-check.mjs") && workflowSecurityCheck.includes("every action must use a full SHA"), "workflow hardening is continuously checked");
-assert(livePrices.includes("!miniTicker@arr"), "Binance mini ticker stream is used");
+assert(livePrices.includes("stream?streams=") && livePrices.includes("@miniTicker") && !livePrices.includes("!miniTicker@arr"), "Binance streams target only rendered pairs");
+assert(livePrices.includes("cardsBySymbol") && !livePrices.includes('querySelector(`.card[data-live-pair='), "ticker handling uses the rendered-card map");
 assert(livePrices.includes("WebSocket"), "live prices use WebSocket");
 assert(livePrices.includes('data-status-value="websocket"'), "live prices expose a separate connection state");
 assert(livePrices.includes("setTimeout"), "live prices schedule reconnects");

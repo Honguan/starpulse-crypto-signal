@@ -1,6 +1,6 @@
 import { planStateFor } from "./strategy.mjs";
 
-const BINANCE_STREAM = "wss://stream.binance.com:9443/ws/!miniTicker@arr";
+const BINANCE_STREAM = "wss://stream.binance.com:9443/stream?streams=";
 const MAX_RECONNECT_DELAY = 30000;
 const FLASH_MS = 650;
 const MAX_SOURCE_DIVERGENCE = 0.05;
@@ -9,6 +9,12 @@ let socket;
 let reconnectTimer;
 let reconnectAttempt = 0;
 let liveState;
+let cardsBySymbol = new Map();
+let subscription = "";
+let root = globalThis.document;
+let WebSocketImpl = globalThis.WebSocket;
+let reconnectSetTimeout = (...args) => globalThis.setTimeout(...args);
+let reconnectClearTimeout = (...args) => globalThis.clearTimeout(...args);
 
 function formatPrice(value) {
   const price = Number(value);
@@ -64,16 +70,16 @@ export function syncLiveStatus(root = globalThis.document) {
   }
 }
 
-export function applyTicker(ticker, root = globalThis.document) {
+export function applyTicker(ticker, cards = cardsBySymbol) {
   const symbol = ticker?.s;
   const nextPrice = Number(ticker?.c);
   const nextChange = Number(ticker?.P);
 
-  if (!root || !/^[A-Z0-9]+USDT$/.test(symbol || "") || !Number.isFinite(nextPrice)) {
+  if (!/^[A-Z0-9]+USDT$/.test(symbol || "") || !Number.isFinite(nextPrice)) {
     return false;
   }
 
-  const card = root.querySelector(`.card[data-live-pair="${symbol}"]`);
+  const card = cards.get(symbol);
   if (!card) {
     return false;
   }
@@ -127,60 +133,92 @@ export function applyTicker(ticker, root = globalThis.document) {
   return true;
 }
 
-function scheduleReconnect(WebSocketImpl) {
+function scheduleReconnect(expectedSubscription) {
   if (reconnectTimer) {
     return;
   }
 
   const delay = Math.min(MAX_RECONNECT_DELAY, 1000 * 2 ** reconnectAttempt);
   reconnectAttempt += 1;
-  reconnectTimer = globalThis.setTimeout(() => {
+  reconnectTimer = reconnectSetTimeout(() => {
     reconnectTimer = undefined;
-    connect(WebSocketImpl);
+    if (subscription === expectedSubscription && !root?.hidden) connect();
   }, delay);
 }
 
-function connect(WebSocketImpl) {
-  if (!WebSocketImpl) {
+function disconnect() {
+  if (reconnectTimer) reconnectClearTimeout(reconnectTimer);
+  reconnectTimer = undefined;
+  if (socket) {
+    socket.onopen = null;
+    socket.onmessage = null;
+    socket.onclose = null;
+    socket.onerror = null;
+    socket.close();
+    socket = undefined;
+  }
+  setLiveState(false, root);
+}
+
+function connect() {
+  if (!WebSocketImpl || !subscription) {
     setLiveState(false);
     return;
   }
 
-  socket = new WebSocketImpl(BINANCE_STREAM);
+  const expectedSubscription = subscription;
+  const currentSocket = new WebSocketImpl(`${BINANCE_STREAM}${subscription}`);
+  socket = currentSocket;
 
-  socket.onopen = () => {
+  currentSocket.onopen = () => {
     reconnectAttempt = 0;
-    setLiveState(true);
+    setLiveState(true, root);
   };
 
-  socket.onmessage = (event) => {
+  currentSocket.onmessage = (event) => {
     try {
-      const payload = JSON.parse(event.data);
-      const tickers = Array.isArray(payload) ? payload : [payload];
-      tickers.forEach((ticker) => applyTicker(ticker));
+      applyTicker(JSON.parse(event.data).data);
     } catch {
       // Ignore malformed stream frames and keep the live connection open.
     }
   };
 
-  socket.onerror = () => {
-    setLiveState(false);
-    socket.close();
+  currentSocket.onerror = () => {
+    setLiveState(false, root);
+    currentSocket.close();
   };
 
-  socket.onclose = () => {
-    setLiveState(false);
-    scheduleReconnect(WebSocketImpl);
+  currentSocket.onclose = () => {
+    if (socket !== currentSocket) return;
+    socket = undefined;
+    setLiveState(false, root);
+    scheduleReconnect(expectedSubscription);
   };
 }
 
 export function startLivePrices(options = {}) {
-  const WebSocketImpl = options.WebSocketImpl || globalThis.WebSocket;
+  root = options.root || globalThis.document;
+  WebSocketImpl = options.WebSocketImpl || globalThis.WebSocket;
+  reconnectSetTimeout = options.setTimeoutImpl || globalThis.setTimeout;
+  reconnectClearTimeout = options.clearTimeoutImpl || globalThis.clearTimeout;
+  cardsBySymbol = new Map([...root.querySelectorAll(".card[data-live-pair]")]
+    .map((card) => [card.dataset.livePair, card])
+    .filter(([symbol]) => /^[A-Z0-9]+USDT$/.test(symbol)));
+  const nextSubscription = [...cardsBySymbol.keys()].sort().map((symbol) => `${symbol.toLowerCase()}@miniTicker`).join("/");
 
-  if (socket && [0, 1].includes(socket.readyState)) {
-    syncLiveStatus();
+  if (root.hidden || !nextSubscription) {
+    subscription = nextSubscription;
+    disconnect();
     return;
   }
 
-  connect(WebSocketImpl);
+  if (subscription === nextSubscription && socket && [0, 1].includes(socket.readyState)) {
+    syncLiveStatus(root);
+    return;
+  }
+
+  disconnect();
+  subscription = nextSubscription;
+  reconnectAttempt = 0;
+  connect();
 }

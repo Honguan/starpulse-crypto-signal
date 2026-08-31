@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { applyTicker, setLiveState } from "../assets/js/live-prices.js";
+import { applyTicker, setLiveState, startLivePrices } from "../assets/js/live-prices.js";
 
 function element(textContent = "") {
   return {
@@ -31,21 +31,21 @@ const card = {
                     : selector === "[data-plan-rr]" ? primaryRr : null;
   }
 };
-const root = { querySelector: (selector) => selector.includes('data-live-pair="BTCUSDT"') ? card : null };
+const cards = new Map([["BTCUSDT", card]]);
 
-assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, root), true);
+assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, cards), true);
 assert.equal(price.textContent, "104");
 assert.equal(change.textContent, "+1.23%");
 assert.equal(longState.textContent, "已到止盈區");
 assert.equal(shortState.textContent, "可進場");
 assert.equal(primaryRr.textContent, "2.5:1");
 
-applyTicker({ s: "BTCUSDT", c: "96", P: "-1" }, root);
+applyTicker({ s: "BTCUSDT", c: "96", P: "-1" }, cards);
 assert.equal(primaryState.textContent, "停損失效");
 assert.equal(primaryRr.textContent, "-");
-assert.equal(applyTicker({ s: "BTCUSDT", c: "110", P: "10" }, root), false);
+assert.equal(applyTicker({ s: "BTCUSDT", c: "110", P: "10" }, cards), false);
 assert.equal(price.textContent, "96");
-assert.equal(applyTicker({ s: "ETHUSDT", c: "100", P: "1" }, root), false);
+assert.equal(applyTicker({ s: "ETHUSDT", c: "100", P: "1" }, cards), false);
 
 const insufficientState = element("資料不足");
 const insufficientCard = {
@@ -56,7 +56,7 @@ const insufficientCard = {
         : selector === "[data-long-plan-state]" || selector === "[data-short-plan-state]" ? insufficientState : null;
   }
 };
-assert.equal(applyTicker({ s: "ETHUSDT", c: "51", P: "1" }, { querySelector: () => insufficientCard }), true);
+assert.equal(applyTicker({ s: "ETHUSDT", c: "51", P: "1" }, new Map([["ETHUSDT", insufficientCard]])), true);
 assert.equal(insufficientState.textContent, "資料不足");
 
 const websocketState = element("連線中…");
@@ -64,5 +64,60 @@ const strategyFreshness = element("過期");
 setLiveState(true, { querySelector: (selector) => selector.includes("websocket") ? websocketState : strategyFreshness });
 assert.equal(websocketState.textContent, "已連線");
 assert.equal(strategyFreshness.textContent, "過期");
+
+class FakeWebSocket {
+  static instances = [];
+  readyState = 0;
+
+  constructor(url) {
+    this.url = url;
+    FakeWebSocket.instances.push(this);
+  }
+
+  close() {
+    this.readyState = 3;
+    this.onclose?.();
+  }
+}
+
+let visibleCards = [card];
+let reconnect;
+const liveRoot = {
+  hidden: false,
+  querySelectorAll: () => visibleCards,
+  querySelector: () => websocketState
+};
+const socketOptions = {
+  root: liveRoot,
+  WebSocketImpl: FakeWebSocket,
+  setTimeoutImpl: (callback) => { reconnect = callback; return 1; },
+  clearTimeoutImpl: () => { reconnect = undefined; }
+};
+
+startLivePrices(socketOptions);
+assert.equal(FakeWebSocket.instances[0].url, "wss://stream.binance.com:9443/stream?streams=btcusdt@miniTicker");
+FakeWebSocket.instances[0].readyState = 1;
+FakeWebSocket.instances[0].onopen();
+FakeWebSocket.instances[0].onmessage({ data: JSON.stringify({ stream: "btcusdt@miniTicker", data: { s: "BTCUSDT", c: "100", P: "0.5" } }) });
+assert.equal(price.textContent, "100");
+
+visibleCards = [insufficientCard];
+startLivePrices(socketOptions);
+assert.equal(FakeWebSocket.instances[0].readyState, 3);
+assert.equal(FakeWebSocket.instances[1].url, "wss://stream.binance.com:9443/stream?streams=ethusdt@miniTicker");
+FakeWebSocket.instances[1].close();
+assert.equal(typeof reconnect, "function");
+reconnect();
+assert.equal(FakeWebSocket.instances[2].url, "wss://stream.binance.com:9443/stream?streams=ethusdt@miniTicker");
+
+liveRoot.hidden = true;
+startLivePrices(socketOptions);
+assert.equal(FakeWebSocket.instances[2].readyState, 3);
+liveRoot.hidden = false;
+startLivePrices(socketOptions);
+assert.equal(FakeWebSocket.instances[3].url, "wss://stream.binance.com:9443/stream?streams=ethusdt@miniTicker");
+visibleCards = [];
+startLivePrices(socketOptions);
+assert.equal(FakeWebSocket.instances[3].readyState, 3);
 
 console.log("live price check ok");

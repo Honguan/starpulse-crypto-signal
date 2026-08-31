@@ -1,6 +1,6 @@
 import { renderDashboard } from "./signal-render.js";
 import { getStrongNotifications } from "./notification.js";
-import { startLivePrices, syncLiveStatus } from "./live-prices.js";
+import { startLivePrices } from "./live-prices.js";
 import { prepareSnapshot } from "./data-freshness.mjs";
 import { parseSignalPayload } from "./signal-schema.mjs";
 import { loadLastKnownGood, saveLastKnownGood } from "./snapshot-store.mjs";
@@ -59,7 +59,7 @@ function renderData(data) {
     favoriteOnly,
     favoriteCoinIds
   });
-  syncLiveStatus();
+  startLivePrices();
 }
 
 function render() {
@@ -104,6 +104,7 @@ function clearDashboard() {
   document.querySelector("#status").replaceChildren();
   document.querySelector("#market").replaceChildren();
   document.querySelector("#plan-list").replaceChildren();
+  startLivePrices();
 }
 
 async function fallbackSnapshot() {
@@ -156,7 +157,6 @@ async function refreshLiveSignals() {
 async function init() {
   try {
     if (!await refreshLiveSignals()) return;
-    startLivePrices();
     getStrongNotifications(signalData);
     globalThis.setInterval(() => {
       refreshLiveSignals().catch((error) => {
@@ -207,5 +207,7 @@ document.addEventListener("click", (event) => {
   saveFavorites();
   render();
 });
+
+document.addEventListener("visibilitychange", () => startLivePrices());
 
 init();
