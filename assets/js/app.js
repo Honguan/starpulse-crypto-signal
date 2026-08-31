@@ -52,12 +52,38 @@ function errorMessage(error) {
   }[error?.code] || "策略資料更新失敗";
 }
 
+function setError(message = "") {
+  if (!message) {
+    errorEl.hidden = true;
+    errorEl.textContent = "";
+    return;
+  }
+  if (errorEl.textContent !== message) errorEl.textContent = message;
+  errorEl.hidden = false;
+}
+
+function focusedCardControl() {
+  const active = document.activeElement;
+  const card = active?.closest?.(".card");
+  const type = active?.classList?.contains("favorite-toggle") ? "favorite" : active?.tagName === "SUMMARY" ? "chart" : "";
+  return card && type ? { coinId: card.dataset.coinId, type } : null;
+}
+
+function restoreCardFocus(focus) {
+  if (!focus) return;
+  const card = [...document.querySelectorAll(".card")].find((candidate) => candidate.dataset.coinId === focus.coinId);
+  const target = focus.type === "chart" ? card?.querySelector("[data-chart-details] > summary") : card?.querySelector(".favorite-toggle");
+  (target || [...modeButtons].find((button) => button.getAttribute("aria-pressed") === "true"))?.focus();
+}
+
 function renderData(data) {
+  const focus = focusedCardControl();
   renderDashboard(data, {
     symbolFilter: normalizeSymbol(coinInput.value),
     favoriteOnly,
     favoriteCoinIds
   });
+  restoreCardFocus(focus);
   startLivePrices();
 }
 
@@ -67,8 +93,7 @@ function render() {
     renderData(signalData);
     return true;
   } catch {
-    errorEl.textContent = errorMessage({ code: "render" });
-    errorEl.hidden = false;
+    setError(errorMessage({ code: "render" }));
     return false;
   }
 }
@@ -76,7 +101,9 @@ function render() {
 function setMode(mode) {
   favoriteOnly = mode === "favorites";
   modeButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.mode === mode);
+    const selected = button.dataset.mode === mode;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-pressed", String(selected));
   });
   render();
 }
@@ -130,10 +157,9 @@ async function refreshLiveSignals() {
     } catch {
       // Storage availability must not invalidate a usable in-memory snapshot.
     }
-    errorEl.hidden = candidate.freshness.state === "fresh";
-    errorEl.textContent = candidate.freshness.state === "delayed"
+    setError(candidate.freshness.state === "fresh" ? "" : candidate.freshness.state === "delayed"
       ? "策略資料更新延遲，暫不顯示為即時資料。"
-      : "策略資料已過期，交易計畫僅供參考且不可執行。";
+      : "策略資料已過期，交易計畫僅供參考且不可執行。");
   } catch (liveError) {
     try {
       const candidate = signalData
@@ -143,12 +169,10 @@ async function refreshLiveSignals() {
       signalData = candidate;
     } catch (fallbackError) {
       clearDashboard();
-      errorEl.textContent = `${errorMessage(fallbackError)}；沒有可用的有效快照。`;
-      errorEl.hidden = false;
+      setError(`${errorMessage(fallbackError)}；沒有可用的有效快照。`);
       return false;
     }
-    errorEl.textContent = `${errorMessage(liveError)}；${signalData.freshness.fallback ? "顯示已驗證的備援快照。" : "保留最後一次有效快照。"}`;
-    errorEl.hidden = false;
+    setError(`${errorMessage(liveError)}；${signalData.freshness.fallback ? "顯示已驗證的備援快照。" : "保留最後一次有效快照。"}`);
   }
   return true;
 }
@@ -158,13 +182,11 @@ async function init() {
     if (!await refreshLiveSignals()) return;
     globalThis.setInterval(() => {
       refreshLiveSignals().catch((error) => {
-        errorEl.textContent = errorMessage(error);
-        errorEl.hidden = false;
+        setError(errorMessage(error));
       });
     }, LIVE_REFRESH_MS);
   } catch (error) {
-    errorEl.hidden = false;
-    errorEl.textContent = error.message || "資料讀取失敗，請稍後再試。";
+    setError(error.message || "資料讀取失敗，請稍後再試。");
   }
 }
 
