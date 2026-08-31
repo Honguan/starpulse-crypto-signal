@@ -1,5 +1,4 @@
 import { renderDashboard } from "./signal-render.js";
-import { getStrongNotifications } from "./notification.js";
 import { startLivePrices } from "./live-prices.js";
 import { prepareSnapshot } from "./data-freshness.mjs";
 import { parseSignalPayload } from "./signal-schema.mjs";
@@ -157,7 +156,6 @@ async function refreshLiveSignals() {
 async function init() {
   try {
     if (!await refreshLiveSignals()) return;
-    getStrongNotifications(signalData);
     globalThis.setInterval(() => {
       refreshLiveSignals().catch((error) => {
         errorEl.textContent = errorMessage(error);

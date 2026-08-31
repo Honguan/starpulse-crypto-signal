@@ -34,7 +34,6 @@ jobs:
           node --no-warnings scripts/render-security-check.mjs
           node scripts/workflow-security-check.mjs
           node --no-warnings scripts/live-price-check.mjs
-          node --no-warnings scripts/notification-check.mjs
           node scripts/check.mjs
           git ls-files -z '*.js' '*.mjs' | xargs -0 -n1 node --check
 
