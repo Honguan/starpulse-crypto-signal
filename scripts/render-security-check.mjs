@@ -43,6 +43,17 @@ assert(ordinary.some((node) => node.dataset.livePrice === "") && ordinary.some((
 assert(ordinary.some((node) => node.dataset.plan === "long") && ordinary.some((node) => node.dataset.plan === "short"));
 assert(ordinary.some((node) => node.dataset.longPlanState === "") && ordinary.some((node) => node.dataset.shortPlanState === ""));
 
+const favorite = data.signals[7];
+renderDashboard(structuredClone(data), { favoriteOnly: true, favoriteCoinIds: new Set([favorite.coinId]) });
+assert.deepEqual(nodes(roots["#plan-list"]).filter((node) => node.tagName === "ARTICLE").map((node) => node.dataset.coinId), [favorite.coinId]);
+
+const sparse = structuredClone(data);
+sparse.signals = [{ ...sparse.signals[0], strategy: undefined, plans: undefined, candles: undefined, details: undefined, liveInstrument: undefined }];
+assert.doesNotThrow(() => renderDashboard(sparse, { symbolFilter: sparse.signals[0].coinId }));
+const sparseCard = nodes(roots["#plan-list"]).find((node) => node.tagName === "ARTICLE");
+assert.equal(sparseCard.dataset.livePair, "");
+assert(nodes(sparseCard).filter((node) => node.dataset.plan).every((node) => node.dataset.planStatus === "資料不足"));
+
 const attack = `<img src=x onerror="globalThis.pwned=1"><script>globalThis.pwned=1</script>'\"><div data-broken="`;
 const malicious = structuredClone(data);
 malicious.updatedAt = attack;
