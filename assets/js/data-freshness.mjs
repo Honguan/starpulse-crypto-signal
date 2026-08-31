@@ -9,6 +9,21 @@ function timestampFor(value) {
   return Date.parse(value);
 }
 
+export function formatLocalTimestamp(value, { locale, timeZone } = {}) {
+  const timestamp = timestampFor(value);
+  if (!Number.isFinite(timestamp)) return "時間無效";
+  return new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZoneName: "short",
+    ...(timeZone && { timeZone })
+  }).format(timestamp);
+}
+
 function freshnessError(message) {
   const error = new Error(message);
   error.code = "stale";

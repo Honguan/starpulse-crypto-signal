@@ -1,5 +1,6 @@
 import { renderCandleChart } from "./candle-chart.mjs";
 import { loadCandles } from "./candle-data.mjs";
+import { formatLocalTimestamp } from "./data-freshness.mjs";
 
 const directionClass = {
   "強烈做多": "strong-long",
@@ -75,7 +76,7 @@ function renderStatus(data) {
     status: data.status === "normal" ? "正常" : "異常",
     freshness: data.freshness?.label || "未知",
     websocket: "連線中…",
-    updatedAt: data.updatedAt,
+    updatedAt: formatLocalTimestamp(data.updatedAt),
     condition: data.market.condition,
     riskLevel: data.market.riskLevel,
     btcDirection: data.market.btcDirection,
