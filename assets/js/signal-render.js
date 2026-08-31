@@ -1,4 +1,5 @@
 import { renderCandleChart } from "./candle-chart.mjs";
+import { loadCandles } from "./candle-data.mjs";
 
 const directionClass = {
   "強烈做多": "strong-long",
@@ -66,7 +67,7 @@ export function renderDashboard(data, options = "") {
   const rankedSignals = signals.sort(byPlanScore);
   const visibleSignals = settings.symbolFilter || settings.favoriteOnly ? rankedSignals : rankedSignals.slice(0, 5);
   renderCards("#plan-list", visibleSignals, favoriteCoinIds);
-  bindCandleCharts(visibleSignals);
+  bindCandleCharts(visibleSignals, data.updatedAt);
 }
 
 function renderStatus(data) {
@@ -121,9 +122,13 @@ function renderCard(signal, favoriteCoinIds) {
   const conditionScore = Math.max(plans.long?.score || 0, plans.short?.score || 0);
   const coinId = safeDataValue(signal.coinId, COIN_ID);
   const livePair = safeDataValue(signal.liveInstrument?.symbol, LIVE_PAIR);
-  const reasons = element("ol", { className: "reason-list" }, signal.reasons.slice(0, 3).map((reason) => element("li", { text: reason })));
+  const reasons = element("ol", { className: "reason-list" }, [
+    `做多方案：${plans.long?.status || "資料不足"}（${plans.long?.score || 0}%）`,
+    `做空方案：${plans.short?.status || "資料不足"}（${plans.short?.score || 0}%）`,
+    `1h RSI14：${strategy.indicators?.rsi14 ?? "-"}`
+  ].map((reason) => element("li", { text: reason })));
   const warnings = element("ul", { className: "warnings" }, [
-    ...signal.warnings.map((warning) => element("li", { text: warning })),
+    element("li", { text: strategy.planState === "資料不足" ? "歷史資料不足，暫不提供進出場計畫。" : "僅供市場分析，不構成投資建議。" }),
     element("li", { text: "請等待價格接近進場區，不要追價。" }),
     element("li", { text: "若價格先觸及停損區，訊號失效。" }),
     element("li", { text: "資料延遲或 API 異常時請勿依賴訊號。" })
@@ -154,7 +159,7 @@ function renderCard(signal, favoriteCoinIds) {
         attributes: { type: "button", "aria-label": `切換 ${signal.name} 最愛` }
       }),
       element("span", { className: "label", text: signal.liveMode === "websocket" && livePair ? `${livePair} 即時` : "快照模式" }),
-      element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || signal.direction || "觀望" })
+      element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || "觀望" })
     ]),
     element("div", { className: "card-body" }, [
       element("div", { className: "metrics" }, [
@@ -172,15 +177,22 @@ function renderCard(signal, favoriteCoinIds) {
   ]);
 }
 
-function bindCandleCharts(signals) {
+function bindCandleCharts(signals, version) {
   document.querySelectorAll("[data-chart-details]").forEach((details) => {
-    details.addEventListener("toggle", () => {
+    details.addEventListener("toggle", async () => {
       if (!details.open || details.dataset.chartReady) return;
       const signal = signals.find((item) => item.coinId === details.dataset.coinId);
-      const rendered = renderCandleChart(details.querySelector("canvas"), signal?.candles || [], signal?.plans || {});
+      details.dataset.chartReady = "loading";
       const empty = details.querySelector(".chart-empty");
-      if (rendered && empty) empty.hidden = true;
-      details.dataset.chartReady = "true";
+      try {
+        const candles = signal?.hasCandles ? await loadCandles(signal.coinId, version) : [];
+        const rendered = renderCandleChart(details.querySelector("canvas"), candles, signal?.plans || {});
+        if (rendered && empty) empty.hidden = true;
+        details.dataset.chartReady = "true";
+      } catch {
+        if (empty) empty.textContent = "K 線資料載入失敗。";
+        delete details.dataset.chartReady;
+      }
     });
   });
 }
@@ -233,11 +245,17 @@ function metric(label, value, marker) {
 }
 
 function renderDetails(signal) {
-  const details = (signal.details || []).map((detail) => element("p", {}, [
+  const indicators = signal.strategy?.indicators || {};
+  const details = [
+    { label: "4h EMA20／EMA50", value: `${indicators.ema4h20 ?? "-"}／${indicators.ema4h50 ?? "-"}`, calculationMode: "4h close EMA(20,50)" },
+    { label: "1h EMA20", value: indicators.ema1h20 ?? "-", calculationMode: "1h close EMA(20)" },
+    { label: "1h RSI14", value: indicators.rsi14 ?? "-", calculationMode: "1h close RSI(14)" },
+    { label: "1h MACD", value: `${indicators.macd ?? "-"}／${indicators.macdSignal ?? "-"}`, calculationMode: "1h close MACD(12,26,9)" }
+  ].map((detail) => element("p", {}, [
     element("strong", { text: detail.label }),
     document.createTextNode(`：${detail.value}`),
     element("br"),
-    element("span", { className: "label", text: `${detail.sourceMode}／${detail.calculationMode}` })
+    element("span", { className: "label", text: `${signal.sourceMode}／${detail.calculationMode}` })
   ]));
-  return element("div", { className: "analysis", text: details.length ? undefined : "沒有可用的計算明細。" }, details);
+  return element("div", { className: "analysis" }, details);
 }

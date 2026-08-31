@@ -32,11 +32,11 @@ EMA20／EMA50 使用前 N 筆 SMA 作為種子；RSI14 使用 Wilder smoothing�
 
 ## 資料更新
 
-GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。公開的 `live-data` 分支永遠只有一個 orphan snapshot commit，且只包含前端需要的 `data/signals.json`；其資料上限為 100 個訊號、每個訊號最多 60 根 4h K 線。主分支同名檔案是讀取失敗時的備援快照。內部 `price-history.json` 不公開也不進 Git，而以 Actions cache 保存；未存取 7 天的 cache 會淘汰，repository 預設 cache 上限 10 GB，滿額時由最舊項目開始逐出。
+GitHub Actions 每 10 分鐘取得 CoinGecko 市值前 100、對齊整點的 1h 價格與官方 4h OHLC。公開的 `live-data` 分支永遠只有一個 orphan snapshot commit，包含最多 180 KiB 的 compact `data/signals.json` 與每資產一份、最多 60 根 4h K 線的 `data/candles/<coinId>.json`。初始載入只下載 compact index；展開單一圖表才下載該資產的 candle snapshot。主分支的 `signals.json` 是讀取失敗時的無 K 線備援快照。內部 `price-history.json` 不公開也不進 Git，而以 Actions cache 保存；未存取 7 天的 cache 會淘汰，repository 預設 cache 上限 10 GB，滿額時由最舊項目開始逐出。
 
 CoinGecko 請求每次最多等待 15 秒，429／5xx／網路或 timeout 最多重試 2 次，採 bounded exponential backoff 並遵守最多 30 秒的 `Retry-After`。永久 4xx 與 malformed JSON 不重試。歷史補齊明確維持 concurrency 1 以控制 demo API 配額；payload 的 `dataQuality` 公布成功、失敗、缺歷史與逐資產失敗分類，任何 partial failure 都使整體狀態降級。若中斷多個窗口，下一次成功 run 會重新取得 CoinGecko 30 日 hourly 與官方 OHLC，再驗證連續區間，不會自行把缺口接成連續資料。
 
-所有 `live-data` 發布共用單一 GitHub Actions concurrency group，一次只允許一個 run 寫入；job 最長執行 15 分鐘。每次發布以開始時的 remote SHA 執行 `--force-with-lease`，把舊 snapshot 替換成新的單一 commit；lease 不符即失敗，不會覆蓋外部更新。這讓 routine update 只保留約一份 `signals.json`，不累積每 10 分鐘一份永久 blob。每次取得新的前 100 清單後，已離開清單的 hourly／4h state 會立即刪除。
+所有 `live-data` 發布共用單一 GitHub Actions concurrency group，一次只允許一個 run 寫入；job 最長執行 15 分鐘。每次發布以開始時的 remote SHA 執行 `--force-with-lease`，把舊 snapshot 替換成新的單一 commit；lease 不符即失敗，不會覆蓋外部更新。這讓 routine update 只保留一組目前的 compact index／per-asset candles，不累積每 10 分鐘一份永久 blob。每次取得新的前 100 清單後，已離開清單的 hourly／4h state 會立即刪除。
 
 既有 `live-data` 歷史的清理方式是成功執行一次新版 `Update Live Signals`：首次 single-commit 發布會讓舊 commit 全部不可達，之後由 GitHub 依服務端排程回收物件。若 repository size 在服務端垃圾回收後仍未下降，請攜帶 `live-data` 最新 commit SHA 聯絡 GitHub Support；不要在 `main` 重寫歷史。
 
@@ -46,7 +46,7 @@ Pages workflow 在 pull request 與 main push 執行相同的 deterministic regr
 
 更新 SLO 是每 10 分鐘發布一次，GitHub Actions cron 僅視為 best-effort。資料年齡達 20 分鐘（連續缺 2 個預期窗口）即顯示延遲／degraded，超過 60 分鐘顯示 stale 並停用計畫。獨立的 `Live Data Freshness` workflow 每 15 分鐘直接驗證已發布 payload 的 schema 與 `updatedAt`；超出 SLO 會產生失敗 Action 與 job summary，藉此區分「更新 workflow 曾成功」和「目前資料仍新鮮」。若 10 分鐘硬 SLA 是產品必要條件，需改用具排程 SLA 的外部 runtime，不能把 GitHub cron 當保證。
 
-訊號 payload 使用 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
+compact 訊號 payload 使用 `schemaVersion: 2`，per-asset candle snapshot 使用獨立的 `schemaVersion: 1`；瀏覽器會先驗證版本、必要欄位、陣列與有限數值，才替換最後一次有效快照。網路、JSON、schema、時間與 render 錯誤會分別提示。
 
 Fallback 用來保護回訪者免受短暫的 live publication 或上游讀取故障：每個瀏覽器只在 schema 與 render 驗證成功後，於 localStorage 覆寫 1 份 last-known-good snapshot，不建立 Git 版本。資料超過 24 小時便刪除且不顯示為可用交易快照；首次造訪、清除瀏覽器資料或所有來源同時失效時不保證有 fallback。
 
@@ -61,6 +61,7 @@ node scripts/strategy-check.mjs
 node scripts/indicator-check.mjs
 node scripts/freshness-check.mjs
 node scripts/signal-schema-check.mjs
+node scripts/payload-size-check.mjs
 node scripts/live-update-check.mjs
 node scripts/candle-chart-check.mjs
 node scripts/render-security-check.mjs

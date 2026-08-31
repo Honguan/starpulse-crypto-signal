@@ -25,11 +25,8 @@ export function freshnessFor(updatedAt, now = Date.now()) {
 
 function disablePlans(data) {
   for (const signal of data.signals || []) {
-    signal.direction = "觀望";
     signal.primaryDirection = "觀望";
     if (signal.strategy) {
-      signal.strategy.direction = "觀望";
-      signal.strategy.primaryDirection = "觀望";
       signal.strategy.planState = "資料過期";
     }
     for (const plan of Object.values(signal.plans || {})) {

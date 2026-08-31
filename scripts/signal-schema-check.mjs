@@ -12,11 +12,11 @@ for (const invalid of [
   { ...valid, schemaVersion: 99 },
   { ...valid, market: null },
   { ...valid, signals: [] },
-  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, reasons: null }) },
+  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, hasCandles: "yes" }) },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, price: NaN }) },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, change24h: null }) },
-  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, details: [null] }) },
-  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, candles: [[1, 2, null, 4, 5]] }) }
+  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, strategy: { indicators: {} } }) },
+  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, sourceMode: null }) }
 ]) assert.throws(() => validateSignalPayload(invalid), { code: "schema" });
 
 console.log("signal schema check ok");

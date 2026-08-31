@@ -1,4 +1,5 @@
-export const SIGNAL_SCHEMA_VERSION = 1;
+export const SIGNAL_SCHEMA_VERSION = 2;
+export const SIGNAL_PAYLOAD_MAX_BYTES = 180 * 1024;
 
 export class SignalPayloadError extends Error {
   constructor(code, message) {
@@ -51,7 +52,7 @@ function validatePlan(plan, path) {
 function validateSignal(signal, index) {
   const path = `signals[${index}]`;
   record(signal, path);
-  ["coinId", "name", "symbol", "direction", "primaryDirection", "riskLevel", "liveMode"].forEach((key) => string(signal[key], `${path}.${key}`));
+  ["coinId", "name", "symbol", "primaryDirection", "riskLevel", "liveMode", "sourceMode"].forEach((key) => string(signal[key], `${path}.${key}`));
   ["price", "change24h", "marketCapRank"].forEach((key) => {
     if (!Number.isFinite(signal[key])) reject(`${path}.${key}`);
   });
@@ -70,15 +71,8 @@ function validateSignal(signal, index) {
   validatePlan(signal.plans.short, `${path}.plans.short`);
   record(signal.strategy, `${path}.strategy`);
   record(signal.strategy.indicators, `${path}.strategy.indicators`);
-  ["reasons", "warnings", "details", "candles"].forEach((key) => array(signal[key], `${path}.${key}`));
-  if (![...signal.reasons, ...signal.warnings].every((item) => typeof item === "string")) reject(`${path}.reasons/warnings`);
-  signal.details.forEach((detail, detailIndex) => {
-    record(detail, `${path}.details[${detailIndex}]`);
-    ["label", "sourceMode", "calculationMode"].forEach((key) => string(detail[key], `${path}.details[${detailIndex}].${key}`));
-  });
-  signal.candles.forEach((candle, candleIndex) => {
-    if (!Array.isArray(candle) || candle.length < 5 || !candle.slice(0, 5).every(Number.isFinite)) reject(`${path}.candles[${candleIndex}]`);
-  });
+  string(signal.strategy.planState, `${path}.strategy.planState`);
+  if (typeof signal.hasCandles !== "boolean") reject(`${path}.hasCandles`);
 }
 
 export function validateSignalPayload(payload) {
