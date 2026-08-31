@@ -69,7 +69,6 @@ node scripts/candle-chart-check.mjs
 node scripts/render-security-check.mjs
 node scripts/workflow-security-check.mjs
 node --no-warnings scripts/live-price-check.mjs
-node --no-warnings scripts/notification-check.mjs
 node scripts/check.mjs
 ```
 
