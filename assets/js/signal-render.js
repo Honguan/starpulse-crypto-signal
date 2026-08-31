@@ -1,4 +1,4 @@
-import { renderCandleChart } from "./candle-chart.mjs";
+import { describeCandleChart, renderCandleChart } from "./candle-chart.mjs";
 import { loadCandles } from "./candle-data.mjs";
 import { formatLocalTimestamp } from "./data-freshness.mjs";
 
@@ -26,6 +26,7 @@ const COIN_ID = /^[a-z0-9][a-z0-9._~-]{0,127}$/i;
 const LIVE_PAIR = /^[A-Z0-9]+USDT$/;
 const PLAN_DIRECTIONS = new Set(["做多", "做空", "觀望"]);
 const PLAN_STATUSES = new Set(["可執行", "等待條件", "資料不足"]);
+let chartObservers = [];
 
 function element(tag, options = {}, children = []) {
   const node = document.createElement(tag);
@@ -47,6 +48,8 @@ function safeDataValue(value, pattern) {
 }
 
 export function renderDashboard(data, options = "") {
+  chartObservers.forEach((observer) => observer.disconnect());
+  chartObservers = [];
   renderStatus(data);
   renderMarket(data.market);
 
@@ -136,8 +139,15 @@ function renderCard(signal, favoriteCoinIds) {
   ]);
   const chartDetails = element("details", { className: "chart-details", dataset: { chartDetails: "", coinId } }, [
     element("summary", { text: "K 線圖" }),
-    element("canvas", { className: "candle-chart", attributes: { width: 640, height: 240, "aria-label": `${signal.symbol} K 線圖` } }),
-    element("p", { className: "chart-empty", text: "展開後載入 K 線；歷史不足時不繪製。" })
+    element("ul", { className: "chart-legend", attributes: { "aria-label": "K 線圖例" } }, [
+      ["ema20", "EMA20（實線）"], ["ema50", "EMA50（虛線）"], ["long", "做多計畫（長虛線）"], ["short", "做空計畫（點線）"]
+    ].map(([className, text]) => element("li", {}, [
+      element("span", { className: `chart-line ${className}`, attributes: { "aria-hidden": "true" } }),
+      document.createTextNode(text)
+    ]))),
+    element("canvas", { className: "candle-chart", attributes: { "aria-label": `${signal.symbol} K 線圖；下方提供完整文字摘要。`, role: "img" } }),
+    element("p", { className: "chart-empty", text: "展開後載入 K 線；歷史不足時不繪製。" }),
+    element("p", { className: "chart-summary", text: "K 線文字摘要將在資料載入後顯示。", attributes: { "aria-live": "polite" } })
   ]);
 
   return element("article", {
@@ -185,10 +195,19 @@ function bindCandleCharts(signals, version) {
       const signal = signals.find((item) => item.coinId === details.dataset.coinId);
       details.dataset.chartReady = "loading";
       const empty = details.querySelector(".chart-empty");
+      const summary = details.querySelector(".chart-summary");
       try {
         const candles = signal?.hasCandles ? await loadCandles(signal.coinId, version) : [];
-        const rendered = renderCandleChart(details.querySelector("canvas"), candles, signal?.plans || {});
+        const canvas = details.querySelector("canvas");
+        const plans = signal?.plans || {};
+        const rendered = renderCandleChart(canvas, candles, plans);
         if (rendered && empty) empty.hidden = true;
+        if (rendered && summary) summary.textContent = describeCandleChart(candles, plans);
+        if (rendered && typeof globalThis.ResizeObserver === "function") {
+          const observer = new globalThis.ResizeObserver(() => renderCandleChart(canvas, candles, plans));
+          observer.observe(canvas);
+          chartObservers.push(observer);
+        }
         details.dataset.chartReady = "true";
       } catch {
         if (empty) empty.textContent = "K 線資料載入失敗。";

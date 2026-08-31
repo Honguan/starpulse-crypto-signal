@@ -391,14 +391,43 @@ h3 {
 .candle-chart {
   display: block;
   width: 100%;
-  height: auto;
+  height: 240px;
+  box-sizing: border-box;
   margin-top: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
 }
 
-.chart-empty {
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chart-line {
+  width: 24px;
+  border-top: 2px solid;
+}
+
+.chart-line.ema20 { color: #b45309; }
+.chart-line.ema50 { color: #6d28d9; border-top-style: dashed; }
+.chart-line.long { color: #0f766e; border-top: 3px double; }
+.chart-line.short { color: #be123c; border-top-style: dotted; }
+
+.chart-empty,
+.chart-summary {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 0.86rem;

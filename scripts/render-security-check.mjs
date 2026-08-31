@@ -10,9 +10,12 @@ class FakeNode {
     this.attributes = {};
     this.textContent = "";
     this.listeners = {};
+    this.style = {};
+    this.clientWidth = 480;
     if (this.tagName === "CANVAS") {
       this.width = 640;
       this.height = 240;
+      this.getBoundingClientRect = () => ({ width: this.clientWidth });
       this.getContext = () => new Proxy({}, { get: () => () => {} });
     }
   }
@@ -35,7 +38,7 @@ class FakeNode {
 
   querySelector(selector) {
     return [this, ...this.querySelectorAll("*")]
-      .find((node) => selector === "canvas" ? node.tagName === "CANVAS" : selector === ".chart-empty" && node.className === "chart-empty") || null;
+      .find((node) => selector === "canvas" ? node.tagName === "CANVAS" : selector.startsWith(".") && node.className?.split(" ").includes(selector.slice(1))) || null;
   }
 
   querySelectorAll() {
@@ -51,6 +54,22 @@ globalThis.document = {
   querySelectorAll: (selector) => selector === "[data-chart-details]"
     ? nodes(roots["#plan-list"]).filter((node) => node.dataset?.chartDetails === "")
     : []
+};
+
+const resizeObservers = [];
+globalThis.ResizeObserver = class {
+  constructor(callback) {
+    this.callback = callback;
+    resizeObservers.push(this);
+  }
+
+  observe(target) {
+    this.target = target;
+  }
+
+  disconnect() {
+    this.disconnected = true;
+  }
 };
 
 const nodes = (root) => [root, ...root.children.flatMap(nodes)];
@@ -79,9 +98,17 @@ await chart.listeners.toggle();
 assert.equal(candleRequests, 1);
 assert.equal(chart.dataset.chartReady, "true");
 assert.equal(chart.querySelector(".chart-empty").hidden, true);
+assert.match(chart.querySelector(".chart-summary").textContent, /可視時間.*最新 K 線開 102.*做多：無計畫價位/);
+assert.equal(nodes(chart).filter((node) => node.tagName === "LI").length, 4);
+assert.equal(resizeObservers.length, 1);
+const chartCanvas = chart.querySelector("canvas");
+chartCanvas.clientWidth = 800;
+resizeObservers[0].callback();
+assert.deepEqual([chartCanvas.width, chartCanvas.height], [800, 280]);
 
 const favorite = data.signals[7];
 renderDashboard(structuredClone(data), { favoriteOnly: true, favoriteCoinIds: new Set([favorite.coinId]) });
+assert.equal(resizeObservers[0].disconnected, true);
 assert.deepEqual(nodes(roots["#plan-list"]).filter((node) => node.tagName === "ARTICLE").map((node) => node.dataset.coinId), [favorite.coinId]);
 
 const sparse = structuredClone(data);
