@@ -54,14 +54,16 @@ function flashPrice(priceEl, nextPrice) {
 }
 
 export function setLiveState(nextState, root = globalThis.document) {
+  const shouldAnnounce = liveState === undefined ? nextState === true : liveState !== nextState;
   liveState = nextState;
   if (!root) {
     return;
   }
   const liveEl = root.querySelector('[data-status-value="websocket"]');
-  if (liveEl) {
-    liveEl.textContent = nextState ? "已連線" : "未連線";
-  }
+  const text = nextState ? "已連線" : "未連線";
+  if (liveEl && liveEl.textContent !== text) liveEl.textContent = text;
+  const announcer = root.querySelector("#status-announcer");
+  if (shouldAnnounce && announcer) announcer.textContent = `即時價格${text}`;
 }
 
 export function syncLiveStatus(root = globalThis.document) {
@@ -107,13 +109,14 @@ export function applyTicker(ticker, cards = cardsBySymbol) {
     if (box.dataset.planStatus !== "可執行" || values.some((value) => value === "")) return;
     const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
     if (![entryLow, entryHigh, stopLoss, takeProfit].every(Number.isFinite)) return;
-    stateEl.textContent = planStateFor({
+    const state = planStateFor({
       direction: box.dataset.planDirection,
       status: box.dataset.planStatus,
       entryZone: { low: entryLow, high: entryHigh },
       stopLoss,
       takeProfit: [takeProfit]
     }, nextPrice);
+    if (stateEl.textContent !== state) stateEl.textContent = state;
   });
 
   const primaryStateEl = card.querySelector("[data-plan-state]");
@@ -125,7 +128,7 @@ export function applyTicker(ticker, cards = cardsBySymbol) {
     if (primaryPlan.dataset.planStatus === "可執行" && values.every((value) => value !== "")) {
       const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
       const state = planStateFor({ direction: primaryPlan.dataset.planDirection, status: primaryPlan.dataset.planStatus, entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit: [takeProfit] }, nextPrice);
-      primaryStateEl.textContent = state;
+      if (primaryStateEl.textContent !== state) primaryStateEl.textContent = state;
       if (state === "停損失效" && primaryRrEl) primaryRrEl.textContent = "-";
     }
   }

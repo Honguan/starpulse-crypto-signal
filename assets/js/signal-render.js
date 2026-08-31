@@ -159,15 +159,15 @@ function renderCard(signal, favoriteCoinIds) {
         element("h3", { className: "symbol", text: signal.symbol }),
         element("span", { className: "asset" }, [
           element("span", { text: `${signal.name}／${signal.coinId}` }),
-          element("span", { text: signal.price, dataset: { livePrice: "" } }),
-          element("span", { text: `${signal.change24h}%`, dataset: { liveChange: "" } })
+          element("span", { text: signal.price, dataset: { livePrice: "" }, attributes: { "aria-live": "off" } }),
+          element("span", { text: `${signal.change24h}%`, dataset: { liveChange: "" }, attributes: { "aria-live": "off" } })
         ])
       ]),
       element("button", {
         className: `favorite-toggle${isFavorite ? " active" : ""}`,
         text: "★",
         dataset: { coinId },
-        attributes: { type: "button", "aria-label": `切換 ${signal.name} 最愛` }
+        attributes: { type: "button", "aria-label": `切換 ${signal.name} 最愛`, "aria-pressed": String(isFavorite) }
       }),
       element("span", { className: "label", text: signal.liveMode === "websocket" && livePair ? `${livePair} 即時` : "快照模式" }),
       element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || "觀望" })
@@ -244,7 +244,7 @@ function renderPlan(key, plan = {}) {
   }, [
     element("div", { className: "plan-head" }, [
       element("h4", { text: isLong ? "做多方案" : "做空方案" }),
-      element("span", { className: "plan-state", text: plan.planState || plan.status || "資料不足", dataset: { [`${prefix}PlanState`]: "" } })
+      element("span", { className: "plan-state", text: plan.planState || plan.status || "資料不足", dataset: { [`${prefix}PlanState`]: "" }, attributes: { "aria-live": "polite", "aria-atomic": "true" } })
     ]),
     element("div", { className: "plan-meta" }, [
       element("span", { text: `條件分數 ${plan.score ?? 0}%` }),
@@ -258,9 +258,10 @@ function renderPlan(key, plan = {}) {
 
 function metric(label, value, marker) {
   const dataset = marker ? { [marker]: "" } : {};
+  const attributes = marker === "planState" ? { "aria-live": "polite", "aria-atomic": "true" } : {};
   return element("div", { className: "metric" }, [
     element("span", { className: "label", text: label }),
-    element("strong", { text: value, dataset })
+    element("strong", { text: value, dataset, attributes })
   ]);
 }
 

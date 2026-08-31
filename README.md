@@ -72,6 +72,16 @@ node --no-warnings scripts/live-price-check.mjs
 node scripts/check.mjs
 ```
 
+## 無障礙檢查
+
+`render-security-check.mjs` 與 `live-price-check.mjs` 會自動驗證 toggle ARIA state、受控 live regions、靜音行情 tick、圖表文字替代與 resize 後焦點語意。發布前另做以下人工檢查：
+
+- 只用 Tab／Shift+Tab／Enter／Space 操作搜尋、模式、最愛與 K 線展開，確認焦點框清楚可見。
+- 用 screen reader 確認「全部／最愛」與星號按鈕會讀出按下狀態，切換最愛後焦點仍在同一幣種；若該卡消失則回到目前模式按鈕。
+- 模擬 stale、offline 與載入錯誤，確認每次狀態轉換只宣告一次。
+- 保持行情串流一分鐘，確認價格 tick 不持續朗讀，只有 plan state 真正改變才宣告。
+- 展開 K 線，確認 canvas 後方可讀出時間範圍、最新 OHLC 與多空計畫價位。
+
 ## 風險提示
 
 本工具僅提供市場資料整理與技術分析輔助，不構成投資建議。加密貨幣波動極高，任何訊號都可能失效。請自行控制倉位、停損與風險。

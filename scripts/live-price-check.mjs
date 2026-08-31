@@ -2,8 +2,12 @@ import assert from "node:assert/strict";
 import { applyTicker, setLiveState, startLivePrices } from "../assets/js/live-prices.js";
 
 function element(textContent = "") {
+  let text = textContent;
+  let textWrites = 0;
   return {
-    textContent,
+    get textContent() { return text; },
+    set textContent(value) { text = value; textWrites += 1; },
+    get textWrites() { return textWrites; },
     dataset: {},
     classList: { add() {}, remove() {} }
   };
@@ -39,6 +43,9 @@ assert.equal(change.textContent, "+1.23%");
 assert.equal(longState.textContent, "已到止盈區");
 assert.equal(shortState.textContent, "可進場");
 assert.equal(primaryRr.textContent, "2.5:1");
+const stateWrites = longState.textWrites + shortState.textWrites + primaryState.textWrites;
+assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, cards), true);
+assert.equal(longState.textWrites + shortState.textWrites + primaryState.textWrites, stateWrites);
 
 applyTicker({ s: "BTCUSDT", c: "96", P: "-1" }, cards);
 assert.equal(primaryState.textContent, "停損失效");
@@ -61,9 +68,17 @@ assert.equal(insufficientState.textContent, "資料不足");
 
 const websocketState = element("連線中…");
 const strategyFreshness = element("過期");
-setLiveState(true, { querySelector: (selector) => selector.includes("websocket") ? websocketState : strategyFreshness });
+const announcer = element();
+const statusRoot = { querySelector: (selector) => selector.includes("websocket") ? websocketState : selector === "#status-announcer" ? announcer : strategyFreshness };
+setLiveState(true, statusRoot);
 assert.equal(websocketState.textContent, "已連線");
 assert.equal(strategyFreshness.textContent, "過期");
+assert.equal(announcer.textContent, "即時價格已連線");
+const announcementWrites = announcer.textWrites;
+setLiveState(true, statusRoot);
+assert.equal(announcer.textWrites, announcementWrites);
+setLiveState(false, statusRoot);
+assert.equal(announcer.textContent, "即時價格未連線");
 
 class FakeWebSocket {
   static instances = [];
@@ -85,7 +100,7 @@ let reconnect;
 const liveRoot = {
   hidden: false,
   querySelectorAll: () => visibleCards,
-  querySelector: () => websocketState
+  querySelector: (selector) => selector.includes("websocket") ? websocketState : selector === "#status-announcer" ? announcer : null
 };
 const socketOptions = {
   root: liveRoot,

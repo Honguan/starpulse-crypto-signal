@@ -82,6 +82,10 @@ assert(/^[a-z0-9][a-z0-9._~-]{0,127}$/i.test(ordinary.find((node) => node.tagNam
 assert(ordinary.some((node) => node.dataset?.livePrice === "") && ordinary.some((node) => node.dataset?.liveChange === ""));
 assert(ordinary.some((node) => node.dataset?.plan === "long") && ordinary.some((node) => node.dataset?.plan === "short"));
 assert(ordinary.some((node) => node.dataset?.longPlanState === "") && ordinary.some((node) => node.dataset?.shortPlanState === ""));
+assert(ordinary.filter((node) => node.className?.includes("favorite-toggle")).every((node) => node.attributes["aria-pressed"] === "false"));
+assert(ordinary.filter((node) => node.dataset?.livePrice === "" || node.dataset?.liveChange === "").every((node) => node.attributes["aria-live"] === "off"));
+assert(ordinary.filter((node) => node.dataset?.planState === "" || node.dataset?.longPlanState === "" || node.dataset?.shortPlanState === "")
+  .every((node) => node.attributes["aria-live"] === "polite" && node.attributes["aria-atomic"] === "true"));
 
 const chartData = structuredClone(data);
 chartData.signals[0].hasCandles = true;
@@ -110,6 +114,7 @@ const favorite = data.signals[7];
 renderDashboard(structuredClone(data), { favoriteOnly: true, favoriteCoinIds: new Set([favorite.coinId]) });
 assert.equal(resizeObservers[0].disconnected, true);
 assert.deepEqual(nodes(roots["#plan-list"]).filter((node) => node.tagName === "ARTICLE").map((node) => node.dataset.coinId), [favorite.coinId]);
+assert.equal(nodes(roots["#plan-list"]).find((node) => node.className?.includes("favorite-toggle")).attributes["aria-pressed"], "true");
 
 const sparse = structuredClone(data);
 sparse.signals = [{ ...sparse.signals[0], strategy: undefined, plans: undefined, candles: undefined, details: undefined, liveInstrument: undefined }];
@@ -151,9 +156,18 @@ assert.equal(longPlan.dataset.planStatus, "資料不足");
 assert(!rendered.some((node) => Object.keys(node.attributes || {}).some((name) => name.startsWith("on"))));
 
 const index = fs.readFileSync("index.html", "utf8");
+const app = fs.readFileSync("assets/js/app.js", "utf8");
+const css = fs.readFileSync("assets/css/style.css", "utf8");
+const readme = fs.readFileSync("README.md", "utf8");
 const csp = index.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)?.[1] || "";
 assert(csp.includes("default-src 'none'") && csp.includes("script-src 'self'") && csp.includes("script-src-attr 'none'"));
 assert(csp.includes("connect-src 'self' https://raw.githubusercontent.com wss://stream.binance.com:9443"));
 assert(!csp.includes("'unsafe-inline'") && !csp.includes("'unsafe-eval'") && !/(?:^|\s)https:(?:\s|;|$)/.test(csp));
+assert(index.includes('id="status-announcer"') && index.includes('id="error" class="error" role="status"'));
+assert(index.includes('data-mode="all" aria-pressed="true"') && index.includes('data-mode="favorites" aria-pressed="false"'));
+assert(app.includes('button.setAttribute("aria-pressed", String(selected))') && app.includes("document.activeElement") && app.includes("restoreCardFocus(focus)"));
+assert(app.includes("if (errorEl.textContent !== message) errorEl.textContent = message"));
+assert(css.includes("button:focus-visible") && css.includes("summary:focus-visible") && css.includes(".sr-only"));
+assert(readme.includes("## 無障礙檢查") && readme.includes("Tab／Shift+Tab／Enter／Space") && readme.includes("screen reader"));
 
 console.log("render security check ok");
