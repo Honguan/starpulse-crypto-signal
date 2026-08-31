@@ -1,3 +1,5 @@
+import { marketFor } from "./market-summary.mjs";
+
 const MINUTE = 60 * 1000;
 
 export const FRESH_MS = 20 * MINUTE;
@@ -49,6 +51,7 @@ function disablePlans(data) {
       plan.planState = "資料過期";
     }
   }
+  if (data.market) Object.assign(data.market, marketFor(data.signals || []));
 }
 
 export function prepareSnapshot(data, { fallback = false, now = Date.now() } = {}) {

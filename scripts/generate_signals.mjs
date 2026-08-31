@@ -3,6 +3,7 @@ import { pathToFileURL } from "node:url";
 import { strategyFor } from "../assets/js/strategy.mjs";
 import { SIGNAL_PAYLOAD_MAX_BYTES, SIGNAL_SCHEMA_VERSION } from "../assets/js/signal-schema.mjs";
 import { fetchJson } from "./api-request.mjs";
+import { marketFor } from "../assets/js/market-summary.mjs";
 
 const API = "https://api.coingecko.com/api/v3/coins/markets";
 const TOP_100_PAGES = [1];
@@ -60,8 +61,7 @@ export async function buildSignals() {
   const coins = (await Promise.all(TOP_100_PAGES.map(fetchPage))).flat().slice(0, 100);
   const signals = coins.map(signalFor);
   const market = {
-    condition: "震盪",
-    riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 80 ? "高" : "中",
+    ...marketFor(signals),
     btcDirection: "觀望",
     ethDirection: "觀望",
     summary: "CoinGecko 市值前 100 備援快照已更新。"

@@ -11,12 +11,14 @@ assert.throws(() => parseSignalPayload('{"schemaVersion":1'), { code: "parse" })
 for (const invalid of [
   { ...valid, schemaVersion: 99 },
   { ...valid, market: null },
+  { ...valid, market: { ...valid.market, metrics: { ...valid.market.metrics, total: 0, longPct: 99 } } },
   { ...valid, signals: [] },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, hasCandles: "yes" }) },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, price: NaN }) },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, change24h: null }) },
   { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, strategy: { indicators: {} } }) },
-  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, sourceMode: null }) }
+  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, sourceMode: null }) },
+  { ...valid, signals: valid.signals.map((signal, index) => index ? signal : { ...signal, riskLevel: "未知" }) }
 ]) assert.throws(() => validateSignalPayload(invalid), { code: "schema" });
 
 console.log("signal schema check ok");

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { marketFor } from "../assets/js/market-summary.mjs";
 
 const data = JSON.parse(fs.readFileSync("data/signals.json", "utf8"));
 assert(data.signals.length >= 10 && data.signals.length <= 100, "signals count is within expected range");
@@ -14,4 +15,9 @@ assert(data.signals.every((signal) => signal.sourceMode === "fallback" && !("pla
 assert(data.signals.every((signal) => !("vegas" in signal) && !("tdSequential" in signal)), "fallback data excludes unimplemented named indicators");
 assert(!("btcVegas" in data.market) && !("ethVegas" in data.market), "market summary excludes unimplemented Vegas labels");
 assert(data.market.condition === "震盪" && data.signals.every((signal) => signal.primaryDirection === "觀望" && !("direction" in signal)), "fallback data does not claim an actionable setup");
+assert.deepEqual(
+  { condition: data.market.condition, riskLevel: data.market.riskLevel, metrics: data.market.metrics },
+  marketFor(data.signals),
+  "fallback publishes the shared auditable market aggregation"
+);
 console.log("check ok");

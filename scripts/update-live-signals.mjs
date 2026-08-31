@@ -6,6 +6,7 @@ import { SIGNAL_PAYLOAD_MAX_BYTES, SIGNAL_SCHEMA_VERSION } from "../assets/js/si
 import { signalFor } from "./generate_signals.mjs";
 import { fetchMarkets, refreshTimeSeries } from "./live-signal-update.mjs";
 import { fetchVerifiedInstruments } from "./binance-instruments.mjs";
+import { marketFor } from "../assets/js/market-summary.mjs";
 
 const outputDir = process.env.LIVE_DATA_DIR || "data";
 const stateFile = process.env.LIVE_STATE_FILE || path.join(outputDir, "price-history.json");
@@ -49,7 +50,7 @@ export function buildLivePayload(coins, state, now = Date.now(), liveInstruments
   const signals = coins.map((coin, index) => ({
     ...signalFrom(coin, index, state.hourly?.[coin.id] || [], state.fourHourly?.[coin.id] || [], now, liveInstruments.get(coin.id))
   }));
-  const count = (direction) => signals.filter((signal) => signal.primaryDirection === direction).length;
+  const market = marketFor(signals);
 
   return {
     schemaVersion: SIGNAL_SCHEMA_VERSION,
@@ -60,8 +61,7 @@ export function buildLivePayload(coins, state, now = Date.now(), liveInstruments
     updatedAt: updatedAt(now),
     dataQuality: state.dataQuality || { source: "CoinGecko", status: "degraded", successCount: 0, failedCount: 0, requestFailureCount: 0, missingHistoryCount: signals.length, concurrency: 1, failures: [] },
     market: {
-      condition: count("做多") > count("做空") ? "偏多" : count("做空") > count("做多") ? "偏空" : "震盪",
-      riskLevel: signals.filter((signal) => signal.riskLevel === "高").length > 20 ? "高" : "中",
+      ...market,
       btcDirection: signals.find((signal) => signal.coinId === "bitcoin")?.primaryDirection || "觀望",
       ethDirection: signals.find((signal) => signal.coinId === "ethereum")?.primaryDirection || "觀望",
       summary: "CoinGecko 市值前 100，1h／4h 策略資料。"
