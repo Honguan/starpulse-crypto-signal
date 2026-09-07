@@ -39,23 +39,18 @@ export async function fetchJson(url, {
 } = {}) {
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     let response;
+    const signal = AbortSignal.timeout(timeoutMs);
     try {
-      response = await fetchImpl(url, { headers, signal: AbortSignal.timeout(timeoutMs) });
+      response = await fetchImpl(url, { headers, signal });
+      if (response.ok) return await response.json();
     } catch (error) {
-      const classification = error?.name === "TimeoutError" ? "timeout" : "network";
+      if (error instanceof SyntaxError) throw new ApiRequestError("malformed-json", `${label} returned malformed JSON`);
+      const classification = error?.name === "TimeoutError" || signal.reason?.name === "TimeoutError" ? "timeout" : "network";
       if (attempt < retries) {
         await sleepImpl(delayFor(attempt, {}, random, now));
         continue;
       }
       throw new ApiRequestError(classification, `${label} ${classification}`, { retryable: true });
-    }
-
-    if (response.ok) {
-      try {
-        return await response.json();
-      } catch {
-        throw new ApiRequestError("malformed-json", `${label} returned malformed JSON`);
-      }
     }
 
     const retryable = response.status === 429 || response.status >= 500;

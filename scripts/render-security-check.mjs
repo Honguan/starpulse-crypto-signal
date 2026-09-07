@@ -41,8 +41,9 @@ class FakeNode {
       .find((node) => selector === "canvas" ? node.tagName === "CANVAS" : selector.startsWith(".") && node.className?.split(" ").includes(selector.slice(1))) || null;
   }
 
-  querySelectorAll() {
-    return this.children.flatMap((child) => child.children ? [child, ...(child.querySelectorAll?.("*") || [])] : []);
+  querySelectorAll(selector) {
+    const descendants = this.children.flatMap((child) => child.children ? [child, ...(child.querySelectorAll?.("*") || [])] : []);
+    return selector === "details" ? descendants.filter((node) => node.tagName === "DETAILS") : descendants;
   }
 }
 
@@ -53,7 +54,7 @@ globalThis.document = {
   querySelector: (selector) => roots[selector],
   querySelectorAll: (selector) => selector === "[data-chart-details]"
     ? nodes(roots["#plan-list"]).filter((node) => node.dataset?.chartDetails === "")
-    : []
+    : selector === ".card" ? nodes(roots["#plan-list"]).filter((node) => node.tagName === "ARTICLE") : []
 };
 
 const resizeObservers = [];
@@ -109,6 +110,22 @@ const chartCanvas = chart.querySelector("canvas");
 chartCanvas.clientWidth = 800;
 resizeObservers[0].callback();
 assert.deepEqual([chartCanvas.width, chartCanvas.height], [800, 280]);
+
+renderDashboard(chartData);
+assert.equal(nodes(roots["#plan-list"]).find((node) => node.dataset?.chartDetails === "").open, true, "refresh preserves an expanded chart");
+
+renderDashboard(structuredClone(data));
+const emptyChart = nodes(roots["#plan-list"]).find((node) => node.dataset?.chartDetails === "");
+emptyChart.open = true;
+await emptyChart.listeners.toggle();
+assert.match(emptyChart.querySelector(".chart-empty").textContent, /沒有足夠/);
+assert.equal(emptyChart.querySelector("canvas").hidden, true);
+
+const watch = structuredClone(data);
+watch.signals[0].primaryDirection = "觀望";
+watch.signals[0].plans.long.riskReward = 2.5;
+renderDashboard(watch, { symbolFilter: watch.signals[0].coinId });
+assert.equal(nodes(roots["#plan-list"]).find((node) => node.dataset?.planRr === "").textContent, "-", "watch never inherits the long plan RR");
 
 const favorite = data.signals[7];
 renderDashboard(structuredClone(data), { favoriteOnly: true, favoriteCoinIds: new Set([favorite.coinId]) });

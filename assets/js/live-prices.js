@@ -1,4 +1,4 @@
-import { planStateFor } from "./strategy.mjs";
+import { actionableDirectionFor, planStateFor } from "./strategy.mjs";
 
 const BINANCE_STREAM = "wss://stream.binance.com:9443/stream?streams=";
 const MAX_RECONNECT_DELAY = 30000;
@@ -75,7 +75,8 @@ export function syncLiveStatus(root = globalThis.document) {
 export function applyTicker(ticker, cards = cardsBySymbol) {
   const symbol = ticker?.s;
   const nextPrice = Number(ticker?.c);
-  const nextChange = Number(ticker?.P);
+  const openPrice = Number(ticker?.o);
+  const nextChange = Number.isFinite(openPrice) && openPrice > 0 ? (nextPrice / openPrice - 1) * 100 : NaN;
 
   if (!/^[A-Z0-9]+USDT$/.test(symbol || "") || !Number.isFinite(nextPrice)) {
     return false;
@@ -99,8 +100,11 @@ export function applyTicker(ticker, cards = cardsBySymbol) {
 
   if (changeEl && Number.isFinite(nextChange)) {
     changeEl.textContent = formatChange(nextChange);
+    changeEl.classList.remove("change-positive", "change-negative");
+    changeEl.classList.add(nextChange >= 0 ? "change-positive" : "change-negative");
   }
 
+  const plans = {};
   ["long", "short"].forEach((direction) => {
     const box = card.querySelector(`[data-plan="${direction}"]`);
     const stateEl = card.querySelector(`[data-${direction}-plan-state]`);
@@ -109,28 +113,34 @@ export function applyTicker(ticker, cards = cardsBySymbol) {
     if (box.dataset.planStatus !== "可執行" || values.some((value) => value === "")) return;
     const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
     if (![entryLow, entryHigh, stopLoss, takeProfit].every(Number.isFinite)) return;
-    const state = planStateFor({
+    const plan = {
       direction: box.dataset.planDirection,
       status: box.dataset.planStatus,
+      score: Number(box.dataset.score),
+      riskReward: Number(box.dataset.riskReward),
       entryZone: { low: entryLow, high: entryHigh },
       stopLoss,
       takeProfit: [takeProfit]
-    }, nextPrice);
+    };
+    const state = planStateFor(plan, nextPrice);
+    plans[direction] = { ...plan, planState: state };
     if (stateEl.textContent !== state) stateEl.textContent = state;
   });
 
   const primaryStateEl = card.querySelector("[data-plan-state]");
   const primaryRrEl = card.querySelector("[data-plan-rr]");
-  const primaryDirection = card.querySelector('[data-plan-status="可執行"]')?.dataset.planDirection;
-  const primaryPlan = primaryDirection === "做空" ? card.querySelector('[data-plan="short"]') : card.querySelector('[data-plan="long"]');
-  if (primaryStateEl && primaryPlan) {
-    const values = [primaryPlan.dataset.entryLow, primaryPlan.dataset.entryHigh, primaryPlan.dataset.stopLoss, primaryPlan.dataset.takeProfit];
-    if (primaryPlan.dataset.planStatus === "可執行" && values.every((value) => value !== "")) {
-      const [entryLow, entryHigh, stopLoss, takeProfit] = values.map(Number);
-      const state = planStateFor({ direction: primaryPlan.dataset.planDirection, status: primaryPlan.dataset.planStatus, entryZone: { low: entryLow, high: entryHigh }, stopLoss, takeProfit: [takeProfit] }, nextPrice);
-      if (primaryStateEl.textContent !== state) primaryStateEl.textContent = state;
-      if (state === "停損失效" && primaryRrEl) primaryRrEl.textContent = "-";
-    }
+  const primaryDirection = actionableDirectionFor(plans);
+  const primaryPlan = primaryDirection === "做空" ? plans.short : primaryDirection === "做多" ? plans.long : null;
+  const badge = card.querySelector("[data-primary-direction]");
+  if (badge) {
+    if (badge.textContent !== primaryDirection) badge.textContent = primaryDirection;
+    badge.className = `badge ${primaryDirection === "做多" ? "long" : primaryDirection === "做空" ? "short" : "watch"}`;
+  }
+  if (Object.keys(plans).length) {
+    const state = primaryPlan?.planState || "等待條件";
+    if (primaryStateEl && primaryStateEl.textContent !== state) primaryStateEl.textContent = state;
+    const rr = primaryPlan?.riskReward;
+    if (primaryRrEl) primaryRrEl.textContent = Number.isFinite(rr) && rr > 0 ? `${rr}:1` : "-";
   }
 
   return true;

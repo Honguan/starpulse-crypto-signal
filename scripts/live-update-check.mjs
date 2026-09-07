@@ -98,7 +98,46 @@ assert.equal(retryCalls, 3);
 retryCalls = 0;
 await assert.rejects(fetchJson("permanent", { fetchImpl: async () => { retryCalls += 1; return response(404, {}); } }), { classification: "http", status: 404 });
 assert.equal(retryCalls, 1);
-await assert.rejects(fetchJson("malformed", { fetchImpl: async () => ({ ...response(200, {}), json: async () => { throw new SyntaxError(); } }) }), { classification: "malformed-json" });
+retryCalls = 0;
+await assert.rejects(fetchJson("malformed", { fetchImpl: async () => {
+  retryCalls += 1;
+  return { ...response(200, {}), json: async () => { throw new SyntaxError(); } };
+} }), { classification: "malformed-json", retryable: false });
+assert.equal(retryCalls, 1);
+
+retryCalls = 0;
+assert.deepEqual(await fetchJson("body-timeout", {
+  fetchImpl: async (_, { signal }) => ++retryCalls > 1 ? response(200, { ok: true }) : {
+    ...response(200, {}),
+    json: () => new Promise((resolve, reject) => {
+      const keepAlive = setTimeout(resolve, 100);
+      signal.addEventListener("abort", () => {
+        clearTimeout(keepAlive);
+        reject(new DOMException("Body aborted", "AbortError"));
+      }, { once: true });
+    })
+  },
+  timeoutMs: 5,
+  retries: 1,
+  sleepImpl: async () => {}
+}), { ok: true });
+assert.equal(retryCalls, 2);
+
+for (const [error, classification] of [
+  [new DOMException("Body timed out", "TimeoutError"), "timeout"],
+  [new TypeError("Body connection terminated"), "network"]
+]) {
+  retryCalls = 0;
+  await assert.rejects(fetchJson("body-failure", {
+    fetchImpl: async () => {
+      retryCalls += 1;
+      return { ...response(200, {}), json: async () => { throw error; } };
+    },
+    retries: 1,
+    sleepImpl: async () => {}
+  }), { classification, retryable: true });
+  assert.equal(retryCalls, 2);
+}
 
 const duplicateAndMissing = [...coins, { id: "wrapped-bitcoin", symbol: "btc" }, { id: "dogecoin", symbol: "doge" }];
 const liveInstruments = verifiedInstruments(duplicateAndMissing, [
@@ -151,6 +190,11 @@ assert.deepEqual(Object.keys(staleState.hourly), ["bitcoin"]);
 assert.deepEqual(Object.keys(staleState.fourHourly), ["bitcoin"]);
 
 const payload = buildLivePayload(coins, state, now, liveInstruments);
+for (const [price_change_percentage_24h, expectedRisk] of [[25, "高"], [12, "中"], [1, "低"]]) {
+  const withoutHistory = buildLivePayload([{ ...coins[0], total_volume: 20_000_000, price_change_percentage_24h }], {}, now);
+  assert.equal(withoutHistory.signals[0].strategy.planState, "資料不足");
+  assert.equal(withoutHistory.signals[0].riskLevel, expectedRisk);
+}
 assert.equal(validateSignalPayload(payload), payload);
 assert.equal(payload.signals.length, 2);
 assert.equal(payload.updatedAt, "2026-01-10T12:10:00.000Z");

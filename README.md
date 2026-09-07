@@ -4,9 +4,12 @@ StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不�
 
 ## 使用方式
 
-- 預設顯示策略分數最高的 5 個幣種。
+- 預設「精選 5 筆」顯示策略分數最高的 5 個幣種；「全部幣種」查看完整清單。
+- 可依主要方向篩選，以及條件分數、市值、24h 漲跌排序。結果依策略快照計算，不隨價格 tick 移動卡片。
 - 在「指定幣種」輸入 `BTC`、`bitcoin` 或 `BTCUSDT`，即可查看該資產的雙向計畫；同代號資產以 CoinGecko ID 區分。
 - 按「加入最愛」保存幣種，再切換「最愛」查看收藏清單。
+- 「加入最愛」需要完整且唯一的名稱／代號；也可直接按卡片星號。瀏覽器儲存受限時會提示，並保留本次選擇。
+- 讀取失敗可按「重新整理資料」；自動更新仍會重試，單次請求最多等待 15 秒。
 - 每張卡同時列出做多、做空的條件、進場區、停損與兩段止盈。
 - 展開「K 線圖」查看最近 4h 蠟燭、EMA20／EMA50 與計畫價位。
 - 「可執行」表示四項條件全部通過；「等待條件」不代表可以進場。
@@ -69,10 +72,13 @@ node scripts/candle-chart-check.mjs
 node scripts/render-security-check.mjs
 node scripts/workflow-security-check.mjs
 node --no-warnings scripts/live-price-check.mjs
+node --no-warnings scripts/dashboard-check.mjs
 node scripts/check.mjs
 ```
 
 ## 無障礙檢查
+
+設計規格見 [DESIGN.md](DESIGN.md)，本次問題與修正記錄見 [介面檢查](docs/ui-audit.md)。
 
 `render-security-check.mjs` 與 `live-price-check.mjs` 會自動驗證 toggle ARIA state、受控 live regions、靜音行情 tick、圖表文字替代與 resize 後焦點語意。發布前另做以下人工檢查：
 

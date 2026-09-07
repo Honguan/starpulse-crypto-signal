@@ -19,8 +19,9 @@ const longState = element("等待回踩");
 const shortState = element("條件不足");
 const primaryState = element("等待回踩");
 const primaryRr = element("2.5:1");
-const longBox = { dataset: { planDirection: "做多", planStatus: "可執行", entryLow: "99", entryHigh: "101", stopLoss: "96", takeProfit: "104" } };
-const shortBox = { dataset: { planDirection: "做空", planStatus: "可執行", entryLow: "104", entryHigh: "106", stopLoss: "110", takeProfit: "100" } };
+const badge = element("做多");
+const longBox = { dataset: { planDirection: "做多", planStatus: "可執行", score: "100", riskReward: "2.5", entryLow: "99", entryHigh: "101", stopLoss: "96", takeProfit: "104" } };
+const shortBox = { dataset: { planDirection: "做空", planStatus: "可執行", score: "100", riskReward: "3", entryLow: "104", entryHigh: "106", stopLoss: "110", takeProfit: "100" } };
 const card = {
   dataset: { livePair: "BTCUSDT", snapshotPrice: "100" },
   querySelector(selector) {
@@ -30,29 +31,52 @@ const card = {
           : selector === '[data-plan="short"]' ? shortBox
             : selector === "[data-long-plan-state]" ? longState
               : selector === "[data-short-plan-state]" ? shortState
-                : selector === '[data-plan-status="可執行"]' ? longBox
+                : selector === "[data-primary-direction]" ? badge
                   : selector === "[data-plan-state]" ? primaryState
                     : selector === "[data-plan-rr]" ? primaryRr : null;
   }
 };
 const cards = new Map([["BTCUSDT", card]]);
 
-assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, cards), true);
+assert.equal(applyTicker({ s: "BTCUSDT", c: "104", o: "100" }, cards), true);
 assert.equal(price.textContent, "104");
-assert.equal(change.textContent, "+1.23%");
+assert.equal(change.textContent, "+4.00%");
 assert.equal(longState.textContent, "已到止盈區");
 assert.equal(shortState.textContent, "可進場");
-assert.equal(primaryRr.textContent, "2.5:1");
+assert.equal(primaryState.textContent, "可進場");
+assert.equal(primaryRr.textContent, "3:1");
+assert.equal(badge.textContent, "做空");
+assert.equal(badge.className, "badge short");
 const stateWrites = longState.textWrites + shortState.textWrites + primaryState.textWrites;
-assert.equal(applyTicker({ s: "BTCUSDT", c: "104", P: "1.23" }, cards), true);
+assert.equal(applyTicker({ s: "BTCUSDT", c: "104", o: "100" }, cards), true);
 assert.equal(longState.textWrites + shortState.textWrites + primaryState.textWrites, stateWrites);
 
-applyTicker({ s: "BTCUSDT", c: "96", P: "-1" }, cards);
-assert.equal(primaryState.textContent, "停損失效");
+applyTicker({ s: "BTCUSDT", c: "96", o: "100" }, cards);
+assert.equal(longState.textContent, "停損失效");
+assert.equal(primaryState.textContent, "等待條件");
+assert.equal(badge.textContent, "觀望");
+assert.equal(badge.className, "badge watch");
 assert.equal(primaryRr.textContent, "-");
-assert.equal(applyTicker({ s: "BTCUSDT", c: "110", P: "10" }, cards), false);
+assert.equal(applyTicker({ s: "BTCUSDT", c: "110", o: "100" }, cards), false);
 assert.equal(price.textContent, "96");
-assert.equal(applyTicker({ s: "ETHUSDT", c: "100", P: "1" }, cards), false);
+applyTicker({ s: "BTCUSDT", c: "100", o: "100" }, cards);
+assert.equal(primaryState.textContent, "可進場");
+assert.equal(primaryRr.textContent, "2.5:1");
+assert.equal(badge.textContent, "做多");
+assert.equal(badge.className, "badge long");
+assert.equal(change.textContent, "0.00%");
+applyTicker({ s: "BTCUSDT", c: "102", o: "100" }, cards);
+assert.equal(longState.textContent, "等待回踩");
+assert.equal(shortState.textContent, "等待回踩");
+assert.equal(primaryState.textContent, "等待條件");
+assert.equal(primaryRr.textContent, "-");
+assert.equal(badge.textContent, "觀望");
+for (const o of [undefined, "0", "bad", "Infinity"]) {
+  applyTicker({ s: "BTCUSDT", c: "103", o }, cards);
+  assert.equal(change.textContent, "+2.00%");
+}
+
+assert.equal(applyTicker({ s: "ETHUSDT", c: "100", o: "100" }, cards), false);
 
 const insufficientState = element("資料不足");
 const insufficientCard = {
@@ -63,7 +87,7 @@ const insufficientCard = {
         : selector === "[data-long-plan-state]" || selector === "[data-short-plan-state]" ? insufficientState : null;
   }
 };
-assert.equal(applyTicker({ s: "ETHUSDT", c: "51", P: "1" }, new Map([["ETHUSDT", insufficientCard]])), true);
+assert.equal(applyTicker({ s: "ETHUSDT", c: "51", o: "100" }, new Map([["ETHUSDT", insufficientCard]])), true);
 assert.equal(insufficientState.textContent, "資料不足");
 
 const websocketState = element("連線中…");
@@ -113,7 +137,7 @@ startLivePrices(socketOptions);
 assert.equal(FakeWebSocket.instances[0].url, "wss://stream.binance.com:9443/stream?streams=btcusdt@miniTicker");
 FakeWebSocket.instances[0].readyState = 1;
 FakeWebSocket.instances[0].onopen();
-FakeWebSocket.instances[0].onmessage({ data: JSON.stringify({ stream: "btcusdt@miniTicker", data: { s: "BTCUSDT", c: "100", P: "0.5" } }) });
+FakeWebSocket.instances[0].onmessage({ data: JSON.stringify({ stream: "btcusdt@miniTicker", data: { s: "BTCUSDT", c: "100", o: "99.5" } }) });
 assert.equal(price.textContent, "100");
 
 visibleCards = [insufficientCard];

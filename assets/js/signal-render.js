@@ -1,6 +1,7 @@
 import { describeCandleChart, renderCandleChart } from "./candle-chart.mjs";
 import { loadCandles } from "./candle-data.mjs";
 import { formatLocalTimestamp } from "./data-freshness.mjs";
+import { selectSignals } from "./signal-filter.mjs";
 
 const directionClass = {
   "強烈做多": "strong-long",
@@ -48,42 +49,38 @@ function safeDataValue(value, pattern) {
 }
 
 export function renderDashboard(data, options = "") {
+  const openDetails = [...document.querySelectorAll(".card")].flatMap((card) =>
+    [...card.querySelectorAll("details")].map((details, index) => details.open ? `${card.dataset.coinId}:${index}` : "").filter(Boolean));
   chartObservers.forEach((observer) => observer.disconnect());
   chartObservers = [];
   renderStatus(data);
-  renderMarket(data.market);
+  renderMarket(data.market, data.dataQuality);
 
   const settings = typeof options === "string" ? { symbolFilter: options } : options;
   const favoriteCoinIds = settings.favoriteCoinIds || new Set();
-  const symbolFilter = settings.symbolFilter || "";
-  const normalizedFilter = symbolFilter.trim().toUpperCase();
-  const signals = data.signals.filter((signal) => {
-    const matchesSymbol = !normalizedFilter || [signal.symbol, signal.coinId, signal.name, signal.liveInstrument?.symbol].some((value) => String(value || "").toUpperCase().includes(normalizedFilter));
-    const matchesFavorite = !settings.favoriteOnly || favoriteCoinIds.has(signal.coinId);
-    return matchesSymbol && matchesFavorite;
-  });
-  const byPlanScore = (a, b) => {
-    const aScore = Math.max(a.plans?.long?.score || 0, a.plans?.short?.score || 0);
-    const bScore = Math.max(b.plans?.long?.score || 0, b.plans?.short?.score || 0);
-    return bScore - aScore || a.marketCapRank - b.marketCapRank;
-  };
-
-  const rankedSignals = signals.sort(byPlanScore);
-  const visibleSignals = settings.symbolFilter || settings.favoriteOnly ? rankedSignals : rankedSignals.slice(0, 5);
-  renderCards("#plan-list", visibleSignals, favoriteCoinIds);
+  const rankedSignals = selectSignals(data.signals, settings);
+  const visibleSignals = settings.symbolFilter?.trim() || settings.favoriteOnly || settings.showAll || settings.direction ? rankedSignals : rankedSignals.slice(0, 5);
+  const count = document.querySelector("#result-count");
+  const countText = `顯示 ${visibleSignals.length} / ${rankedSignals.length} 筆`;
+  if (count && count.textContent !== countText) count.textContent = countText;
+  const emptyMessage = settings.favoriteOnly && !favoriteCoinIds.size
+    ? "尚未收藏幣種。切換「全部幣種」，按星號建立你的觀察清單。"
+    : "沒有符合篩選的幣種。請清除搜尋、切換全部方向，或查看全部幣種；最愛也可能已離開市值前 100 名。";
+  renderCards("#plan-list", visibleSignals, favoriteCoinIds, emptyMessage);
   bindCandleCharts(visibleSignals, data.updatedAt);
+  document.querySelectorAll(".card").forEach((card) => {
+    card.querySelectorAll("details").forEach((details, index) => {
+      if (openDetails.includes(`${card.dataset.coinId}:${index}`)) details.open = true;
+    });
+  });
 }
 
 function renderStatus(data) {
   const status = {
-    status: data.status === "normal" ? "正常" : "異常",
+    status: data.status === "normal" ? "正常" : "資料降級",
     freshness: data.freshness?.label || "未知",
     websocket: "連線中…",
     updatedAt: formatLocalTimestamp(data.updatedAt),
-    condition: data.market.condition,
-    riskLevel: data.market.riskLevel,
-    btcDirection: data.market.btcDirection,
-    ethDirection: data.market.ethDirection,
     source: data.strategySource || (data.live ? "即時策略資料" : "備援快照")
   };
 
@@ -93,13 +90,16 @@ function renderStatus(data) {
   ])));
 }
 
-function renderMarket(market) {
+function renderMarket(market, quality) {
   document.querySelector("#market").replaceChildren(element("div", { className: "market-grid" }, [
     marketItem("市場狀態", market.condition),
     marketItem("市場風險", market.riskLevel),
+    marketItem("做多 / 做空 / 觀望", market.metrics ? `${market.metrics.long} / ${market.metrics.short} / ${market.metrics.neutral}` : "—"),
+    marketItem("BTC / ETH 方向", `${market.btcDirection} / ${market.ethDirection}`),
     element("div", { className: "market-card market-summary" }, [
       element("span", { className: "label", text: "摘要" }),
-      element("strong", { text: market.summary })
+      element("strong", { text: market.summary }),
+      element("span", { className: "label", text: quality ? `資料涵蓋：成功 ${quality.successCount} · 失敗 ${quality.failedCount} · 歷史不足 ${quality.missingHistoryCount}` : "資料品質未提供" })
     ])
   ]));
 }
@@ -111,18 +111,18 @@ function marketItem(label, value) {
   ]);
 }
 
-function renderCards(selector, signals, favoriteCoinIds = new Set()) {
+function renderCards(selector, signals, favoriteCoinIds = new Set(), emptyMessage) {
   const root = document.querySelector(selector);
   root.replaceChildren(...(signals.length
     ? signals.map((signal) => renderCard(signal, favoriteCoinIds))
-    : [element("p", { className: "empty", text: "目前沒有符合條件的訊號。" })]));
+    : [element("p", { className: "empty", text: emptyMessage })]));
 }
 
 function renderCard(signal, favoriteCoinIds) {
   const isFavorite = favoriteCoinIds.has(signal.coinId);
   const strategy = signal.strategy || {};
   const plans = signal.plans || {};
-  const primary = signal.primaryDirection === "做空" ? plans.short : plans.long;
+  const primary = signal.primaryDirection === "做空" ? plans.short : signal.primaryDirection === "做多" ? plans.long : null;
   const conditionScore = Math.max(plans.long?.score || 0, plans.short?.score || 0);
   const coinId = safeDataValue(signal.coinId, COIN_ID);
   const livePair = safeDataValue(signal.liveInstrument?.symbol, LIVE_PAIR);
@@ -157,10 +157,12 @@ function renderCard(signal, favoriteCoinIds) {
     element("div", { className: "card-head" }, [
       element("div", {}, [
         element("h3", { className: "symbol", text: signal.symbol }),
-        element("span", { className: "asset" }, [
-          element("span", { text: `${signal.name}／${signal.coinId}` }),
-          element("span", { text: signal.price, dataset: { livePrice: "" }, attributes: { "aria-live": "off" } }),
-          element("span", { text: `${signal.change24h}%`, dataset: { liveChange: "" }, attributes: { "aria-live": "off" } })
+        element("span", { className: "asset", text: `${signal.name} · #${signal.marketCapRank}` }),
+        element("span", { className: "asset coin-id", text: signal.coinId }),
+        element("div", { className: "price-row" }, [
+          element("span", { text: "USD", className: "label" }),
+          element("span", { text: formatPrice(signal.price), dataset: { livePrice: "" }, attributes: { "aria-live": "off" } }),
+          element("span", { className: signal.change24h >= 0 ? "change-positive" : "change-negative", text: `${signal.change24h > 0 ? "+" : ""}${Number(signal.change24h).toFixed(2)}%`, dataset: { liveChange: "" }, attributes: { "aria-live": "off" } })
         ])
       ]),
       element("button", {
@@ -169,21 +171,19 @@ function renderCard(signal, favoriteCoinIds) {
         dataset: { coinId },
         attributes: { type: "button", "aria-label": `切換 ${signal.name} 最愛`, "aria-pressed": String(isFavorite) }
       }),
-      element("span", { className: "label", text: signal.liveMode === "websocket" && livePair ? `${livePair} 即時` : "快照模式" }),
-      element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || "觀望" })
+      element("span", { className: "label price-source", text: signal.liveMode === "websocket" && livePair ? `${livePair} 串流行情` : "CoinGecko 快照" }),
+      element("span", { className: `badge ${directionClass[signal.primaryDirection] || "watch"}`, text: signal.primaryDirection || "觀望", dataset: { primaryDirection: "" } })
     ]),
     element("div", { className: "card-body" }, [
       element("div", { className: "metrics" }, [
         metric("條件", `${conditionScore}%`),
         metric("RSI", strategy.indicators?.rsi14 ?? "-"),
         metric("主要狀態", strategy.planState || "資料延遲", "planState"),
-        metric("主要 RR", primary?.riskReward ? `${primary.riskReward}:1` : "-", "planRr")
+        metric("主要 RR", primary?.status === "可執行" && primary?.planState !== "停損失效" && primary?.riskReward ? `${primary.riskReward}:1` : "-", "planRr")
       ]),
       element("div", { className: "plan-grid" }, [renderPlan("long", plans.long), renderPlan("short", plans.short)]),
-      reasons,
-      warnings,
       chartDetails,
-      element("details", {}, [element("summary", { text: "為什麼" }), renderDetails(signal)])
+      element("details", { className: "analysis-details" }, [element("summary", { text: "策略依據與風險" }), reasons, renderDetails(signal), warnings])
     ])
   ]);
 }
@@ -196,13 +196,20 @@ function bindCandleCharts(signals, version) {
       details.dataset.chartReady = "loading";
       const empty = details.querySelector(".chart-empty");
       const summary = details.querySelector(".chart-summary");
+      if (empty) empty.textContent = "正在載入 K 線…";
       try {
         const candles = signal?.hasCandles ? await loadCandles(signal.coinId, version) : [];
+        if (details.isConnected === false) return;
         const canvas = details.querySelector("canvas");
         const plans = signal?.plans || {};
         const rendered = renderCandleChart(canvas, candles, plans);
         if (rendered && empty) empty.hidden = true;
         if (rendered && summary) summary.textContent = describeCandleChart(candles, plans);
+        canvas.hidden = !rendered;
+        if (!rendered) {
+          if (empty) empty.textContent = "此快照沒有足夠的 K 線歷史，暫時無法繪圖。";
+          if (summary) summary.textContent = "可先查看上方計畫；下一次資料更新後再試。";
+        }
         if (rendered && typeof globalThis.ResizeObserver === "function") {
           const observer = new globalThis.ResizeObserver(() => renderCandleChart(canvas, candles, plans));
           observer.observe(canvas);
@@ -210,7 +217,8 @@ function bindCandleCharts(signals, version) {
         }
         details.dataset.chartReady = "true";
       } catch {
-        if (empty) empty.textContent = "K 線資料載入失敗。";
+        if (empty) empty.textContent = "K 線資料載入失敗；收合後重新展開即可重試。";
+        if (summary) summary.textContent = "若持續失敗，請重新整理策略快照。";
         delete details.dataset.chartReady;
       }
     });
@@ -236,6 +244,8 @@ function renderPlan(key, plan = {}) {
       plan: prefix,
       planDirection,
       planStatus,
+      score: Number.isFinite(plan.score) ? plan.score : 0,
+      riskReward: Number.isFinite(plan.riskReward) ? plan.riskReward : "",
       entryLow: Number.isFinite(plan.entryZone?.low) ? plan.entryZone.low : "",
       entryHigh: Number.isFinite(plan.entryZone?.high) ? plan.entryZone.high : "",
       stopLoss: Number.isFinite(plan.stopLoss) ? plan.stopLoss : "",
@@ -254,6 +264,10 @@ function renderPlan(key, plan = {}) {
     ]),
     element("div", { className: "conditions", text: conditions.length ? undefined : "資料不足" }, conditions)
   ]);
+}
+
+function formatPrice(value) {
+  return Number.isFinite(value) ? value.toLocaleString("en-US", { maximumFractionDigits: value >= 1000 ? 2 : value >= 1 ? 4 : 8 }) : "—";
 }
 
 function metric(label, value, marker) {

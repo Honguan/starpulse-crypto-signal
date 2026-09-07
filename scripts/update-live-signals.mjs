@@ -28,8 +28,8 @@ function updatedAt(now) {
 function signalFrom(coin, index, hourly, candles4h, now, liveInstrument) {
   const base = signalFor(coin, index);
   const strategy = strategyFor(hourly, candles4h, coin.current_price, now);
-  const volatility = strategy.indicators.volatility || 0;
-  const riskLevel = volatility >= 4 ? "高" : volatility >= 2 ? "中" : "低";
+  const volatility = strategy.indicators.volatility;
+  const riskLevel = Number.isFinite(volatility) ? volatility >= 4 ? "高" : volatility >= 2 ? "中" : "低" : base.riskLevel;
 
   return {
     ...base,

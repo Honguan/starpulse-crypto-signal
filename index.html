@@ -5,14 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self' https://raw.githubusercontent.com wss://stream.binance.com:9443; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>StarPulse Crypto Signal</title>
+  <meta name="description" content="StarPulse 星脈：比較加密貨幣雙向交易條件、追蹤收藏與資料新鮮度。">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+  <a class="skip-link" href="#plans-title">跳至交易計畫</a>
   <header class="site-header">
     <div class="wrap">
-      <p class="eyebrow">StarPulse Crypto Signal</p>
-      <h1>星脈加密貨幣訊號看板</h1>
-      <p class="subtitle">每個幣種同時呈現做多與做空計畫；條件不足時只顯示觀望，不提供可執行訊號。</p>
+      <div class="header-row"><p class="eyebrow">✦ StarPulse <span>星脈 / 市場觀測站</span></p><button id="refresh-signals" type="button">重新整理資料</button></div>
+      <h1>看清條件，再做決定。</h1>
+      <p class="subtitle">比較多空計畫、追蹤關注幣種。價格即時變動，策略快照每 10 分鐘更新。</p>
     </div>
   </header>
 
@@ -20,31 +22,42 @@
     <section id="status" class="status-grid" aria-label="狀態列"></section>
     <p id="status-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></p>
     <p id="error" class="error" role="status" aria-live="polite" aria-atomic="true" hidden></p>
-
-    <section class="filter-panel" aria-label="手動指定幣種">
-      <label for="coin-symbol">指定幣種</label>
-      <div class="filter-row">
-        <input id="coin-symbol" type="search" placeholder="例如 BTCUSDT" autocomplete="off">
-        <button id="add-favorite" type="button">加入最愛</button>
-        <button id="clear-symbol" type="button">清除</button>
-      </div>
-      <div class="mode-row" role="group" aria-label="顯示模式">
-        <button class="mode-button active" type="button" data-mode="all" aria-pressed="true">全部</button>
-        <button class="mode-button" type="button" data-mode="favorites" aria-pressed="false">最愛</button>
-      </div>
-    </section>
+    <p id="loading" class="empty" role="status">正在讀取市場快照…</p>
+    <noscript><p class="error">請啟用 JavaScript，才能讀取行情與操作看板。</p></noscript>
 
     <section class="panel" aria-labelledby="market-title">
-      <div class="section-heading">
-        <h2 id="market-title">市場總覽</h2>
-      </div>
+      <div class="section-heading"><h2 id="market-title">市場總覽</h2><span class="label">依策略快照統計</span></div>
       <div id="market" class="market"></div>
+    </section>
+
+    <section class="filter-panel" aria-label="搜尋與篩選幣種">
+      <label for="coin-symbol">搜尋幣種</label>
+      <div class="filter-row">
+        <input id="coin-symbol" type="search" placeholder="代號、名稱或 CoinGecko ID，例如 BTCUSDT" autocomplete="off" aria-describedby="search-help">
+        <button id="add-favorite" type="button" disabled>加入最愛</button>
+        <button id="clear-symbol" type="button">清除</button>
+      </div>
+      <p id="search-help" class="help-text">支援部分名稱；按卡片星號收藏。收藏只儲存在這個瀏覽器。</p>
+      <p id="action-feedback" class="help-text" role="status" aria-live="polite" aria-atomic="true"></p>
+      <div class="toolbar">
+        <div class="mode-row" role="group" aria-label="顯示模式">
+          <button class="mode-button active" type="button" data-mode="all" aria-pressed="true">精選 5 筆</button>
+          <button class="mode-button" type="button" data-mode="browse" aria-pressed="false">全部幣種</button>
+          <button class="mode-button" type="button" data-mode="favorites" aria-pressed="false">最愛</button>
+        </div>
+        <div class="select-row">
+          <label for="direction-filter">方向<select id="direction-filter"><option value="">全部方向</option><option value="做多">做多</option><option value="做空">做空</option><option value="觀望">觀望</option></select></label>
+          <label for="sort-order">排序<select id="sort-order"><option value="score">條件分數</option><option value="rank">市值排名</option><option value="change-desc">24h 漲幅</option><option value="change-asc">24h 跌幅</option></select></label>
+        </div>
+      </div>
     </section>
 
     <section class="panel" aria-labelledby="plans-title">
       <div class="section-heading">
-        <h2 id="plans-title">雙向交易計畫</h2>
+        <h2 id="plans-title" tabindex="-1">雙向交易計畫</h2>
+        <p id="result-count" class="label" role="status" aria-live="polite" aria-atomic="true"></p>
       </div>
+      <p class="help-text">條件分數不是勝率；100% 仍須確認進場區與計畫狀態。篩選與排序依快照，價格串流不會移動卡片。</p>
       <div id="plan-list" class="card-grid"></div>
     </section>
   </main>
