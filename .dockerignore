@@ -1,0 +1,11 @@
+*
+!requirements.txt
+!apps/
+!apps/**
+!services/
+!services/**
+!database/
+!database/**
+!tests/
+!tests/**
+**/__pycache__

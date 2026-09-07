@@ -1,0 +1,45 @@
+name: starpulse-v2
+services:
+  db:
+    image: timescale/timescaledb:2.25.1-pg17
+    environment:
+      POSTGRES_DB: starpulse
+      POSTGRES_USER: starpulse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your environment}
+    volumes:
+      - market-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U starpulse -d starpulse"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  api:
+    build: .
+    environment: &runtime
+      PGHOST: db
+      PGDATABASE: starpulse
+      PGUSER: starpulse
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your environment}
+      SYMBOLS: ${SYMBOLS:-BTCUSDT,ETHUSDT,ENAUSDT}
+    ports:
+      - "127.0.0.1:${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+  collector:
+    build: .
+    command: ["python", "-m", "services.collector"]
+    environment: *runtime
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  market-data:

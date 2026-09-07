@@ -1,0 +1,36 @@
+name: V2 Core
+on:
+  push:
+    branches: [main, v2]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    services:
+      db:
+        image: timescale/timescaledb:2.25.1-pg17
+        env:
+          POSTGRES_DB: starpulse_test
+          POSTGRES_USER: starpulse
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 127.0.0.1:55439:5432
+        options: >-
+          --health-cmd "pg_isready -U starpulse -d starpulse_test"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: Build Core runtime
+        run: docker build -t starpulse-core-check .
+      - name: Run deterministic and real database tests
+        run: >-
+          docker run --rm --network host
+          -e TEST_DATABASE_URL=postgresql://starpulse@127.0.0.1:55439/starpulse_test
+          starpulse-core-check python -m unittest discover -s tests -v

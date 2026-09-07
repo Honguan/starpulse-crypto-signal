@@ -1,5 +1,7 @@
 # StarPulse Crypto Signal
 
+v1 stable 保留現有靜態看板。v2 Core 的獨立 Backend、啟動方式與驗收契約見 [架構](docs/architecture.md)；[企劃審查與後續里程碑](docs/v2-review.md) 說明 Core 與完整 MVP 的差異。
+
 StarPulse 是部署在 GitHub Pages 的加密貨幣市場分析看板。它不下單、不保存持倉，只根據公開市場資料產生做多與做空計畫。
 
 ## 使用方式
